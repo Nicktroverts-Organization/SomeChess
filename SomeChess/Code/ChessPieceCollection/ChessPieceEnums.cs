@@ -1,4 +1,4 @@
-﻿namespace SomeChess.Code.Enums
+﻿namespace SomeChess.Code.ChessPieceCollection
 {
     public enum ChessMovePattern
     {
@@ -11,4 +11,9 @@
         None
     }
 
+    public enum Team
+    {
+        White,
+        Black,
+    }
 }

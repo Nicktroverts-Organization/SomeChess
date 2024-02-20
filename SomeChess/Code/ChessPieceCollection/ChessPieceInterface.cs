@@ -1,7 +1,4 @@
-﻿using SomeChess.Code.Enums;
-using SomeChess.Code;
-
-namespace SomeChess.Code.Interfaces
+﻿namespace SomeChess.Code.ChessPieceCollection
 {
     public interface IChessPiece
     {

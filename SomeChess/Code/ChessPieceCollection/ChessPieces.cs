@@ -1,10 +1,9 @@
-﻿using SomeChess.Code.Enums;
-using SomeChess.Code.Interfaces;
+﻿using SomeChess.Code.Interfaces;
 using SomeChess.Code.ChessPieces;
+using SomeChess.Code.ChessPieceCollection;
 
 namespace SomeChess.Code.ChessPieces
 {
-
     public static class ChessPieces
     {
         public static ChessPiece KnightPiece = new ChessPiece()
@@ -40,6 +39,12 @@ namespace SomeChess.Code.ChessPieces
         public static ChessPiece KingPiece = new ChessPiece()
         {
             MovePattern = ChessMovePattern.King,
+
+        };
+
+        public static ChessPiece EmptyPiece = new ChessPiece()
+        {
+            MovePattern = ChessMovePattern.None,
 
         };
 

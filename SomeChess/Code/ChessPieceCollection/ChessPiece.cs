@@ -1,7 +1,6 @@
 ﻿using SomeChess.Code;
-using SomeChess.Code.Enums;
-using SomeChess.Code.Interfaces;
 using SomeChess.Code.ChessPieces;
+using SomeChess.Code.ChessPieceCollection;
 
 namespace SomeChess.Code.ChessPieces
 {
@@ -11,9 +10,11 @@ namespace SomeChess.Code.ChessPieces
         private ChessMovePattern? _MovePattern = null;
         public ChessMovePattern MovePattern { get => _MovePattern ?? ChessMovePattern.None; set => _MovePattern = value; }
 
-        public ChessPiece()
+        private Team? _Team = null;
+        public Team Team
         {
-
+            get => _Team ?? throw new Exception("Piece should have a team");
+            set => _Team = value;
         }
     }
 }
