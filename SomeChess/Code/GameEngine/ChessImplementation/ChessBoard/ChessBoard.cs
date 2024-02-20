@@ -1,7 +1,6 @@
-﻿using SomeChess.Code.ChessPieceCollection;
-using SomeChess.Code.ChessPieces;
+﻿using SomeChess.Code.GameEngine.ChessImplementation.ChessPieceCollection;
 
-namespace SomeChess.Code.ChessBoard
+namespace SomeChess.Code.GameEngine.ChessImplementation.ChessBoard
 {
     public static class ChessBoard
     {
@@ -49,16 +48,16 @@ namespace SomeChess.Code.ChessBoard
     {
         public Temp()
         {
-            ChessBoard.GetField("e5").Piece = ChessPieces.ChessPieces.PawnPiece;
+            ChessBoard.GetField("e5").Piece = ChessPieces.PawnPiece;
             ChessBoard.GetPiece("e5").Team = Team.White;
 
-            ChessBoard.GetField("h8").Piece = ChessPieces.ChessPieces.RookPiece;
+            ChessBoard.GetField("h8").Piece = ChessPieces.RookPiece;
             ChessBoard.GetPiece("h8").Team = Team.Black;
         }
     }
 
     public class ChessField
     {
-        public ChessPiece Piece { get; set; } = ChessPieces.ChessPieces.EmptyPiece;
+        public ChessPiece Piece { get; set; } = ChessPieces.EmptyPiece;
     }
 }

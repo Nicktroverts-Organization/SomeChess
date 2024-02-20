@@ -1,8 +1,6 @@
 ﻿using SomeChess.Code.Interfaces;
-using SomeChess.Code.ChessPieces;
-using SomeChess.Code.ChessPieceCollection;
 
-namespace SomeChess.Code.ChessPieces
+namespace SomeChess.Code.GameEngine.ChessImplementation.ChessPieceCollection
 {
     public static class ChessPieces
     {
