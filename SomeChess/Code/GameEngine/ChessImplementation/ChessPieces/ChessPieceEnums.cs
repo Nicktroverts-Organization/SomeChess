@@ -1,4 +1,4 @@
-﻿namespace SomeChess.Code.GameEngine.ChessImplementation.ChessPieceCollection
+﻿namespace SomeChess.Code.GameEngine.ChessImplementation
 {
     public enum ChessMovePattern
     {
