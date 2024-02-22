@@ -14,45 +14,28 @@ namespace SomeChess.Code.MatchMaking
 
     public class MatchSearching
     {
-        public string Player1 { get; set; }
-        public string Player2 { get; set; }
+        public Player? Black { get; set; }
+        public Player? White { get; set; }
 
 
-        public Team? Player1Team 
+        
+
+
+        public MatchSearching(Player player)
         {
-            get => Player1Team;
-            set
+            Random rndm = new Random();
+            
+            if(rndm.Next(2) == 0)
             {
-                if (Player2Team == null)
-                {
-                    Player1Team = value;
-                }
+                Black = player;
+            }
+            else
+            {
+                White = player;
             }
         }
 
-        public Team? Player2Team
-        {
-            get => Player2Team;
-            set
-            {
-                if (Player1Team == null)
-                {
-                    if(value == Team.White)
-                    {
-                        Player1Team = Team.Black;
-                        Player2Team = Team.White;
-                    }
-                    else
-                    {
-                        Player1Team = Team.White;
-                        Player2Team = Team.Black;
-                    }
-                }
-            }
-        }
-
-
-        public MatchSearching()
+        public void Join(Player player)
         {
 
         }
