@@ -31,7 +31,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public ChessPiece GetPiece(string Field)
         {
             if (ValidateField(Field))
-                return Board[ChessGlobalVarCollection.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1];
+                return Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1];
 
             return new EmptyPiece();
         }
@@ -39,14 +39,14 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void SetPiece(string Field, ChessPiece piece)
         {
             if (ValidateField(Field))
-                Board[ChessGlobalVarCollection.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1] = piece;
+                Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1] = piece;
         }
 
         public bool ValidateField(string Field)
         {
-            if (!ChessGlobalVarCollection.AlphConversionChars.Contains(Field.ToLower()[0]) || Field.Length > 2)
+            if (!Chess.AlphConversionChars.Contains(Field.ToLower()[0]) || Field.Length > 2)
                 throw new ArgumentException("Field does not exist!");
-            if (Board[ChessGlobalVarCollection.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1] is null)
+            if (Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1] is null)
                 throw new ArgumentException("Field couldn't be found!");
             
             return true;

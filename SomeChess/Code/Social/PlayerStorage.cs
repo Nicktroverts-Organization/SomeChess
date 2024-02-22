@@ -7,7 +7,6 @@
 
     public class PlayerStorage
     {
-        private static 
 
 
     }

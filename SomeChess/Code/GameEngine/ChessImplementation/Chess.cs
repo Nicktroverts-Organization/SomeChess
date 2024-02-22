@@ -4,18 +4,28 @@
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
-    public record Chess
+    public record Chess : IGame
     {
         public static ChessBoard Board = new();
 
         public static List<char> AlphConversionChars = new()
             { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
+        public static bool GameIsRunning = false;
+
         public Team TeamTurn = Team.White;
 
-        public Chess()
+        public Chess() => ResetBoard();
+
+        public void StartGame()
         {
             ResetBoard();
+            GameIsRunning = true;
+        }
+
+        public void StopGame()
+        {
+            GameIsRunning = false;
         }
 
         public void ResetBoard()
@@ -38,6 +48,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <returns>Returns whether or not it was successfully moved</returns>
         public bool MovePiece(string From, string To)
         {
+            //Check that game is running
+            if (!GameIsRunning)
+                throw new InvalidOperationException("Can't move piece while game is not running!");
+
             //Check if player is trying to move opponents piece.
             if (Board.GetPiece(From).Team != TeamTurn)
                 return false;

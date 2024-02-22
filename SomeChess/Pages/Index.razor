@@ -1,3 +1,33 @@
 ﻿@page "/"
+@using System.Timers
 
 <h1 class="text-green-400 text-5xl">Hello, world!</h1>
+
+<input disabled="true" @bind="timedisplay"/>
+
+
+@code
+{
+    private TimeSpan time = new TimeSpan(0, 0, 10, 0);
+    public string timedisplay = "";
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        if (firstRender)
+        {
+            System.Timers.Timer timer = new();
+            timer.Elapsed += new ElapsedEventHandler(TimerTick);
+            timer.Interval = 1000;
+            timer.Enabled = true; 
+        }
+    }
+
+    private void TimerTick(object source, ElapsedEventArgs e)
+    {
+        time -= new TimeSpan(0, 0, 0, 1);
+        Console.WriteLine(time.ToString("g"));
+        timedisplay = time.ToString("g");
+        InvokeAsync(StateHasChanged);
+    }
+}

@@ -11,8 +11,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public Team Team = Team.White;
         public override bool CanMove(string from, string to)
         {
-            //todo
-            return false;
+            //get x and y distances the piece is moving regardless of positive or negative numbers
+            int rowDiff = Convert.ToInt16(MathF.Abs(Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0])));
+            int colDiff = Convert.ToInt16(MathF.Abs((int)to[1] - (int)from[1]));
+
+            if (!((rowDiff == 1 && colDiff == 2) || (rowDiff == 2 && colDiff == 1))) return false; // Checks for correct move pattern (L)
+
+            if (Chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return true; //Checks if moving to empty field
+
+            return Chess.Board.GetPiece(to).Team != Team; //Tries to move on other piece if opponent return true else return false;
         }
     }
 
@@ -23,7 +30,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public override bool CanMove(string from, string to)
         {
-            if (from == "" || to == "")
+            if (from == "" || to == "") //given arguments are invalid.
                 throw new ArgumentException("\"from\" or \"to\" was empty!");
 
             //make sure fields are actual chess fields
@@ -33,9 +40,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             int pathLength = Convert.ToInt16(MathF.Abs(Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0])));
             if (pathLength != MathF.Abs(Convert.ToInt16(to[1]) - Convert.ToInt16(from[1]))) return false;
 
+            //change multiplier depending on whether or not piece is moving in a positive or negative direction
             int rowChange = to[0] > from[0] ? 1 : -1;
             int colChange = to[1] > from[1] ? 1 : -1;
 
+            //check if something is in the way
             for (int i = 1; i < pathLength; i++)
             {
                 char file = (char)(from[0] + i * rowChange);
@@ -61,12 +70,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (from == "" || to == "")
                 throw new ArgumentException("\"from\" or \"to\" was empty!");
 
+            //checks if given fields are actual chess fields
             Chess.Board.ValidateFields(new[] { from, to });
 
-            int pathLength = Convert.ToInt16(MathF.Abs(Chess.AlphConversionChars.IndexOf(to.ToLower()[0])
-                                                       - Chess.AlphConversionChars.IndexOf(from.ToLower()[0])));
+            //gets the distance piece is traveling
+            int pathLength = Convert.ToInt16(MathF.Abs(Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0])));
+            
             if (pathLength == MathF.Abs(Convert.ToInt16(to[1]) - Convert.ToInt16(from[1]))) return false; //If Diagonal return false;
 
+            //check if other piece is in the way
             for (int i = 1; i < pathLength; i++)
             {
                 if (from[0] == to[0]) // Moving vertically
@@ -85,10 +97,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
             }
 
-            if (Chess.Board.GetPiece(to).PieceType == ChessPieceType.None)
-                return true;
+            if (Chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return true; //If field is empty move there
 
-            return Chess.Board.GetPiece(to).Team != Team;
+            return Chess.Board.GetPiece(to).Team != Team; //If opponent on field move there else don't move there
         }
     }
     public class PawnPiece : ChessPiece
@@ -98,7 +109,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public override bool CanMove(string from, string to)
         {
-            //todo
+            //todo - Remember to do this it is not implemented as of now IMPORTANT!!!
             return false;
         }
     }
@@ -134,7 +145,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             Chess.Board.ValidateFields(new[] { from, to });
 
             // Check if the move is within one square in any direction
-            int rowDiff = Math.Abs(Chess.AlphConversionChars.IndexOf(to[0]) - Chess.AlphConversionChars.IndexOf(from[0]));
+            int rowDiff = Math.Abs(Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0]));
             int colDiff = Math.Abs((int)to[1] - (int)from[1]);
 
             if (rowDiff > 1 || colDiff > 1)
@@ -147,16 +158,13 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 {
                     string tempField = $"{(char)Chess.AlphConversionChars[i]}{(char)j}";
 
-                    if (Chess.Board.GetPiece(tempField).Team == Team)
-                        continue;
+                    if (Chess.Board.GetPiece(tempField).Team == Team) continue;
 
-                    if (Chess.Board.GetPiece(tempField).CanMove(tempField, to))
-                        return false;
+                    if (Chess.Board.GetPiece(tempField).CanMove(tempField, to)) return false;
                 }
             }
 
-            if (Chess.Board.GetPiece(to).PieceType == ChessPieceType.None)
-                return true;
+            if (Chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return true;
 
             return Chess.Board.GetPiece(to).Team != Team;
         }
@@ -167,9 +175,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public ChessPieceType PieceType = ChessPieceType.None;
         public Team Team = Team.White;
 
-        public override bool CanMove(string from, string to)
-        {
-            throw new NotImplementedException();
-        }
+        public override bool CanMove(string from, string to) => false;
     }
 }
