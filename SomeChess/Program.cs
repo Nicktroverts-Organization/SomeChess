@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using SomeChess.Code;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();

@@ -14,7 +14,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
          * B B B B B B B B
          * T P L K K L P T
          */
-        public static ChessPiece[,] DefaultBoard = new ChessPiece[8, 8]
+        public static ChessPiece[,] Default = new ChessPiece[8, 8]
         {
             {new RookPiece(), new KnightPiece(), new BishopPiece(), new QueenPiece(), new KingPiece(), new BishopPiece(), new KnightPiece(), new RookPiece()},
             {new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece()},

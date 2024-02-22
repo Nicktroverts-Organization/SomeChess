@@ -5,8 +5,8 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
     public abstract class ChessPiece
     {
-        private ChessMovePattern? _MovePattern = null;
-        public ChessMovePattern MovePattern { get => _MovePattern ?? ChessMovePattern.None; set => _MovePattern = value; }
+        private ChessPieceType? _MovePattern = null;
+        public ChessPieceType PieceType { get => _MovePattern ?? ChessPieceType.None; set => _MovePattern = value; }
 
         private Team? _Team = null;
         public Team Team
@@ -17,8 +17,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public void InheritFrom(ChessPiece piece)
         {
-            MovePattern = piece.MovePattern;
+            PieceType = piece.PieceType;
             Team = piece.Team;
         }
+
+        public abstract bool CanMove(string from, string to);
     }
 }

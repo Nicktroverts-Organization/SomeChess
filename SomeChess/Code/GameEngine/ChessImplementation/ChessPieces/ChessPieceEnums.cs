@@ -1,6 +1,6 @@
 ﻿namespace SomeChess.Code.GameEngine.ChessImplementation
 {
-    public enum ChessMovePattern
+    public enum ChessPieceType
     {
         Knight,
         Queen,

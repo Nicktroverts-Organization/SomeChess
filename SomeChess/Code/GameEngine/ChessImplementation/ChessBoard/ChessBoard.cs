@@ -4,15 +4,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 {
     public class ChessBoard
     {
-        public ChessPiece[,]? Board = Boards.DefaultBoard;
-
-        private List<char> AlphConversionChars = new() 
-            { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+        public ChessPiece[,]? Board = Boards.Default;
 
 
-        public void SetFieldToDefault()
+        public void SetBoardToDefault()
         {
-            Board = Boards.DefaultBoard;
+            Board = Boards.Default;
 
             for (int i = 0; i < Board.GetLength(0); i++)
             {
@@ -34,7 +31,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public ChessPiece GetPiece(string Field)
         {
             if (ValidateField(Field))
-                return Board[AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1];
+                return Board[ChessGlobalVarCollection.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1];
 
             return new EmptyPiece();
         }
@@ -42,16 +39,25 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void SetPiece(string Field, ChessPiece piece)
         {
             if (ValidateField(Field))
-                Board[AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1] = piece;
+                Board[ChessGlobalVarCollection.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1] = piece;
         }
 
         public bool ValidateField(string Field)
         {
-            if (!AlphConversionChars.Contains(Field.ToLower()[0]))
+            if (!ChessGlobalVarCollection.AlphConversionChars.Contains(Field.ToLower()[0]) || Field.Length > 2)
                 throw new ArgumentException("Field does not exist!");
-            if (Board[AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1] is null)
+            if (Board[ChessGlobalVarCollection.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1] is null)
                 throw new ArgumentException("Field couldn't be found!");
             
+            return true;
+        }
+
+        public bool ValidateFields(string[] Fields)
+        {
+            foreach (string field in Fields)
+                if (!ValidateField(field)) 
+                    return false;
+
             return true;
         }
     }
