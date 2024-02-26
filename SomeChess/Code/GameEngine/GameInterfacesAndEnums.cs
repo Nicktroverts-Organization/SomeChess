@@ -15,17 +15,13 @@
         Go
     }
 
-    public enum Team
-    {
-        White,
-        Black
-    }
-
-    public interface IGame
+    public interface IGame<T>
     {
         public void StartGame();
 
         public void StopGame();
+
+        public T GetGame();
     }
 
 }

@@ -1,34 +1,21 @@
 ﻿using SomeChess.Code.GameEngine;
+using SomeChess.Code.GameEngine.ChessImplementation;
+using SomeChess.Code.Social;
 
 
 namespace SomeChess.Code.MatchMaking
 {
-    public enum GameMode
+
+
+    public interface IMatch
     {
-        OfflinePlayers,
-        Multiplayer,
-        WithComputer,
-    }
 
+        public MatchSettings GetSettings();
 
+        public void Join(Player player);
 
+        public void Leave(Player player);
 
-    public abstract class Match
-    {
-        protected IGame game { get; set; }
-
-        
-
-        protected GameMode mode { get; set; }
-
-        public Match(IGame game)
-        {
-            this.game = game;
-
-            this.mode = GameMode.WithComputer;
-        }
-
-         
     }
 
 

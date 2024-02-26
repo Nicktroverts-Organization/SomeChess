@@ -1,13 +1,6 @@
-﻿ namespace SomeChess.Code.MatchMaking.Chess
+﻿ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 {
-    public enum TimerDuration
-    {
-        FourSecondTimer = 4,
-        FifteenSecondTimer = 15,
-        OneMinuteTimer = 60,
-        TwoMinuteTimer = 120,
-        FiveMinuteTimer = 300
-    }
+
 
 
     public class ChessMatchConstructor

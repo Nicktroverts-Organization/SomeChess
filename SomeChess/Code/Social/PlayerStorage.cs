@@ -12,7 +12,7 @@ namespace SomeChess.Code.Social
         public Player(string name, string id)
         {
             Name = name;
-
+            ID = id;
         }
 
 
