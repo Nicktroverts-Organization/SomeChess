@@ -22,6 +22,8 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
     {
         public Chess Chess { get; }
 
+        private int MatchID { get; }
+
         private bool isStarted;
 
         // todo - for Ilkin - from denys and nick
@@ -37,7 +39,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
         public ChessPlayer White { get; set; }
 
 
-        public ChessMatch(IGame<Chess> game, Player aPlayer, bool hasTimer = false)
+        public ChessMatch(IGame<Chess> game, Player aPlayer, int uniqueId, bool hasTimer = false)
         {
             isStarted = false;
 
@@ -92,6 +94,12 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
         public MatchSettings GetSettings()
         {
             return new ChessMatchSettings(HasTimer, Duration);
+        }
+
+
+        public int GetMatchID()
+        {
+            return MatchID;
         }
 
 

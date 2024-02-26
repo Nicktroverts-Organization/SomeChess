@@ -10,7 +10,7 @@ namespace SomeChess.Code.MatchMaking
         //todo damn, using sealed, such professionalism. bababoye
     public sealed class MatchSearching  
     {   
-        private List<Match> matches;
+        private List<IMatch> matches;
 
 
         private MatchSearching()    
@@ -29,9 +29,60 @@ namespace SomeChess.Code.MatchMaking
             return instance;
         }
 
-        public void AddMatch(Match match)
+        public IMatch SearchMatch(MatchSettings settings)
+        {
+            foreach(IMatch match in matches)
+            {
+                if(match.GetType() == settings.MatchType && match.GetSettings() == settings)
+                {
+                    return match;
+                }
+            }
+            return null;
+        }
+
+        public void AddMatch(IMatch match)
         {
             matches.Add(match);
         }
+
+        public void RemoveMatch(IMatch match)
+        {
+            matches.Remove(match);
+        }
+
+        public int GetUniqueID()
+        {
+            Random rng = new();
+
+            if (matches.Count >= 999999)
+                throw new Exception("Too many games already exist, impossible to create an unique ID");
+
+            int id = rng.Next(999999);
+            bool alreadyExists = false;
+
+            foreach(IMatch match in matches)
+            {
+                if(match.GetMatchID() == id) 
+                    alreadyExists = true;
+            }
+
+            if( alreadyExists )
+            {
+                id = GetUniqueID();
+                return id;
+            }
+            else
+            {
+                return id;
+            }
+
+        }
+
+
+
+
+
+
     }
 }
