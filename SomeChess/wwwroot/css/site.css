@@ -30,3 +30,44 @@
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+:root {
+    --BackgroundColor: #402218;
+    --SecondBackgroundColor: #865439;
+    --HoverColor: #C68B59;
+    --ActiveColor: #D7B19D;
+    --TextColor: #d3d3d3;
+}
+.chessboard {
+    display: grid;
+    grid-template-columns: repeat(8, 80px);
+    grid-template-rows: repeat(8, 80px);
+}
+.normalefiguren {
+    width: 70px;
+}
+.powns {
+    width: 50px;
+}
+.rook {
+    width: 60px;
+}
+.knight {
+    width: 65px;
+}
+
+.item {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.whiteCell {
+    background-color: #eeeed2;
+}
+
+.blackCell {
+    background-color: #769656; 
+}
