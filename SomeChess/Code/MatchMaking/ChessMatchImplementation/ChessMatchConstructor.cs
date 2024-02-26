@@ -13,6 +13,7 @@
             set { if (HasTimer) { RoundDuration = value; } }
         }
 
+        public GameMode Mode { get; set; }
 
     }
 }
