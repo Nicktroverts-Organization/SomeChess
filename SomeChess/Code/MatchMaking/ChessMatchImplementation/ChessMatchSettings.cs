@@ -2,9 +2,9 @@
 {
     public record ChessMatchSettings : MatchSettings
     {
-        public bool HasTimer { get; }
+        public bool HasTimer { get; set; }
 
-        public TimerDuration Duration { get; }
+        public TimerDuration Duration { get; set; }
 
 
 

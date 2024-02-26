@@ -13,16 +13,16 @@ namespace SomeChess.Code.MatchMaking
         private List<IMatch> matches;
 
 
-        private MatchSearching()    
-        {   
-                  
+        private MatchSearching()
+        {
+
         }
 
         private static MatchSearching instance;
 
         public static MatchSearching GetInstance()
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = new MatchSearching();
             }

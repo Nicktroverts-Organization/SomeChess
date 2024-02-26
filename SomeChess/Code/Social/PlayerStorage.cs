@@ -18,9 +18,22 @@ namespace SomeChess.Code.Social
 
     }
 
-    public class PlayerStorage
+    public sealed class PlayerStorage
     {
         private List<Player> _players;
+
+        private static PlayerStorage instance;
+
+        private PlayerStorage() { }
+
+        public static PlayerStorage GetInstence()
+        {
+            if (instance == null)
+            {
+                instance = new PlayerStorage();
+            }
+            return instance;
+        }
 
         public Player GetPlayerByID(string id)
         {
@@ -36,7 +49,7 @@ namespace SomeChess.Code.Social
             }
         }
 
-        private string Create16DigitString()
+        public static string Create16DigitString()
         {
             Random rndm = new Random();
             var builder = new StringBuilder();
@@ -69,6 +82,7 @@ namespace SomeChess.Code.Social
             
             return newPlayer;
         }
+
 
         public void RemovePlayerByID(string id)
         {
