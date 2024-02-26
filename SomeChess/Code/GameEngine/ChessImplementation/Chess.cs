@@ -1,14 +1,13 @@
-﻿using SomeChess.Code.GameEngine.ChessImplementation;
-//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
+﻿//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
 //ispolzovat KakietoSchachmaty.Kod.IgrovoiDvighok;
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
-    public record Chess : IGame
+    public record Chess : IGame<Chess>
     {
         public static ChessBoard Board = new();
 
-        public static List<char> AlphConversionChars = new()
+        public static List<char> AlphConversionChars = new() 
             { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
         public static bool GameIsRunning = false;
@@ -67,6 +66,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             
             //Successfully moved piece from field "From" to field "To"
             return true;
+        }
+
+        public Chess GetGame()
+        {
+            return this;
         }
     }
 }

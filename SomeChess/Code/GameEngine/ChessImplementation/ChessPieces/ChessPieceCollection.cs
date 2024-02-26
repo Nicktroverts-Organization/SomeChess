@@ -1,7 +1,11 @@
 ﻿using System.Data;
+using System;
 using System.Numerics;
 using System.Security.Cryptography;
 using SomeChess.Code.GameEngine.ChessImplementation;
+using SomeChess.Code.MatchMaking;
+
+//todo - Someone check the performance of this code. I don't think i could make it any better. [Nick, 26.02.2024]
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
@@ -102,15 +106,43 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             return Chess.Board.GetPiece(to).Team != Team; //If opponent on field move there else don't move there
         }
     }
+
     public class PawnPiece : ChessPiece
     {
         public ChessPieceType PieceType = ChessPieceType.Pawn;
         public Team Team = Team.White;
 
+        // this is absolute pain i can't think and my brain is fried even though i just woke up pls kill me.
         public override bool CanMove(string from, string to)
         {
             //todo - Remember to do this it is not implemented as of now IMPORTANT!!!
+            switch (Team)
+            {
+                case Team.White:
+                    PawnCanMove(from, to, 1);
+                    break;
+                case Team.Black:
+                    PawnCanMove(from, to, -1);
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
+
+
             return false;
+        }
+
+        private bool PawnCanMove(string from, string to, int direction)
+        {
+
+            //gets the distance piece is traveling
+            int pathLength = Convert.ToInt16(MathF.Abs(Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0])));
+
+            Chess.Board.ValidateFields(new[] { from, to });
+
+            return direction != 1 && direction != -1 && false;
+
+
         }
     }
 

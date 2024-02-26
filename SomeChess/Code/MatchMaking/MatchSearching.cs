@@ -2,6 +2,7 @@
 using SomeChess.Code.Social;
 using SomeChess.Code.GameEngine.ChessImplementation;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 
 namespace SomeChess.Code.MatchMaking
