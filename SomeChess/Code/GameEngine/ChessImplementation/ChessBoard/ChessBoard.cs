@@ -1,63 +1,64 @@
-﻿using SomeChess.Code.GameEngine.ChessImplementation.ChessPieceCollection;
+﻿using SomeChess.Code.GameEngine.ChessImplementation;
 
-namespace SomeChess.Code.GameEngine.ChessImplementation.ChessBoard
+namespace SomeChess.Code.GameEngine.ChessImplementation
 {
-    public static class ChessBoard
+    public class ChessBoard
     {
-        //todo - optimize this, It's probably a bad way to do this
-        public static ChessField[,] Board = new ChessField[8, 8]
-        {
-            {new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField()},
-            {new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField()},
-            {new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField()},
-            {new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField()},
-            {new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField()},
-            {new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField()},
-            {new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField()},
-            {new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField(), new ChessField()},
-        };
-
-        private static List<char> letterConversionChars = new()
-        {
-            'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'
-        };
+        public ChessPiece[,]? Board = Boards.Default;
 
 
-        public static void ResetFieldToDefault()
+        public void SetBoardToDefault()
         {
-            //todo - create this method
+            Board = Boards.Default;
+
+            for (int i = 0; i < Board.GetLength(0); i++)
+            {
+                for (int j = 0; j < Board.GetLength(1); j++)
+                {
+                    if (i >= 5)
+                    {
+                        Board[i, j].Team = Team.Black;
+                    }
+                    else
+                    {
+                        Board[i, j].Team = Team.White;
+                    }
+                }
+            }
         }
 
 
-        public static ChessField GetField(string Field)
+        public ChessPiece GetPiece(string Field)
         {
-            if (!letterConversionChars.Contains(Field.ToLower()[0]))
-                throw new ArgumentException("Field does not exist");
+            if (ValidateField(Field))
+                return Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1];
 
-            return Board[letterConversionChars.IndexOf(Field.ToLower()[0]), Field.ToLower()[1]];
+            return new EmptyPiece();
         }
 
-
-        public static ChessPiece GetPiece(string Field) => GetField(Field).Piece;
-    }
-
-
-    //This thing is temporary so please remember to delete it at some point
-    //todo - delete this at some point when it's not needed anymore
-    public class Temp
-    {
-        public Temp()
+        public void SetPiece(string Field, ChessPiece piece)
         {
-            ChessBoard.GetField("e5").Piece = ChessPieces.PawnPiece;
-            ChessBoard.GetPiece("e5").Team = Team.White;
-
-            ChessBoard.GetField("h8").Piece = ChessPieces.RookPiece;
-            ChessBoard.GetPiece("h8").Team = Team.Black;
+            if (ValidateField(Field))
+                Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1] = piece;
         }
-    }
 
-    public class ChessField
-    {
-        public ChessPiece Piece { get; set; } = ChessPieces.EmptyPiece;
+        public bool ValidateField(string Field)
+        {
+            if (!Chess.AlphConversionChars.Contains(Field.ToLower()[0]) || Field.Length > 2)
+                throw new ArgumentException("Field does not exist!");
+            if (Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), Convert.ToInt32(Field.ToLower()[1]) - 1] is null)
+                throw new ArgumentException("Field couldn't be found!");
+            
+            return true;
+        }
+
+        public bool ValidateFields(string[] Fields)
+        {
+            foreach (string field in Fields)
+                if (!ValidateField(field)) 
+                    return false;
+
+            return true;
+        }
     }
 }
