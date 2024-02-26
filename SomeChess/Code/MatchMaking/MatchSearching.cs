@@ -14,31 +14,14 @@ namespace SomeChess.Code.MatchMaking
 
     public class MatchSearching
     {
-        public Player? Black { get; set; }
-        public Player? White { get; set; }
-
-
-        
-
 
         public MatchSearching(Player player)
         {
-            Random rndm = new Random();
-            
-            if(rndm.Next(2) == 0)
-            {
-                Black = player;
-            }
-            else
-            {
-                White = player;
-            }
-        }
 
-        public void Join(Player player)
-        {
+
 
         }
+
 
     }
 }
