@@ -30,16 +30,21 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
         /// <summary>
         /// <para>Ilkin it's personal for you</para>
         /// </summary>
-        public bool HasTimer;
+        
+        private GameMode gameMode {  get; set; }
 
-        TimerDuration Duration { get; set; }
+        public bool HasTimer { get; set; }
+
+        public int Duration { get; set; }
+
+        public int ExtraTime { get; set; }
 
         public ChessPlayer Black { get; set; }
 
         public ChessPlayer White { get; set; }
 
 
-        public ChessMatch(IGame<Chess> game, Player aPlayer, int uniqueId, bool hasTimer = false)
+        public ChessMatch(IGame<Chess> game, Player aPlayer, ChessMatchSettings settings, int uniqueId,  bool hasTimer = false)
         {
             isStarted = false;
 
@@ -93,7 +98,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
         public MatchSettings GetSettings()
         {
-            return new ChessMatchSettings(HasTimer, Duration);
+            return new ChessMatchSettings(gameMode, HasTimer, Duration, ExtraTime);
         }
 
 

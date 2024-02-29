@@ -13,6 +13,8 @@ namespace SomeChess.Code.MatchMaking
     {   
         private List<IMatch> matches;
 
+        private List<IMatch> offlineMatches;
+
 
         private MatchSearching()
         {
