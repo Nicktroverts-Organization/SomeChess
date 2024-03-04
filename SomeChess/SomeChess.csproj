@@ -13,9 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Code\Js\" />
     <Folder Include="Code\ComputerPlayer\" />
-    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>

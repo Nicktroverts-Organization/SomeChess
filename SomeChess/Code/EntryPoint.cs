@@ -15,7 +15,6 @@ namespace SomeChess.Code
 
         public EntryPoint()
         {
-            ChessMatchSettings settings = new(true, TimerDuration.FifteenSecondTimer);
 
         }
 
@@ -23,8 +22,6 @@ namespace SomeChess.Code
         
 
         
-
-
 
 
 

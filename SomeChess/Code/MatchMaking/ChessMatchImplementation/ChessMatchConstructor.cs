@@ -5,14 +5,26 @@
 
     public class ChessMatchConstructor
     {
-        public bool HasTimer { get; set; }
+        public GameMode Mode { get; set; }
 
-        public TimerDuration RoundDuration
+        private bool hasTimer {  get; set; }
+
+        private int duration { get; set; }
+
+        private int extraTime { get; set; }
+
+
+
+        public ChessMatchConstructor() { }
+
+        public void ChangeMode(GameMode newMode)
         {
-            get => RoundDuration;
-            set { if (HasTimer) { RoundDuration = value; } }
-        }
+            Mode = newMode;
 
+            hasTimer = ModePropertiesChecker.HasTimer(newMode);
+            duration = ModePropertiesChecker.GetDuration(newMode);
+            extraTime = ModePropertiesChecker.GetExtraTime(newMode);
+        }
 
     }
 }

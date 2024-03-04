@@ -564,12 +564,52 @@ video {
   position: relative;
 }
 
+.ml-12 {
+  margin-left: 3rem;
+}
+
+.ml-14 {
+  margin-left: 3.5rem;
+}
+
+.ml-16 {
+  margin-left: 4rem;
+}
+
+.ml-24 {
+  margin-left: 6rem;
+}
+
+.ml-52 {
+  margin-left: 13rem;
+}
+
 .ml-8 {
   margin-left: 2rem;
 }
 
 .ml-80 {
   margin-left: 20rem;
+}
+
+.ml-96 {
+  margin-left: 24rem;
+}
+
+.mr-0 {
+  margin-right: 0px;
+}
+
+.mt-14 {
+  margin-top: 3.5rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.mt-7 {
+  margin-top: 1.75rem;
 }
 
 .block {
@@ -596,12 +636,40 @@ video {
   display: none;
 }
 
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-24 {
+  height: 6rem;
+}
+
+.h-5 {
+  height: 1.25rem;
+}
+
 .h-52 {
   height: 13rem;
 }
 
 .h-64 {
   height: 16rem;
+}
+
+.w-24 {
+  width: 6rem;
+}
+
+.w-5 {
+  width: 1.25rem;
+}
+
+.w-52 {
+  width: 13rem;
+}
+
+.w-96 {
+  width: 24rem;
 }
 
 .border-collapse {
@@ -612,8 +680,22 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.select-none {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
 .resize {
   resize: both;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.place-content-evenly {
+  place-content: space-evenly;
 }
 
 .content-center {
@@ -628,13 +710,52 @@ video {
   justify-content: center;
 }
 
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.justify-self-center {
+  justify-self: center;
+}
+
 .border {
   border-width: 1px;
+}
+
+.bg-black {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-5 {
+  padding: 1.25rem;
+}
+
+.pl-2 {
+  padding-left: 0.5rem;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .text-5xl {
   font-size: 3rem;
   line-height: 1;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 .font-bold {
@@ -654,6 +775,11 @@ video {
 .text-green-400 {
   --tw-text-opacity: 1;
   color: rgb(74 222 128 / var(--tw-text-opacity));
+}
+
+.text-neutral-50 {
+  --tw-text-opacity: 1;
+  color: rgb(250 250 250 / var(--tw-text-opacity));
 }
 
 .text-red-400 {
@@ -703,11 +829,18 @@ video {
   content: "An error has occurred."
 }
 
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
 :root {
-  --BackgroundColor: #402218;
-  --SecondBackgroundColor: #865439;
-  --HoverColor: #C68B59;
-  --ActiveColor: #D7B19D;
+  --BackgroundColor: #283739;
+  --SecondBackgroundColor: #2c5d63;
+  --HoverColor: #a2c11c;
   --TextColor: #d3d3d3;
 }
 
@@ -747,4 +880,160 @@ video {
 
 .blackCell {
   background-color: #769656;
+}
+
+.playOnline {
+  transition-duration: 0.25s;
+  transition-property: all;
+  transition-timing-function: ease;
+  border-style: solid;
+  margin-top: 3vh;
+  height: 10vh;
+  width: 400px;
+  border-radius: 15px;
+  font-size: 250%;
+  color: white;
+  background-color: #93c75e;
+}
+
+.playOnline:hover {
+  background-color: #72c21f;
+}
+
+.playOnline img, .playOnline span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.playOnline img {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 1.5vh;
+  margin-left: -5vw;
+}
+
+.playOnline span {
+  margin-top: -9.5vh;
+  margin-left: 1.5vw;
+  font-size: 50%;
+}
+
+.playComputer {
+  transition-duration: 0.25s;
+  transition-property: all;
+  transition-timing-function: ease;
+  height: 10vh;
+  width: 400px;
+  border-radius: 15px;
+  font-size: 250%;
+  color: white;
+  background-color: #696969;
+}
+
+.playComputer img, .playComputer span {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.playComputer img {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 1.5vh;
+  margin-left: -6vw;
+}
+
+.playComputer span {
+  margin-top: -9.5vh;
+  margin-right: 1vw;
+  font-size: 50%;
+}
+
+.playComputer:hover {
+  background-color: #636363;
+}
+
+.greengradient {
+  font-size: 400%;
+  background-image: linear-gradient(to right, rgb(182, 244, 146), rgb(51, 139, 147));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.anton-regular {
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.backholder {
+  background-color: var(--SecondBackgroundColor);
+  border-radius: 10px;
+  width: 30vw;
+}
+
+.chooseTime {
+  background-color: var(--SecondBackgroundColor);
+  display: flex;
+  position: absolute;
+  margin-left: 54.2vw;
+  width: 30vw;
+  border-radius: 10px;
+  height: 60vh;
+  margin-top: -67vh;
+}
+
+.chooseTime span {
+  color: rgb(242, 84, 84);
+  margin-left: 28.5vw;
+  cursor: pointer;
+}
+
+.chooseTime span:hover {
+  color: rgb(243, 45, 45);
+}
+
+.chooseTime button {
+  background-color: var(--HoverColor);
+  width: 6vw;
+  border-radius: 5px;
+}
+
+.chooseTime button:hover {
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: ease-in-out;
+  box-shadow: 0 0 15px #72c21f;
+}
+
+.selectedTimeShadow {
+  background-color: #32581f;
+  box-shadow: 0 0 10px #72c21f;
+}
+
+.chooseTime h1 {
+  font-size: 400%;
+}
+
+.chooseTime h2 {
+  font-size: 200%;
+  color: white;
+}
+
+.chooseTime a {
+  cursor: pointer;
+  font-size: 300%;
+  box-shadow: 0 0 20px white;
+  color: white;
+  width: 10vw;
+  height: 6.5vh;
+  border-radius: 10px;
+  background-color: #283739;
+  font-weight: 700;
+}
+
+.chooseTime a:hover {
+  background-color: #2f3e41;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: ease-in-out;
 }
