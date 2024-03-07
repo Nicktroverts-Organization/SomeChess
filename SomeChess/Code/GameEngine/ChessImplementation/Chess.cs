@@ -40,11 +40,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {
                 for (var j = 0; j < 2; j++)
                 {
-                    WhitePieces.Add(Board.GetPiece($"{AlphConversionChars[i]}, {j}"));
+                    WhitePieces.Add(Board.GetPiece($"{AlphConversionChars[i]}{j+1}"));
                 }
                 for (var j = 7; j > 5; j--)
                 {
-                    BlackPieces.Add(Board.GetPiece($"{AlphConversionChars[i]}, {j}"));
+                    BlackPieces.Add(Board.GetPiece($"{AlphConversionChars[i]}{j+1}"));
                 }
             }
         }
