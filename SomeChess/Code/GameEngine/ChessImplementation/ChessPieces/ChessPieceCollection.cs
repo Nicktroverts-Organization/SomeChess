@@ -4,8 +4,12 @@ using System.Numerics;
 using System.Security.Cryptography;
 using SomeChess.Code.GameEngine.ChessImplementation;
 using SomeChess.Code.MatchMaking;
+//ᵇᵃᵇᵃᵇᵒʸᵉ
+//ʙᴀʙᴀʙᴏʏᴇ
 
-//todo - Someone check the performance of this code. I don't think i could make it any better. [Nick, 26.02.2024]
+
+// todo - Someone check the performance of this code. I don't think i could make it any better. [Nick, 26.02.2024]
+// todo - Someone check if this code even works. I don't think i can make it good. [Nick, 04.03.2024]
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
@@ -115,34 +119,36 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         // this is absolute pain i can't think and my brain is fried even though i just woke up pls kill me.
         public override bool CanMove(string from, string to)
         {
-            //todo - Remember to do this it is not implemented as of now IMPORTANT!!!
-            switch (Team)
-            {
-                case Team.White:
-                    PawnCanMove(from, to, 1);
-                    break;
-                case Team.Black:
-                    PawnCanMove(from, to, -1);
-                    break;
-                default:
-                    throw new InvalidOperationException();
-            }
-
-
-            return false;
+            return PawnCanMove(from, to, Team == Team.White ? 1 : -1);
         }
 
         private bool PawnCanMove(string from, string to, int direction)
         {
+            //No comments for you, Future me! get gud.
+            
+            if (direction != 1 && direction != -1) return false;
+            //if ((int)MathF.Abs(direction) != 1) return false;
+            
+            Chess.Board.ValidateFields(new[] { from, to });
 
             //gets the distance piece is traveling
             int pathLength = Convert.ToInt16(MathF.Abs(Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0])));
+            int colDiff = Convert.ToInt16(MathF.Abs((int)to[1] - (int)from[1]));
 
-            Chess.Board.ValidateFields(new[] { from, to });
+            if (pathLength > (Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) == 2 || Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) == 7 ? 2 : 1)) 
+                return false;
 
-            return direction != 1 && direction != -1 && false;
+            if (Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0]) != direction && Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0]) != direction + direction)
+                return false;
 
 
+            if (colDiff > 1) return false;
+            if (colDiff == 1 && pathLength != 1) return false;
+
+            if (Chess.Board.GetPiece(to).Team != Team && colDiff == 1) return true;
+            if (Chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return true;
+
+            return false;
         }
     }
 
@@ -183,6 +189,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (rowDiff > 1 || colDiff > 1)
                 return false;
 
+            // todo - Make this less performance intensive please.
             // logic to check if the move would result in putting the king in check.
             for (var i = 0; i < 8; i++)
             {
