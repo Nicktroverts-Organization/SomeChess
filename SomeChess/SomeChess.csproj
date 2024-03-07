@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\Js\DragAndDrop.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="System.Private.CoreLib">
       <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.NETCore.App\7.0.14\System.Private.CoreLib.dll</HintPath>
     </Reference>

@@ -1,7 +1,7 @@
-﻿using SomeChess.Code.GameEngine;
+﻿ 
+using SomeChess.Code.GameEngine;
 using SomeChess.Code.GameEngine.ChessImplementation;
 using SomeChess.Code.Social;
-
 
 namespace SomeChess.Code.MatchMaking
 {
