@@ -16,4 +16,13 @@
         White,
         Black,
     }
+
+    public enum ChessState
+    {
+        WhiteWin,
+        BlackWin,
+        Draw,
+        Playing,
+        None
+    }
 }

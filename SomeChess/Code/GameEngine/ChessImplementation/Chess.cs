@@ -1,6 +1,8 @@
 ﻿//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
 //ispolzovat KakietoSchachmaty.Kod.IgrovoiDvighok;
 
+using System.Security.Cryptography.X509Certificates;
+
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
     public record Chess : IGame<Chess>
@@ -13,6 +15,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public static bool GameIsRunning = false;
 
         public Team TeamTurn = Team.White;
+
+        public List<ChessPiece> WhitePieces = new();
+        public List<ChessPiece> BlackPieces = new();
 
         public Chess() => ResetBoard();
 
@@ -31,11 +36,30 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             Board.SetBoardToDefault();
             TeamTurn = Team.White;
+            for (var i = 0; i < 8; i++)
+            {
+                for (var j = 0; j < 2; j++)
+                {
+                    WhitePieces.Add(Board.GetPiece($"{AlphConversionChars[i]}, {j}"));
+                }
+                for (var j = 7; j > 5; j--)
+                {
+                    BlackPieces.Add(Board.GetPiece($"{AlphConversionChars[i]}, {j}"));
+                }
+            }
+        }
+
+        /// <summary>
+        /// <para>End current players turn.</para>
+        /// </summary>
+        public void EndTurn()
+        {
+            TeamTurn = TeamTurn == Team.White ? Team.Black : Team.White;
         }
 
         public void UpdateGameState()
         {
-            //todo
+
             throw new NotImplementedException();
         }
 

@@ -4,9 +4,12 @@ using System.Numerics;
 using System.Security.Cryptography;
 using SomeChess.Code.GameEngine.ChessImplementation;
 using SomeChess.Code.MatchMaking;
+//ᵇᵃᵇᵃᵇᵒʸᵉ
+//ʙᴀʙᴀʙᴏʏᴇ
 
-//todo - Someone check the performance of this code. I don't think i could make it any better. [Nick, 26.02.2024]
-//todo - Someone check if this code even works. I don't think i can make it good. [Nick, 04.03.2024]
+
+// todo - Someone check the performance of this code. I don't think i could make it any better. [Nick, 26.02.2024]
+// todo - Someone check if this code even works. I don't think i can make it good. [Nick, 04.03.2024]
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
@@ -121,7 +124,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         private bool PawnCanMove(string from, string to, int direction)
         {
+            //No comments for you, Future me! get gud.
+            
             if (direction != 1 && direction != -1) return false;
+            //if ((int)MathF.Abs(direction) != 1) return false;
+            
             Chess.Board.ValidateFields(new[] { from, to });
 
             //gets the distance piece is traveling
@@ -134,13 +141,14 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0]) != direction && Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0]) != direction + direction)
                 return false;
 
+
             if (colDiff > 1) return false;
             if (colDiff == 1 && pathLength != 1) return false;
 
             if (Chess.Board.GetPiece(to).Team != Team && colDiff == 1) return true;
             if (Chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return true;
 
-            return Chess.Board.GetPiece(to).Team != Team;
+            return false;
         }
     }
 
@@ -181,6 +189,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (rowDiff > 1 || colDiff > 1)
                 return false;
 
+            // todo - Make this less performance intensive please.
             // logic to check if the move would result in putting the king in check.
             for (var i = 0; i < 8; i++)
             {
