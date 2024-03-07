@@ -1,161 +1,162 @@
 ﻿@inject IJSRuntime JsRuntime;
 @using Microsoft.AspNetCore.Components.Web
+@using SomeChess.Code.GameEngine.ChessImplementation
 
 <div class="flex text-center justify-center place-content-evenly mt-7">
     <div class="chessboard select-none flex text-center justify-center">
         <div>
-            <div class="item whiteCell" id="a8">
-                <img draggable="true" class="rook" src="images/b_rook.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)" id="a8">
+                <img draggable="true" class="rook" src="images/b_rook.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item blackCell" id="a7">
-                <img draggable="true" class="powns" src="images/b_pawn.png" @ondrop="Drop" @ondragover="AllowDrop" />
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)" id="a7">
+                <img draggable="true" class="powns" src="images/b_pawn.png"  />
             </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="a6"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="a5"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="a4"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="a3"></div>
-            <div class="item whiteCell " @ondrop="Drop" @ondragover="AllowDrop" id="a2">
-                <img draggable="true" class="powns" src="images/w_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="a6"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="a5"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="a4"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="a3"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="a2">
+                <img draggable="true" class="powns" src="images/w_pawn.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="a1">
-                <img draggable="true" class="rook" src="images/w_rook.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
-            </div>
-        </div>
-        <div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="b8">
-                <img draggable="true" class="knight" src="images/b_knight.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
-            </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="b7">
-                <img draggable="true" class="powns" src="images/b_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
-            </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="b6"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="b5"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="b4"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="b3"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="b2">
-                <img draggable="true" class="powns" src="images/w_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
-            </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="b1">
-                <img draggable="true" class="knight" src="images/w_knight.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="a1">
+                <img draggable="true" class="rook" src="images/w_rook.png"  @ondragend="DragEnd" />
             </div>
         </div>
         <div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="c8">
-                <img draggable="true" class="normalefiguren" src="images/b_bishop.png"@ondragstart="DragStart" @ondragend="DragEnd" />
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="b8">
+                <img draggable="true" class="knight" src="images/b_knight.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="c7">
-                <img draggable="true" class="powns" src="images/b_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="b7">
+                <img draggable="true" class="powns" src="images/b_pawn.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="c6"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="c5"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="c4"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="c3"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="c2">
-                <img draggable="true" class="powns" src="images/w_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="b6"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="b5"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="b4"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="b3"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="b2">
+                <img draggable="true" class="powns" src="images/w_pawn.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="c1">
-                <img draggable="true" class="normalefiguren" src="images/w_bishop.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="b1">
+                <img draggable="true" class="knight" src="images/w_knight.png"  @ondragend="DragEnd" />
             </div>
         </div>
         <div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="d8">
-                <img draggable="true" class="normalefiguren" src="images/b_queen.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="c8">
+                <img draggable="true" class="normalefiguren" src="images/b_bishop.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="d7">
-                <img draggable="true" class="powns" src="images/b_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="c7">
+                <img draggable="true" class="powns" src="images/b_pawn.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="d6"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="d5"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="d4"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="d3"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="d2">
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="c6"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="c5"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="c4"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="c3"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="c2">
+                <img draggable="true" class="powns" src="images/w_pawn.png"  @ondragend="DragEnd" />
+            </div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="c1">
+                <img draggable="true" class="normalefiguren" src="images/w_bishop.png"  @ondragend="DragEnd" />
+            </div>
+        </div>
+        <div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="d8">
+                <img draggable="true" class="normalefiguren" src="images/b_queen.png"  @ondragend="DragEnd" />
+            </div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="d7">
+                <img draggable="true" class="powns" src="images/b_pawn.png"  @ondragend="DragEnd" />
+            </div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="d6"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="d5"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="d4"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="d3"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="d2">
                 <img draggable="true" class="powns" src="images/w_pawn.png" />
             </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="d1">
-                <img draggable="true" class="normalefiguren" src="images/w_queen.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="d1">
+                <img draggable="true" class="normalefiguren" src="images/w_queen.png"  @ondragend="DragEnd" />
             </div>
         </div>
         <div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="e8">
-                <img draggable="true" class="normalefiguren" src="images/b_king.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="e8">
+                <img draggable="true" class="normalefiguren" src="images/b_king.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="e7">
-                <img draggable="true" class="powns" src="images/b_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="e7">
+                <img draggable="true" class="powns" src="images/b_pawn.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="e6"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="e5"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="e4"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="e3"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="e2">
-                <img draggable="true" class="powns" src="images/w_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="e6"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="e5"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="e4"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="e3"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="e2">
+                <img draggable="true" class="powns" src="images/w_pawn.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="e1">
-                <img draggable="true" class="normalefiguren" src="images/w_king.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
-            </div>
-        </div>
-        <div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="f8">
-                <img draggable="true" class="normalefiguren" src="images/b_bishop.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
-            </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="f7">
-                <img draggable="true" class="powns" src="images/b_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
-            </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="f6"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="f5"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="f4"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="f3"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="f2">
-                <img draggable="true" class="powns" src="images/w_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
-            </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="f1">
-                <img draggable="true" class="normalefiguren" src="images/w_bishop.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="e1">
+                <img draggable="true" class="normalefiguren" src="images/w_king.png"  @ondragend="DragEnd" />
             </div>
         </div>
         <div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="g8">
-                <img draggable="true" class="knight" src="images/b_knight.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="f8">
+                <img draggable="true" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)" class="normalefiguren" src="images/b_bishop.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="g7">
-                <img draggable="true" class="powns" src="images/b_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="f7">
+                <img draggable="true" class="powns" src="images/b_pawn.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="g6"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="g5"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="g4"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="g3"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="g2">
-                <img draggable="true" class="powns" src="images/w_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="f6"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="f5"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="f4"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="f3"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="f2">
+                <img draggable="true" class="powns" src="images/w_pawn.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="g1">
-                <img draggable="true" class="knight" src="images/w_knight.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="f1">
+                <img draggable="true" class="normalefiguren" src="images/w_bishop.png"  @ondragend="DragEnd" />
             </div>
         </div>
         <div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="h8">
-                <img draggable="true" class="rook" src="images/b_rook.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="g8">
+                <img draggable="true" class="knight" src="images/b_knight.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="h7">
-                <img draggable="true" class="powns" src="images/b_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="g7">
+                <img draggable="true" class="powns" src="images/b_pawn.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="h6"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="h5"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="h4"></div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="h3"></div>
-            <div class="item blackCell" @ondrop="Drop" @ondragover="AllowDrop" id="h2">
-                <img draggable="true" @ondrop="Drop" @ondragover="AllowDrop" class="powns" src="images/w_pawn.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="g6"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="g5"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="g4"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="g3"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="g2">
+                <img draggable="true" class="powns" src="images/w_pawn.png"  @ondragend="DragEnd" />
             </div>
-            <div class="item whiteCell" @ondrop="Drop" @ondragover="AllowDrop" id="h1">
-                <img draggable="true" class="rook" src="images/w_rook.png" @ondragstart="DragStart" @ondragend="DragEnd"/>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="g1">
+                <img draggable="true" class="knight" src="images/w_knight.png"  @ondragend="DragEnd" />
+            </div>
+        </div>
+        <div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="h8">
+                <img draggable="true" class="rook" src="images/b_rook.png"  @ondragend="DragEnd" />
+            </div>
+            <div class="item whiteCell" ondrop="Drop"  id="h7">
+                <img draggable="true" class="powns" src="images/b_pawn.png"  @ondragend="DragEnd" />
+            </div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="h6"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="h5"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="h4"></div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="h3"></div>
+            <div class="item blackCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="h2">
+                <img draggable="true" ondrop="Drop"  class="powns" src="images/w_pawn.png"  @ondragend="DragEnd" />
+            </div>
+            <div class="item whiteCell" onmouseup="getMouseUpElementID(this)" onclick="getClickedElementID(this)"  id="h1">
+                <img draggable="true" class="rook" src="images/w_rook.png"  @ondragend="DragEnd" />
             </div>
         </div>
     </div>
     <div class="backholder ml-24 flex flex-col text-center ">
         <h1 class="greengradient anton-regular">
             Play Chess<br />
-            Online<br/>
+            Online<br />
             on the #1 Site!
         </h1>
         <div>
-            <button @onclick="() => { PlayOnline = true;}" class="playOnline"><img width="72" height="2" src="images/online-icon.png"/>Play Online<br /><span>Play with a real person online!</span></button>
+            <button @onclick="() => { PlayOnline = true;}" class="playOnline"><img width="72" height="2" src="images/online-icon.png" />Play Online<br /><span>Play with a real person online!</span></button>
         </div>
         <div>
             <button class="playComputer"><img width="72" height="2" src="images/computer-icon.png" /> Computer<br /><span class="smalltextPlayComputer">Play vs training bots</span></button>
@@ -196,7 +197,7 @@
                     <button @onclick="() => { SetButtonState(9);}" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
                 </div>
             </div>
-            <div class="playButton flex justify-center mt-14">
+            <div class="playButton flex justify-center mt-14 select-none">
                 <a class="flex text-center justify-center">Play</a>
             </div>
         </div>
@@ -208,6 +209,16 @@
 @code {
     public bool PlayOnline = false;
     int SelectedButton = 0;
+    public Chess ChessGame = new Chess();
+
+    public string FromID = "";
+    public string ToID = "";
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        ChessGame.StartGame();
+        return base.OnAfterRenderAsync(firstRender);
+    }
 
     void SetButtonState(int buttonNumber)
     {
@@ -217,31 +228,25 @@
         }
         else
         {
-            SelectedButton = 0; 
+            SelectedButton = 0;
         }
     }
 
-    private void DragStart(DragEventArgs e)
+    public async Task DragEnd(DragEventArgs e)
     {
-        string jsFunction = @"window.BlazorDragAndDrop.DragStart";
-        JsRuntime.InvokeVoidAsync(jsFunction, e);
-    }
+        FromID = await JsRuntime.InvokeAsync<string>("getSelected");
+        ToID = await JsRuntime.InvokeAsync<string>("getDropped");
 
-    private void DragEnd(DragEventArgs e)
-    {
-        string jsFunction = @"window.BlazorDragAndDrop.DragEnd";
-        JsRuntime.InvokeVoidAsync(jsFunction, e);
-    }
+        Console.WriteLine(FromID);
+        Console.WriteLine(ToID);
 
-    private void Drop(DragEventArgs e)
-    {
-        string jsFunction = @"window.BlazorDragAndDrop.Drop";
-        JsRuntime.InvokeVoidAsync(jsFunction, e);
-    }
+        if (ChessGame.MovePiece(FromID, ToID))
+        {
+            await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+        }
+        else
+        {
 
-    private void AllowDrop(DragEventArgs e)
-    {
-        string jsFunction = @"window.BlazorDragAndDrop.DragOver";
-        JsRuntime.InvokeVoidAsync(jsFunction, e);
+        }
     }
 }

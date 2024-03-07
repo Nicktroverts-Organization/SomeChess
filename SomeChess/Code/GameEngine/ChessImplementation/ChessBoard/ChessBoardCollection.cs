@@ -5,18 +5,18 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
     public static class Boards
     {
 
-        /* T P L K K L P T
+        /* T P L K Q L P T
          * B B B B B B B B
          * _ _ _ _ _ _ _ _
          * _ _ _ _ _ _ _ _
          * _ _ _ _ _ _ _ _
          * _ _ _ _ _ _ _ _
          * B B B B B B B B
-         * T P L K K L P T
+         * T P L K Q L P T
          */
         public static ChessPiece[,] Default = new ChessPiece[8, 8]
         {
-            {new RookPiece(), new KnightPiece(), new BishopPiece(), new QueenPiece(), new KingPiece(), new BishopPiece(), new KnightPiece(), new RookPiece()},
+            {new RookPiece(), new KnightPiece(), new BishopPiece(), new KingPiece(), new QueenPiece(), new BishopPiece(), new KnightPiece(), new RookPiece()},
             {new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece()},
             {new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece()},
             {new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece()},
