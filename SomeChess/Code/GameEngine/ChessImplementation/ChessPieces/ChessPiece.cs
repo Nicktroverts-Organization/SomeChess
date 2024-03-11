@@ -5,15 +5,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
     public abstract class ChessPiece
     {
-        private ChessPieceType? _MovePattern = null;
-        public ChessPieceType PieceType { get => _MovePattern ?? ChessPieceType.None; set => _MovePattern = value; }
+        public ChessPieceType PieceType;
 
-        private Team? _Team = null;
-        public Team Team
-        {
-            get => _Team ?? throw new Exception("Piece should have a team");
-            set => _Team = value;
-        }
+        public Team Team;
 
         public void InheritFrom(ChessPiece piece)
         {

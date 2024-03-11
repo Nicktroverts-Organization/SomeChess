@@ -217,6 +217,7 @@
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         ChessGame.StartGame();
+        ChessGame.UpdateGameState();
         return base.OnAfterRenderAsync(firstRender);
     }
 

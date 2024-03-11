@@ -55,12 +55,25 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void EndTurn()
         {
             TeamTurn = TeamTurn == Team.White ? Team.Black : Team.White;
+            UpdateGameState();
         }
 
         public void UpdateGameState()
         {
-
-            throw new NotImplementedException();
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    for (int x = 0; x < 8; x++)
+                    {
+                        for (int y = 0; y < 8; y++)
+                        {
+                            Console.WriteLine($"{AlphConversionChars[i]}{j + 1} -> {AlphConversionChars[x]}{y + 1} : {Board.GetPiece($"{AlphConversionChars[i]}{j + 1}")
+                                .CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}")}");
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

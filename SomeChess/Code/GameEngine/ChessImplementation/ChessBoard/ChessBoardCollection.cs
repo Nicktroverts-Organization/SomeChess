@@ -16,14 +16,14 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
          */
         public static ChessPiece[,] Default = new ChessPiece[8, 8]
         {
-            {new RookPiece(), new KnightPiece(), new BishopPiece(), new KingPiece(), new QueenPiece(), new BishopPiece(), new KnightPiece(), new RookPiece()},
-            {new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece()},
-            {new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece()},
-            {new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece()},
-            {new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece()},
-            {new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece()},
-            {new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece(), new PawnPiece()},
-            {new RookPiece(), new KnightPiece(), new BishopPiece(), new KingPiece(), new QueenPiece(), new BishopPiece(), new KnightPiece(), new RookPiece()},
+            {new RookPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new RookPiece()},
+            {new KnightPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new KnightPiece()},
+            {new BishopPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new BishopPiece()},
+            {new QueenPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new QueenPiece()},
+            {new KingPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new KingPiece()},
+            {new BishopPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new BishopPiece()},
+            {new KnightPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new KnightPiece()},
+            {new RookPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new RookPiece()},
         };
     }
 }
