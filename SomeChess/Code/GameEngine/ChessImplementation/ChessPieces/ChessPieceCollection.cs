@@ -15,10 +15,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 {
     public class KnightPiece : ChessPiece
     {
-        public KnightPiece()
+        public KnightPiece(Team team) : base(team)
         {
             PieceType = ChessPieceType.Knight;
-            Team = Team.White;
+            Team = team;
         }
 
         public override bool CanMove(string from, string to)
@@ -37,10 +37,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
     public class BishopPiece : ChessPiece
     {
-        public BishopPiece()
+        public BishopPiece(Team team) : base(team)
         {
             PieceType = ChessPieceType.Bishop;
-            Team = Team.White;
+            Team = team;
         }
 
         public override bool CanMove(string from, string to)
@@ -78,10 +78,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
     public class RookPiece : ChessPiece
     {
         
-        public RookPiece()
+        public RookPiece(Team team) : base(team)
         {
             PieceType = ChessPieceType.Rook;
-            Team = Team.White;
+            Team = team;
         }
 
         public override bool CanMove(string from, string to)
@@ -135,10 +135,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
     public class PawnPiece : ChessPiece
     {
-        public PawnPiece()
+        public PawnPiece(Team team) : base(team)
         {
             PieceType = ChessPieceType.Pawn;
-            Team = Team.White;
+            Team = team;
         }
 
         // this is absolute pain i can't think and my brain is fried even though i just woke up pls kill me.
@@ -185,13 +185,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
     public class QueenPiece : ChessPiece
     {
-        private readonly RookPiece _rook = new();
-        private readonly BishopPiece _bishop = new();
+        private readonly RookPiece _rook;
+        private readonly BishopPiece _bishop;
 
-        public QueenPiece()
+        public QueenPiece(Team team) : base(team)
         {
             PieceType = ChessPieceType.Queen;
-            Team = Team.White;
+            Team = team;
+            _rook = new RookPiece(team);
+            _bishop = new BishopPiece(team);
         }
 
         public override bool CanMove(string from, string to)
@@ -200,18 +202,17 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             Chess.Board.ValidateFields(new[] { from, to });
 
             //Check if one of both pieces can move if yes return true else return false
-            return _rook.CanMove(from, to) || _bishop.CanMove(from, to);
+            if (_rook.CanMove(from, to) || _bishop.CanMove(from, to)) return true;
+            return false;
         }
     }
 
     public class KingPiece : ChessPiece
     {
-        private readonly QueenPiece _queen = new();
-
-        public KingPiece()
+        public KingPiece(Team team) : base(team)
         {
             PieceType = ChessPieceType.King;
-            Team = Team.White;
+            Team = team;
         }
 
         public override bool CanMove(string from, string to)
@@ -247,10 +248,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
     public class EmptyPiece : ChessPiece
     {
-        public EmptyPiece()
+        public EmptyPiece(Team team) : base(team)
         {
             PieceType = ChessPieceType.None;
-            Team = Team.White;
+            Team = team;
         }
 
         public override bool CanMove(string from, string to) => false;

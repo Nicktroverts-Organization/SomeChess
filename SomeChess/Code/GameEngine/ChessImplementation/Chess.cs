@@ -12,7 +12,8 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public static List<char> AlphConversionChars = new() 
             { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
-        public static bool GameIsRunning = false;
+
+        public ChessState State = ChessState.None;
 
         public Team TeamTurn = Team.White;
 
@@ -24,12 +25,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void StartGame()
         {
             ResetBoard();
-            GameIsRunning = true;
+            State = ChessState.Playing;
         }
 
         public void StopGame()
         {
-            GameIsRunning = false;
+            State = ChessState.None;
         }
 
         public void ResetBoard()
@@ -85,7 +86,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public bool MovePiece(string From, string To)
         {
             //Check that game is running
-            if (!GameIsRunning)
+            if (State == ChessState.None)
                 throw new InvalidOperationException("Can't move piece while game is not running!");
 
             //Check if player is trying to move opponents piece.
@@ -99,7 +100,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             //Moves the piece to the new position
             Board.SetPiece(To, Board.GetPiece(From));
-            Board.SetPiece(From, new EmptyPiece());
+            Board.SetPiece(From, new EmptyPiece(Board.GetPiece(From).Team));
             
             //Successfully moved piece from field "From" to field "To"
             return true;

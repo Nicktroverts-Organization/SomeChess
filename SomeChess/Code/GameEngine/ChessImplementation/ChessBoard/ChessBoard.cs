@@ -10,17 +10,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void SetBoardToDefault()
         {
             Board = Boards.Default;
-
-            for (int i = 0; i < Board.GetLength(0); i++)
-            {
-                for (int j = 0; j < Board.GetLength(1); j++)
-                {
-                    if (j >= 5)
-                        GetPiece($"{Chess.AlphConversionChars[i]}{j+1}").Team = Team.Black;
-                    else
-                        GetPiece($"{Chess.AlphConversionChars[i]}{j + 1}").Team = Team.White;
-                }
-            }
         }
 
 
@@ -29,7 +18,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (ValidateField(Field))
                 return Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), (int)Char.GetNumericValue(Field.ToLower()[1]) - 1];
 
-            return new EmptyPiece();
+            return new EmptyPiece(Team.White);
         }
 
         public void SetPiece(string Field, ChessPiece piece)

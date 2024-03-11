@@ -16,14 +16,14 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
          */
         public static ChessPiece[,] Default = new ChessPiece[8, 8]
         {
-            {new RookPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new RookPiece()},
-            {new KnightPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new KnightPiece()},
-            {new BishopPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new BishopPiece()},
-            {new QueenPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new QueenPiece()},
-            {new KingPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new KingPiece()},
-            {new BishopPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new BishopPiece()},
-            {new KnightPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new KnightPiece()},
-            {new RookPiece(), new PawnPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new EmptyPiece(), new PawnPiece(), new RookPiece()},
+            {new RookPiece(Team.White), new PawnPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.Black), new EmptyPiece(Team.Black), new PawnPiece(Team.Black), new RookPiece(Team.Black)},
+            {new KnightPiece(Team.White), new PawnPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.Black), new EmptyPiece(Team.Black), new PawnPiece(Team.Black), new KnightPiece(Team.Black)},
+            {new BishopPiece(Team.White), new PawnPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.Black), new EmptyPiece(Team.Black), new PawnPiece(Team.Black), new BishopPiece(Team.Black)},
+            {new QueenPiece(Team.White), new PawnPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.Black), new EmptyPiece(Team.Black), new PawnPiece(Team.Black), new QueenPiece(Team.Black)},
+            {new KingPiece(Team.White), new PawnPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.Black), new EmptyPiece(Team.Black), new PawnPiece(Team.Black), new KingPiece(Team.Black)},
+            {new BishopPiece(Team.White), new PawnPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.Black), new EmptyPiece(Team.Black), new PawnPiece(Team.Black), new BishopPiece(Team.Black)},
+            {new KnightPiece(Team.White), new PawnPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.Black), new EmptyPiece(Team.Black), new PawnPiece(Team.Black), new KnightPiece(Team.Black)},
+            {new RookPiece(Team.White), new PawnPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.Black), new EmptyPiece(Team.Black), new PawnPiece(Team.Black), new RookPiece(Team.Black)},
         };
     }
 }

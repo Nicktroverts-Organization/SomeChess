@@ -15,6 +15,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             Team = piece.Team;
         }
 
+        protected ChessPiece(Team team)
+        {
+            Team = team;
+        }
+
         public abstract bool CanMove(string from, string to);
     }
 }
