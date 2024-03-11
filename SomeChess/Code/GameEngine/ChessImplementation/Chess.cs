@@ -51,6 +51,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             UpdateGameState();
         }
 
+        /// <summary>
+        /// <para>Performance hell</para>
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void UpdateGameState()
         {
             WhiteKingCanMove = false;
@@ -65,8 +69,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     {
                         for (int y = 0; y < 8; y++)
                         {
+                            //Get From Piece
                             var FromPiece = Board.GetPiece($"{AlphConversionChars[i]}{j + 1}");
 
+                            //Check for Fields each Team can move to
                             if (FromPiece.Team == Team.White)
                             {
                                 if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
@@ -78,6 +84,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                                     FieldsBlackCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
                             }
 
+                            //Check if the kings can move anywhere without checkmate
                             if (FromPiece.PieceType == ChessPieceType.King && FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
                             {
                                 switch (FromPiece.Team)
@@ -91,16 +98,22 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                                         BlackKingCanMove = true;
                                         break;
                                     default:
-                                        throw new ArgumentOutOfRangeException();
+                                        throw new ArgumentOutOfRangeException("FromPiece doesn't have a Team");
                                 }
                             }
-
-                            Console.WriteLine($"{AlphConversionChars[i]}{j + 1} -> {AlphConversionChars[x]}{y + 1} : {FromPiece
-                                .CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame())}");
+                            Console.Write($"{AlphConversionChars[i]}{j + 1} -> {AlphConversionChars[x]}{y + 1} : ");
+                            Console.ForegroundColor =
+                                FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? ConsoleColor.Green : ConsoleColor.Red;
+                            Console.Write(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()));
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write($"{(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{ AlphConversionChars[x]}{y + 1}", GetGame()) ? " " : "")}" + " | ");
                         }
+                        Console.Write("\n");
                     }
                 }
             }
+
+            State = ChessState.Playing;
 
             if (FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackKingCanMove == false)
                 State = ChessState.WhiteWin;
