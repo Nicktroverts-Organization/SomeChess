@@ -7,9 +7,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 {
     public record Chess : IGame<Chess>
     {
-        public static ChessBoard Board = new();
+        public ChessBoard Board = new();
 
-        public static List<char> AlphConversionChars = new() 
+        public static List<char> AlphConversionChars = new()
             { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
 
@@ -17,8 +17,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public Team TeamTurn = Team.White;
 
-        public List<ChessPiece> WhitePieces = new();
-        public List<ChessPiece> BlackPieces = new();
+        public List<string> FieldsBlackCanMoveTo = new();
+        public List<string> FieldsWhiteCanMoveTo = new();
+
+        public bool? WhiteKingCanMove;
+        public bool? BlackKingCanMove;
 
         public Chess() => ResetBoard();
 
@@ -37,17 +40,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             Board.SetBoardToDefault();
             TeamTurn = Team.White;
-            for (var i = 0; i < 8; i++)
-            {
-                for (var j = 0; j < 2; j++)
-                {
-                    WhitePieces.Add(Board.GetPiece($"{AlphConversionChars[i]}{j+1}"));
-                }
-                for (var j = 7; j > 5; j--)
-                {
-                    BlackPieces.Add(Board.GetPiece($"{AlphConversionChars[i]}{j+1}"));
-                }
-            }
         }
 
         /// <summary>
@@ -61,6 +53,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public void UpdateGameState()
         {
+            WhiteKingCanMove = false;
+            BlackKingCanMove = false;
+            string whiteKingField = "";
+            string blackKingField = "";
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -69,12 +65,47 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     {
                         for (int y = 0; y < 8; y++)
                         {
-                            Console.WriteLine($"{AlphConversionChars[i]}{j + 1} -> {AlphConversionChars[x]}{y + 1} : {Board.GetPiece($"{AlphConversionChars[i]}{j + 1}")
-                                .CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}")}");
+                            var FromPiece = Board.GetPiece($"{AlphConversionChars[i]}{j + 1}");
+
+                            if (FromPiece.Team == Team.White)
+                            {
+                                if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
+                                    FieldsWhiteCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
+                            }
+                            else if (FromPiece.Team == Team.Black)
+                            {
+                                if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
+                                    FieldsBlackCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
+                            }
+
+                            if (FromPiece.PieceType == ChessPieceType.King && FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
+                            {
+                                switch (FromPiece.Team)
+                                {
+                                    case Team.White:
+                                        whiteKingField = $"{AlphConversionChars[i]}{j + 1}";
+                                        WhiteKingCanMove = true;
+                                        break;
+                                    case Team.Black:
+                                        blackKingField = $"{AlphConversionChars[i]}{j + 1}";
+                                        BlackKingCanMove = true;
+                                        break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
+                                }
+                            }
+
+                            Console.WriteLine($"{AlphConversionChars[i]}{j + 1} -> {AlphConversionChars[x]}{y + 1} : {FromPiece
+                                .CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame())}");
                         }
                     }
                 }
             }
+
+            if (FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackKingCanMove == false)
+                State = ChessState.WhiteWin;
+            if (FieldsBlackCanMoveTo.Contains(whiteKingField) && WhiteKingCanMove == false)
+                State = ChessState.BlackWin;
         }
 
         /// <summary>
@@ -93,15 +124,17 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (Board.GetPiece(From).Team != TeamTurn)
                 return false;
 
+            //if ((TeamTurn == Team.White ? FieldsBlackCanMoveTo.Contains(To) : FieldsWhiteCanMoveTo.Contains(To)) && Board.GetPiece(From).PieceType == ChessPieceType.King) return false;
+
             //Check if the given parameters are valid chess fields.
             Board.ValidateFields(new[] { From, To });
 
-            if (!Board.GetPiece(From).CanMove(From, To)) return false; //If Piece can't move to field "To", return false.
+            if (!Board.GetPiece(From).CanMove(From, To, GetGame())) return false; //If Piece can't move to field "To", return false.
 
             //Moves the piece to the new position
             Board.SetPiece(To, Board.GetPiece(From));
             Board.SetPiece(From, new EmptyPiece(Board.GetPiece(From).Team));
-            
+
             //Successfully moved piece from field "From" to field "To"
             return true;
         }

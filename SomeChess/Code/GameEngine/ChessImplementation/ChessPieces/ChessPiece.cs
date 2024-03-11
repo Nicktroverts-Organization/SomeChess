@@ -20,6 +20,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             Team = team;
         }
 
-        public abstract bool CanMove(string from, string to);
+        public abstract bool CanMove(string from, string to, Chess chess);
     }
 }
