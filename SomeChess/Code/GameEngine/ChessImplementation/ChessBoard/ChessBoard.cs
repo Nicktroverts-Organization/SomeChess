@@ -6,54 +6,59 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
     {
         public ChessPiece[,]? Board = Boards.Default;
 
-
+        /// <summary>
+        /// <para>Sets the <see cref="Board"/> to <see cref="Boards.Default"/></para>
+        /// </summary>
         public void SetBoardToDefault()
         {
             Board = Boards.Default;
-
-            for (int i = 0; i < Board.GetLength(0); i++)
-            {
-                for (int j = 0; j < Board.GetLength(1); j++)
-                {
-                    if (i >= 5)
-                    {
-                        Board[i, j].Team = Team.Black;
-                    }
-                    else
-                    {
-                        Board[i, j].Team = Team.White;
-                    }
-                }
-            }
         }
 
-
+        /// <summary>
+        /// <para>Gets <see cref="ChessPiece"/> on <paramref name="Field"/>.</para>
+        /// </summary>
+        /// <param name="Field">The field to get the <see cref="ChessPiece"/> from.</param>
+        /// <returns>The <see cref="ChessPiece"/> from the <paramref name="Field"/></returns>
         public ChessPiece GetPiece(string Field)
         {
             if (ValidateField(Field))
                 return Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), (int)Char.GetNumericValue(Field.ToLower()[1]) - 1];
 
-            return new EmptyPiece();
+            return new EmptyPiece(Team.White);
         }
 
+        /// <summary>
+        /// <para>Sets the <see cref="ChessPiece"/> on <paramref name="Field"/> to <paramref name="piece"/>.</para>
+        /// </summary>
+        /// <param name="Field"></param>
+        /// <param name="piece"></param>
         public void SetPiece(string Field, ChessPiece piece)
         {
             if (ValidateField(Field))
                 Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), (int)Char.GetNumericValue(Field.ToLower()[1]) - 1] = piece;
         }
 
+        /// <summary>
+        /// <para>Checks whether or not a field actually exists.</para>
+        /// </summary>
+        /// <param name="Field">Chess Field to check (example: "e2")</param>
+        /// <returns><c>true</c> if it's valid and <c>false</c> if it's invalid</returns>
+        /// <exception cref="ArgumentException"></exception>
         public bool ValidateField(string Field)
         {
             if (!Chess.AlphConversionChars.Contains(Field.ToLower()[0]) || Field.Length > 2)
                 throw new ArgumentException("Field does not exist!");
-            Console.WriteLine(Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]));
-            Console.WriteLine((int)Char.GetNumericValue(Field.ToLower()[1]) - 1);
             if (Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), (int)Char.GetNumericValue(Field.ToLower()[1]) - 1] is null)
                 throw new ArgumentException("Field couldn't be found!");
             
             return true;
         }
 
+        /// <summary>
+        /// <para>Checks whether or not fields actually exists.</para>
+        /// </summary>
+        /// <param name="Field">Chess Fields to check (example: "e2", "e3")</param>
+        /// <returns><c>true</c> if they're valid and <c>false</c> if they're invalid</returns>
         public bool ValidateFields(string[] Fields)
         {
             foreach (string field in Fields)
