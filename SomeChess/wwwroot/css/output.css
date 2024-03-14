@@ -552,6 +552,10 @@ video {
   visibility: collapse;
 }
 
+.static {
+  position: static;
+}
+
 .fixed {
   position: fixed;
 }
@@ -800,6 +804,15 @@ video {
   outline-style: solid;
 }
 
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.backdrop-filter {
+  -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+          backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
+
 #blazor-error-ui {
   background: lightyellow;
   bottom: 0;
@@ -1007,7 +1020,7 @@ video {
 
 .selectedTimeShadow {
   background-color: #32581f;
-  box-shadow: 0 0 10px #72c21f;
+  box-shadow: 0 0 20px #72c21f;
 }
 
 .chooseTime h1 {
@@ -1036,4 +1049,23 @@ video {
   transition-duration: 0.15s;
   transition-property: all;
   transition-timing-function: ease-in-out;
+}
+
+.chessPiece[draggable] {
+  cursor: pointer;
+  -webkit-backdrop-filter: brightness(20%);
+          backdrop-filter: brightness(20%);
+}
+
+.chessPiece {
+  cursor: pointer;
+}
+
+img.chessPiece[draggable] {
+  -webkit-backdrop-filter: brightness(100%);
+          backdrop-filter: brightness(100%);
+}
+
+.selected {
+  z-index: 999;
 }

@@ -212,3 +212,17 @@
             transition-property: all;
             transition-timing-function: ease-in-out;
         }
+
+.chessPiece[draggable] {
+    cursor: pointer;
+    backdrop-filter: brightness(20%);
+}
+.chessPiece {
+    cursor: pointer;
+}
+img.chessPiece[draggable] {
+    backdrop-filter: brightness(100%); 
+}
+.selected {
+    z-index: 999;
+}
