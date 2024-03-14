@@ -9,12 +9,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public Team Team;
 
-        public void InheritFrom(ChessPiece piece)
-        {
-            PieceType = piece.PieceType;
-            Team = piece.Team;
-        }
-
         protected ChessPiece(Team team)
         {
             Team = team;
