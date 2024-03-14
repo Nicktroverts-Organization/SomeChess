@@ -15,6 +15,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public Team TeamTurn = Team.White;
 
+        public List<ChessPiece> BlackPieces = new();
+        public List<ChessPiece> WhitePieces = new();
+
         public List<string> FieldsBlackCanMoveTo = new();
         public List<string> FieldsWhiteCanMoveTo = new();
 
@@ -117,6 +120,16 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             UpdateGameState();
         }
 
+        private void ClearVariables()
+        {
+            WhiteKingCanMove = false;
+            BlackKingCanMove = false;
+            WhitePieces.Clear();
+            BlackPieces.Clear();
+            FieldsWhiteCanMoveTo.Clear();
+            FieldsBlackCanMoveTo.Clear();
+        }
+
         /// <summary>
         /// <para>Checks game state and changes some variables according to this game state</para>
         /// <para>Performance hell</para>
@@ -124,10 +137,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <exception cref="ArgumentOutOfRangeException">If for some reason the Team enum does not equal any possible values it throws an exception</exception>
         public void UpdateGameState()
         {
-            WhiteKingCanMove = false;
-            BlackKingCanMove = false;
-            FieldsWhiteCanMoveTo.Clear();
-            FieldsBlackCanMoveTo.Clear();
+            ClearVariables();
             string whiteKingField = "";
             string blackKingField = "";
             for (int i = 0; i < 8; i++)
@@ -146,11 +156,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                             {
                                 if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
                                     FieldsWhiteCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
+                                if (FromPiece.PieceType != ChessPieceType.None)
+                                    WhitePieces.Add(FromPiece);
                             }
                             else if (FromPiece.Team == Team.Black)
                             {
                                 if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
                                     FieldsBlackCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
+                                if (FromPiece.PieceType != ChessPieceType.None)
+                                    BlackPieces.Add(FromPiece);
                             }
 
                             //Check if the kings can move anywhere without checkmate
@@ -192,9 +206,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = ChessState.WhiteWin;
             if (FieldsBlackCanMoveTo.Contains(whiteKingField) && WhiteKingCanMove == false)
                 GameState = ChessState.BlackWin;
-            if (BlackKingCanMove == false && !FieldsWhiteCanMoveTo.Contains(blackKingField))
+            if (BlackKingCanMove == false && !FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackPieces.Count == 1)
                 GameState = ChessState.Draw;
-            if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(whiteKingField))
+            if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(whiteKingField) && WhitePieces.Count == 1)
                 GameState = ChessState.Draw;
         }
 
