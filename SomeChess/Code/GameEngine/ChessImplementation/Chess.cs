@@ -177,7 +177,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                                 FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? ConsoleColor.Green : ConsoleColor.Red;
                             Console.Write(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()));
                             Console.ForegroundColor = ConsoleColor.White;
-                            Console.Write($"{(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{ AlphConversionChars[x]}{y + 1}", GetGame()) ? " " : "")}" + " | ");
+                            Console.Write($"{(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? " " : "")}" + " | ");
                         }
                         Console.Write("\n");
                     }
@@ -192,10 +192,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = ChessState.WhiteWin;
             if (FieldsBlackCanMoveTo.Contains(whiteKingField) && WhiteKingCanMove == false)
                 GameState = ChessState.BlackWin;
-            if (BlackKingCanMove == false && !FieldsWhiteCanMoveTo.Contains(blackKingField))
-                GameState = ChessState.Draw;
-            if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(whiteKingField))
-                GameState = ChessState.Draw;
+            //if (BlackKingCanMove == false && !FieldsWhiteCanMoveTo.Contains(blackKingField))
+            //    GameState = ChessState.Draw;
+            //if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(whiteKingField))
+            //    GameState = ChessState.Draw;
         }
 
         /// <summary>
