@@ -60,7 +60,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             int colChange = (int)Char.GetNumericValue(to[1]) > (int)Char.GetNumericValue(from[1]) ? 1 : -1;
 
             //check if something is in the way
-            for (int i = 1; i <= pathLength; i++)
+            for (int i = 1; i < pathLength; i++)
             {
                 int file = (Chess.AlphConversionChars.IndexOf(from.ToLower()[0]) + i * rowChange);
                 int rank = ((int)Char.GetNumericValue(from[1]) + i * colChange);
