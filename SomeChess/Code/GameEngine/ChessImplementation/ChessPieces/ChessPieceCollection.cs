@@ -160,6 +160,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             int colDiff = Convert.ToInt16(MathF.Abs(Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0])));
             int pathLength = Convert.ToInt16(MathF.Abs((int)Char.GetNumericValue(to[1]) - (int)Char.GetNumericValue(from[1])));
 
+            //check for correct direction
+            if ((int)Char.GetNumericValue(to[1]) > (int)Char.GetNumericValue(from[1])) {
+                if (direction == -1) 
+                    return false; }
+            else
+                if (direction == 1)
+                    return false;
+
+
             if (pathLength > (((int)Char.GetNumericValue(from[1]) == 2 || (int)Char.GetNumericValue(from[1]) == 7) ? 2 : 1))
                 return false;
 

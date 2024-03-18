@@ -21,6 +21,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public List<string> FieldsBlackCanMoveTo = new();
         public List<string> FieldsWhiteCanMoveTo = new();
 
+        public string whiteKingField = "";
+        public string blackKingField = "";
+
         public bool? WhiteKingCanMove;
         public bool? BlackKingCanMove;
 
@@ -128,6 +131,8 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             BlackPieces.Clear();
             FieldsWhiteCanMoveTo.Clear();
             FieldsBlackCanMoveTo.Clear();
+            whiteKingField = "";
+            blackKingField = "";
         }
 
         /// <summary>
@@ -138,8 +143,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void UpdateGameState()
         {
             ClearVariables();
-            string whiteKingField = "";
-            string blackKingField = "";
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -217,23 +220,56 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// </summary>
         /// <param name="From">The field of the piece to move.</param>
         /// <param name="To">The field to move the piece to.</param>
+        /// <param name="IgnoreSpecialCases">this is meant for internal use only. don't touch!</param>
         /// <returns>Returns whether or not it was successfully moved</returns>
-        public bool MovePiece(string From, string To)
+        public bool MovePiece(string From, string To, bool IgnoreSpecialCases = false)
         {
             //Check that game is running
             if (GameState != ChessState.Playing)
                 throw new InvalidOperationException("Can't move piece while not game is not running!");
 
+            var FromPiece = Board.GetPiece(From);
+
             //Check if player is trying to move opponents piece.
-            if (Board.GetPiece(From).Team != TeamTurn)
+            if (FromPiece.Team != TeamTurn)
                 return false;
+
+            if (!IgnoreSpecialCases)
+            {
+                Chess? ChessCopy = this;
+
+                if (TeamTurn == Team.White)
+                {
+                    if (FieldsBlackCanMoveTo.Contains(whiteKingField))
+                    {
+                        ChessCopy.MovePiece(From, To, true);
+                        ChessCopy.EndTurn();
+                        if (ChessCopy.FieldsBlackCanMoveTo.Contains(whiteKingField))
+                            return false;
+                    }
+                }
+                else
+                {
+                    if (FieldsWhiteCanMoveTo.Contains(blackKingField))
+                    {
+                        ChessCopy.MovePiece(From, To, true);
+                        ChessCopy.EndTurn();
+                        if (ChessCopy.FieldsWhiteCanMoveTo.Contains(blackKingField))
+                            return false;
+                    }
+                }
+
+                ChessCopy = null;
+            }
+
 
             //if ((TeamTurn == Team.White ? FieldsBlackCanMoveTo.Contains(To) : FieldsWhiteCanMoveTo.Contains(To)) && Board.GetPiece(From).PieceType == ChessPieceType.King) return false;
 
             //Check if the given parameters are valid chess fields.
             Board.ValidateFields(new[] { From, To });
 
-            if (!Board.GetPiece(From).CanMove(From, To, GetGame())) return false; //If Piece can't move to field "To", return false.
+            if (!Board.GetPiece(From).CanMove(From, To, GetGame()))
+                return false; //If Piece can't move to field "To", return false.
 
             //Moves the piece to the new position
             Board.SetPiece(To, Board.GetPiece(From));
