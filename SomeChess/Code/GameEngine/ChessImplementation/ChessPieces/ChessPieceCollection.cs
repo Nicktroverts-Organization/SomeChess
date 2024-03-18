@@ -183,7 +183,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (colDiff > 1) return false;
             if (colDiff == 1 && pathLength != 1) return false;
 
-            if (chess.Board.GetPiece(to).Team != Team && colDiff == 1) return true;
+            if (chess.Board.GetPiece(to).Team != Team && colDiff == 1 && chess.Board.GetPiece(to).PieceType != ChessPieceType.None) return true;
             else if (colDiff == 1 && chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return false;
             else if (colDiff == 1 && chess.Board.GetPiece(to).Team == Team) return false;
             if (chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return true;
