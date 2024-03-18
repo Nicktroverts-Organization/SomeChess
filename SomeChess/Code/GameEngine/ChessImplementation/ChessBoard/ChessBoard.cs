@@ -2,9 +2,26 @@
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
-    public class ChessBoard
+    public class ChessBoard : ICloneable
     {
         public ChessPiece[,]? Board = Boards.Default;
+
+        public ChessBoard()
+        {
+            return;
+        }
+
+        public Guid Test = Guid.NewGuid();
+
+        public ChessBoard(ChessBoard origin)
+        {
+            Board = origin.Board;
+        }
+
+        public ChessBoard GetCopy()
+        {
+            return new ChessBoard((ChessBoard)this.MemberwiseClone());
+        }
 
         /// <summary>
         /// <para>Sets the <see cref="Board"/> to <see cref="Boards.Default"/></para>
@@ -66,6 +83,21 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     return false;
 
             return true;
+        }
+
+        public object Clone()
+        {
+            var board = new ChessBoard();
+            ChessPiece[,]? boardClone = Boards.Default;
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    boardClone[i, j] = (ChessPiece)boardClone[i, j].Clone();
+                }
+            }
+            board.Board = boardClone;
+            return board;
         }
     }
 }
