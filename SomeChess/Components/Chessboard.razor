@@ -153,7 +153,6 @@ else
 
 
 @code {
-    bool boardUpdated = false;
     public bool isDragging = true;
     public bool PlayOnline = false;
     public bool Reload = true;
@@ -179,7 +178,7 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        
+
 
         if (firstRender)
         {
@@ -221,16 +220,16 @@ else
             if (ChessGame.MovePiece(FromID, ToID))
             {
                 ChessGame.EndTurn();
-                // Reload = true;
-                // StateHasChanged();
+                Reload = true;
+                StateHasChanged();
             }
             else
             {
 
                 ToID = FromID;
-                // Reload = true;
-                // StateHasChanged();
-                       //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                Reload = true;
+                StateHasChanged();
+                //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
             }
         }
     }
