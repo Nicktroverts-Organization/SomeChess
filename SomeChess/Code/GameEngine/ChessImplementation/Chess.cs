@@ -186,14 +186,14 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                             }
 
                             //Write colored debug message to console
-                            //Console.Write($"{AlphConversionChars[i]}{j + 1} -> {AlphConversionChars[x]}{y + 1} : ");
-                            //Console.ForegroundColor =
-                            //    FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? ConsoleColor.Green : ConsoleColor.Red;
-                            //Console.Write(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()));
-                            //Console.ForegroundColor = ConsoleColor.White;
-                            //Console.Write($"{(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? " " : "")}" + " | ");
+                            Console.Write($"{AlphConversionChars[i]}{j + 1} -> {AlphConversionChars[x]}{y + 1} : ");
+                            Console.ForegroundColor =
+                                FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? ConsoleColor.Green : ConsoleColor.Red;
+                            Console.Write(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()));
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write($"{(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? " " : "")}" + " | ");
                         }
-                        //Console.Write("\n");
+                        Console.Write("\n");
                     }
                 }
             }
