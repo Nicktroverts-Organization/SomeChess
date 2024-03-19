@@ -175,15 +175,18 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                             //Check for Fields each Team can move to
                             if (FromPiece.Team == Team.White)
                             {
+
                                 if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
-                                    FieldsWhiteCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
+                                    if (FromPiece.PieceType != ChessPieceType.Pawn)
+                                        FieldsWhiteCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
                                 if (FromPiece.PieceType != ChessPieceType.None)
                                     WhitePieces.Add(FromPiece);
                             }
                             else if (FromPiece.Team == Team.Black)
                             {
                                 if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
-                                    FieldsBlackCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
+                                    if (FromPiece.PieceType != ChessPieceType.Pawn)
+                                        FieldsBlackCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
                                 if (FromPiece.PieceType != ChessPieceType.None)
                                     BlackPieces.Add(FromPiece);
                             }
@@ -233,9 +236,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             //Check for conditions to gather correct states
             ////if (FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackKingCanMove == false)
-                ////GameState = ChessState.WhiteWin;
+            ////GameState = ChessState.WhiteWin;
             ////if (FieldsBlackCanMoveTo.Contains(whiteKingField) && WhiteKingCanMove == false)
-                ////GameState = ChessState.BlackWin;
+            ////GameState = ChessState.BlackWin;
             if (BlackKingCanMove == false && !FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackPieces.Count == 1)
                 GameState = ChessState.Draw;
             if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(whiteKingField) && WhitePieces.Count == 1)
@@ -265,20 +268,20 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (Original)
             {
                 Chess? ChessCopy = (Chess)Clone();
-                
+
 
                 if (TeamTurn == Team.White)
                 {
                     ChessCopy.MovePiece(From, To);
                     ChessCopy.EndTurn();
-                    if (ChessCopy.FieldsBlackCanMoveTo.Contains(whiteKingField))
+                    if (ChessCopy.FieldsBlackCanMoveTo.Contains(ChessCopy.whiteKingField))
                         return false;
                 }
                 else
                 {
                     ChessCopy.MovePiece(From, To);
                     ChessCopy.EndTurn();
-                    if (ChessCopy.FieldsWhiteCanMoveTo.Contains(blackKingField))
+                    if (ChessCopy.FieldsWhiteCanMoveTo.Contains(ChessCopy.blackKingField))
                         return false;
                 }
 

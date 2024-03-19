@@ -213,7 +213,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (colDiff > 1) return false;
             if (colDiff == 1 && pathLength != 1) return false;
 
-            if (chess.Board.GetPiece(to).Team != Team && colDiff == 1 && chess.Board.GetPiece(to).PieceType != ChessPieceType.None) return true;
+            if (chess.Board.GetPiece(to).Team != Team && colDiff == 1 && chess.Board.GetPiece(to).PieceType != ChessPieceType.None)
+            {
+                if (Team == Team.White)
+                    chess.FieldsWhiteCanMoveTo.Add(to);
+                else
+                    chess.FieldsBlackCanMoveTo.Add(to);
+
+                return true;
+            }
             else if (colDiff == 1 && chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return false;
             else if (colDiff == 1 && chess.Board.GetPiece(to).Team == Team) return false;
             if (chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return true;
@@ -291,18 +299,18 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (rowDiff > 1 || colDiff > 1)
                 return false;
 
-            // logic to check if the move would result in putting the king in check.
-            for (var i = 0; i < 8; i++)
-            {
-                for (var j = 0; j < 8; j++)
-                {
-                    string tempField = $"{(char)Chess.AlphConversionChars[i]}{(char)j + 1}";
+            //// logic to check if the move would result in putting the king in check.
+            //for (var i = 0; i < 8; i++)
+            //{
+            //    for (var j = 0; j < 8; j++)
+            //    {
+            //        string tempField = $"{(char)Chess.AlphConversionChars[i]}{(char)j + 1}";
 
-                    if (chess.Board.GetPiece(tempField).Team == Team) continue;
+            //        if (chess.Board.GetPiece(tempField).Team == Team) continue;
 
-                    if (chess.Board.GetPiece(tempField).CanMove(tempField, to, chess.GetGame())) return false;
-                }
-            }
+            //        if (chess.Board.GetPiece(tempField).CanMove(tempField, to, chess.GetGame())) return false;
+            //    }
+            //}
 
             if (chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return true;
 
