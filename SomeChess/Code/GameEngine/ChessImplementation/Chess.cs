@@ -186,12 +186,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                             }
 
                             //Write colored debug message to console
-                            Console.Write($"{AlphConversionChars[i]}{j + 1} -> {AlphConversionChars[x]}{y + 1} : ");
-                            Console.ForegroundColor =
-                                FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? ConsoleColor.Green : ConsoleColor.Red;
-                            Console.Write(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()));
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.Write($"{(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? " " : "")}" + " | ");
+                            //Console.Write($"{AlphConversionChars[i]}{j + 1} -> {AlphConversionChars[x]}{y + 1} : ");
+                            //Console.ForegroundColor =
+                            //    FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? ConsoleColor.Green : ConsoleColor.Red;
+                            //Console.Write(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()));
+                            //Console.ForegroundColor = ConsoleColor.White;
+                            //Console.Write($"{(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? " " : "")}" + " | ");
                         }
                         Console.Write("\n");
                     }
@@ -202,7 +202,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             GameState = ChessState.Playing;
 
             //Check for conditions to gather correct states
-            if (FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackKingCanMove == false)
+            if (FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackKingCanMove == false) 
                 GameState = ChessState.WhiteWin;
             if (FieldsBlackCanMoveTo.Contains(whiteKingField) && WhiteKingCanMove == false)
                 GameState = ChessState.BlackWin;

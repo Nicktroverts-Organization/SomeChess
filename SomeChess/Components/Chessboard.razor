@@ -34,7 +34,7 @@
                             pieceColor = "w";
                         else pieceColor = "b";
 
-                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" onmouseover="SelectedPeace(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
                             @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
                         </div>
                     }
@@ -88,7 +88,7 @@ else
                             pieceColor = "w";
                         else pieceColor = "b";
 
-                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" onmouseover="SelectedPeace(event)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
                             @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
                         </div>
                     }
@@ -149,10 +149,27 @@ else
             </div>
         </div>
     </div>
+
+@*     @if (GameOver)
+    {
+        <span @onclick="() => { NotNewGame = true; }" class="material-symbols-outlined fixed absolute select-none">cancel</span>
+        <div class="bg-green-300 w-4/12 h-3/6 ml-32">
+            @if(GameWon == "white")
+            {
+                <p class="anton-regular text-lg">You won the game!</p>
+            }
+            else
+            {
+                <p class="anton-regular text-lg ">You lost the game</p>
+            }
+            <button>PLay new one!</button>
+        </div>
+    } *@
 }
 
 
 @code {
+    bool NotNewGame = false;
     public bool isDragging = true;
     public bool PlayOnline = false;
     public bool Reload = true;
@@ -178,8 +195,6 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-
-
         if (firstRender)
         {
             ChessGame.StartGame();
@@ -217,6 +232,7 @@ else
         else if (Event == "mouseup")
         {
             ToID = id;
+            Console.WriteLine(ChessGame.GetGameState());
             if (ChessGame.MovePiece(FromID, ToID))
             {
                 ChessGame.EndTurn();
@@ -225,7 +241,6 @@ else
             }
             else
             {
-
                 ToID = FromID;
                 Reload = true;
                 StateHasChanged();

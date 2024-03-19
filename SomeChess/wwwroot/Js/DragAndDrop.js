@@ -66,3 +66,7 @@ window.addEventListener('dragstart', function (event) {
     event.target.offsetY = event.clientY - event.target.getBoundingClientRect().top;
     event.target.style.position = 'absolute';
 });
+window.SelectedPeace = function (event) {
+    var element = document.getElementById(event.id);
+    element.style.zIndex = '1';
+}
