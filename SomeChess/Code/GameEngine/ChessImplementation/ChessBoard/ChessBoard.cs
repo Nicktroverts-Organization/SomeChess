@@ -41,7 +41,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (ValidateField(Field))
                 return Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), (int)Char.GetNumericValue(Field.ToLower()[1]) - 1];
 
-            return new EmptyPiece(Team.White);
+            return new EmptyPiece(Team.White, Field);
         }
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 {
     public class KnightPiece : ChessPiece
     {
-        public KnightPiece(Team team) : base(team)
+        public KnightPiece(Team team, string field) : base(team, field)
         {
             PieceType = ChessPieceType.Knight;
             Team = team;
@@ -36,7 +36,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public override object Clone()
         {
-            var clone = new KnightPiece(Team);
+            var clone = new KnightPiece(Team, Field);
             clone.PieceType = PieceType;
             return clone;
         }
@@ -44,10 +44,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
     public class BishopPiece : ChessPiece
     {
-        public BishopPiece(Team team) : base(team)
+        public BishopPiece(Team team, string field) : base(team, field)
         {
             PieceType = ChessPieceType.Bishop;
             Team = team;
+            Field = field;
         }
 
         public override bool CanMove(string from, string to, Chess chess)
@@ -83,7 +84,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public override object Clone()
         {
-            var clone = new BishopPiece(Team);
+            var clone = new BishopPiece(Team, Field);
             clone.PieceType = PieceType;
             return clone;
         }
@@ -92,10 +93,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
     public class RookPiece : ChessPiece
     {
 
-        public RookPiece(Team team) : base(team)
+        public RookPiece(Team team, string field) : base(team, field)
         {
             PieceType = ChessPieceType.Rook;
             Team = team;
+            Field = field;
         }
 
         public override bool CanMove(string from, string to, Chess chess)
@@ -148,7 +150,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public override object Clone()
         {
-            var clone = new RookPiece(Team);
+            var clone = new RookPiece(Team, Field);
             clone.PieceType = PieceType;
             return clone;
         }
@@ -156,10 +158,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
     public class PawnPiece : ChessPiece
     {
-        public PawnPiece(Team team) : base(team)
+        public PawnPiece(Team team, string field) : base(team, field)
         {
             PieceType = ChessPieceType.Pawn;
             Team = team;
+            Field = field;
         }
 
         // this is absolute pain i can't think and my brain is fried even though i just woke up pls kill me.
@@ -231,7 +234,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public override object Clone()
         {
-            var clone = new PawnPiece(Team);
+            var clone = new PawnPiece(Team, Field);
             clone.PieceType = PieceType;
             return clone;
         }
@@ -242,12 +245,13 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         private readonly RookPiece _rook;
         private readonly BishopPiece _bishop;
 
-        public QueenPiece(Team team) : base(team)
+        public QueenPiece(Team team, string field) : base(team, field)
         {
             PieceType = ChessPieceType.Queen;
             Team = team;
-            _rook = new RookPiece(team);
-            _bishop = new BishopPiece(team);
+            Field = field;
+            _rook = new RookPiece(team, Field);
+            _bishop = new BishopPiece(team, Field);
         }
 
         public override bool CanMove(string from, string to, Chess chess)
@@ -262,7 +266,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public override object Clone()
         {
-            var clone = new QueenPiece(Team);
+            var clone = new QueenPiece(Team, Field);
             clone.PieceType = PieceType;
             return clone;
         }
@@ -270,10 +274,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
     public class KingPiece : ChessPiece
     {
-        public KingPiece(Team team) : base(team)
+        public KingPiece(Team team, string field) : base(team, field)
         {
             PieceType = ChessPieceType.King;
             Team = team;
+            Field = field;
         }
 
         public override bool CanMove(string from, string to, Chess chess)
@@ -319,7 +324,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public override object Clone()
         {
-            var clone = new KingPiece(Team);
+            var clone = new KingPiece(Team, Field);
             clone.PieceType = PieceType;
             return clone;
         }
@@ -327,17 +332,18 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
     public class EmptyPiece : ChessPiece
     {
-        public EmptyPiece(Team team) : base(team)
+        public EmptyPiece(Team team, string field) : base(team, field)
         {
             PieceType = ChessPieceType.None;
             Team = team;
+            Field = field;
         }
 
         public override bool CanMove(string from, string to, Chess chess) => false;
 
         public override object Clone()
         {
-            var clone = new EmptyPiece(Team);
+            var clone = new EmptyPiece(Team, Field);
             clone.PieceType = PieceType;
             return clone;
         }
