@@ -6,6 +6,22 @@ using SomeChess.Code.MatchMaking.ChessMatchImplementation;
 
 namespace SomeChess.Code
 {
+    public static class LoggingHandler
+    {
+        public static ILoggerFactory loggerFactory = LoggerFactory.Create(
+            builder => builder
+                .AddConsole()
+                .AddDebug()
+                .SetMinimumLevel(LogLevel.Debug)
+        );
+
+        public static ILogger GetLogger<T>()
+        {
+            var logger = loggerFactory.CreateLogger<T>();
+            return logger;
+        }
+    }
+
     public class EntryPoint
     {
 

@@ -33,6 +33,13 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             return chess.Board.GetPiece(to).Team != Team; //Tries to move on other piece if opponent return true else return false;
         }
+
+        public override object Clone()
+        {
+            var clone = new KnightPiece(Team);
+            clone.PieceType = PieceType;
+            return clone;
+        }
     }
 
     public class BishopPiece : ChessPiece
@@ -49,7 +56,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 throw new ArgumentException("\"from\" or \"to\" was empty!");
 
             //make sure fields are actual chess fields
-            chess.Board.ValidateFields(new[]{ from, to });
+            chess.Board.ValidateFields(new[] { from, to });
 
             //get the distance piece is going to move and make sure it's diagonal
             int pathLength = Convert.ToInt16(MathF.Abs(Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0])));
@@ -60,7 +67,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             int colChange = (int)Char.GetNumericValue(to[1]) > (int)Char.GetNumericValue(from[1]) ? 1 : -1;
 
             //check if something is in the way
-            for (int i = 1; i <= pathLength; i++)
+            for (int i = 1; i < pathLength; i++)
             {
                 int file = (Chess.AlphConversionChars.IndexOf(from.ToLower()[0]) + i * rowChange);
                 int rank = ((int)Char.GetNumericValue(from[1]) + i * colChange);
@@ -73,11 +80,18 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             return chess.Board.GetPiece(to).Team != Team; //Tries to move on other piece if opponent return true else return false;
         }
+
+        public override object Clone()
+        {
+            var clone = new BishopPiece(Team);
+            clone.PieceType = PieceType;
+            return clone;
+        }
     }
 
     public class RookPiece : ChessPiece
     {
-        
+
         public RookPiece(Team team) : base(team)
         {
             PieceType = ChessPieceType.Rook;
@@ -131,6 +145,13 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             return chess.Board.GetPiece(to).Team != Team; //If opponent on field move there else don't move there
         }
+
+        public override object Clone()
+        {
+            var clone = new RookPiece(Team);
+            clone.PieceType = PieceType;
+            return clone;
+        }
     }
 
     public class PawnPiece : ChessPiece
@@ -150,7 +171,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         private bool PawnCanMove(string from, string to, int direction, Chess chess)
         {
             //No comments for you, Future me! get gud.
-            
+
             if (direction != 1 && direction != -1) return false;
             //if ((int)MathF.Abs(direction) != 1) return false;
 
@@ -160,7 +181,16 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             int colDiff = Convert.ToInt16(MathF.Abs(Chess.AlphConversionChars.IndexOf(to.ToLower()[0]) - Chess.AlphConversionChars.IndexOf(from.ToLower()[0])));
             int pathLength = Convert.ToInt16(MathF.Abs((int)Char.GetNumericValue(to[1]) - (int)Char.GetNumericValue(from[1])));
 
-            if (pathLength > (((int)Char.GetNumericValue(from[1]) == 2 || (int)Char.GetNumericValue(from[1]) == 7) ? 2 : 1)) 
+            //check for correct direction
+            if ((int)Char.GetNumericValue(to[1]) > (int)Char.GetNumericValue(from[1])) {
+                if (direction == -1) 
+                    return false; }
+            else
+                if (direction == 1)
+                    return false;
+
+
+            if (pathLength > (((int)Char.GetNumericValue(from[1]) == 2 || (int)Char.GetNumericValue(from[1]) == 7) ? 2 : 1))
                 return false;
 
             int numericDifference = (int)MathF.Abs((int)Char.GetNumericValue(to[1]) - (int)Char.GetNumericValue(from[1]));
@@ -170,16 +200,32 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             //if (!((int)MathF.Abs((int)Char.GetNumericValue(to[1]) - (int)Char.GetNumericValue(from[1])) == direction || (int)MathF.Abs((int)Char.GetNumericValue(to[1]) - (int)Char.GetNumericValue(from[1])) == direction + direction)) return false;
 
+            //check for other pieces in the way
+            for (int i = 1; i < pathLength; i++)
+            {
+                char row = from[0];
+                int col = (((int)Char.GetNumericValue(from[1])) + ((int)Char.GetNumericValue(to[1]) > (int)Char.GetNumericValue(from[1]) ? i : -i));
+                if (chess.Board.GetPiece($"{row}{col}").PieceType != ChessPieceType.None)
+                    return false;
+            }
+
 
             if (colDiff > 1) return false;
             if (colDiff == 1 && pathLength != 1) return false;
 
-            if (chess.Board.GetPiece(to).Team != Team && colDiff == 1) return true;
-            else if(colDiff == 1 && chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return false;
+            if (chess.Board.GetPiece(to).Team != Team && colDiff == 1 && chess.Board.GetPiece(to).PieceType != ChessPieceType.None) return true;
+            else if (colDiff == 1 && chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return false;
             else if (colDiff == 1 && chess.Board.GetPiece(to).Team == Team) return false;
             if (chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return true;
 
             return false;
+        }
+
+        public override object Clone()
+        {
+            var clone = new PawnPiece(Team);
+            clone.PieceType = PieceType;
+            return clone;
         }
     }
 
@@ -204,6 +250,13 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             //Check if one of both pieces can move if yes return true else return false
             if (_rook.CanMove(from, to, chess.GetGame()) || _bishop.CanMove(from, to, chess.GetGame())) return true;
             return false;
+        }
+
+        public override object Clone()
+        {
+            var clone = new QueenPiece(Team);
+            clone.PieceType = PieceType;
+            return clone;
         }
     }
 
@@ -243,7 +296,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {
                 for (var j = 0; j < 8; j++)
                 {
-                    string tempField = $"{(char)Chess.AlphConversionChars[i]}{(char)j+1}";
+                    string tempField = $"{(char)Chess.AlphConversionChars[i]}{(char)j + 1}";
 
                     if (chess.Board.GetPiece(tempField).Team == Team) continue;
 
@@ -254,6 +307,13 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (chess.Board.GetPiece(to).PieceType == ChessPieceType.None) return true;
 
             return chess.Board.GetPiece(to).Team != Team;
+        }
+
+        public override object Clone()
+        {
+            var clone = new KingPiece(Team);
+            clone.PieceType = PieceType;
+            return clone;
         }
     }
 
@@ -266,5 +326,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         }
 
         public override bool CanMove(string from, string to, Chess chess) => false;
+
+        public override object Clone()
+        {
+            var clone = new EmptyPiece(Team);
+            clone.PieceType = PieceType;
+            return clone;
+        }
     }
 }

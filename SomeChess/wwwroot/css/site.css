@@ -212,3 +212,7 @@
             transition-property: all;
             transition-timing-function: ease-in-out;
         }
+
+.chessPiece[draggable] {
+    cursor: pointer;
+}

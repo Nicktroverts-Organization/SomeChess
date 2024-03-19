@@ -25,5 +25,19 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {new KnightPiece(Team.White), new PawnPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.Black), new EmptyPiece(Team.Black), new PawnPiece(Team.Black), new KnightPiece(Team.Black)},
             {new RookPiece(Team.White), new PawnPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.White), new EmptyPiece(Team.Black), new EmptyPiece(Team.Black), new PawnPiece(Team.Black), new RookPiece(Team.Black)},
         };
+
+        public static ChessPiece[,] CloneDefault()
+        {
+            ChessPiece[,] clone = new ChessPiece[8, 8];
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    clone[i, j] = (ChessPiece)Default[i, j].Clone();
+                }
+            }
+
+            return clone;
+        }
     }
 }
