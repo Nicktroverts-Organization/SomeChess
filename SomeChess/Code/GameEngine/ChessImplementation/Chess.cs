@@ -145,7 +145,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             blackKingField = "";
         }
 
-        /// <summary>
+        /// <summary>ö
         /// <para>Checks game state and changes some variables according to this game state</para>
         /// <para>Performance hell</para>
         /// </summary>
@@ -235,10 +235,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             GameState = ChessState.Playing;
 
             //Check for conditions to gather correct states
-            ////if (FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackKingCanMove == false)
-            ////GameState = ChessState.WhiteWin;
-            ////if (FieldsBlackCanMoveTo.Contains(whiteKingField) && WhiteKingCanMove == false)
-            ////GameState = ChessState.BlackWin;
+            if (FieldsWhiteCanMoveTo.Contains(blackKingField) && FieldsBlackCanMoveTo.Count == 0)
+                GameState = ChessState.WhiteWin;
+            if (FieldsBlackCanMoveTo.Contains(blackKingField) && FieldsWhiteCanMoveTo.Count == 0)
+                GameState = ChessState.BlackWin;
             if (BlackKingCanMove == false && !FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackPieces.Count == 1)
                 GameState = ChessState.Draw;
             if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(whiteKingField) && WhitePieces.Count == 1)
