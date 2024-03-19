@@ -38,7 +38,7 @@
     }
 
 
-    static class ModePropertiesChecker
+    public static class ModePropertiesChecker
     {
         public static bool IsOnline(GameMode mode)
         {
