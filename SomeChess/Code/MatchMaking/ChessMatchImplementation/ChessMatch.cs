@@ -44,11 +44,13 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
         public ChessPlayer White { get; set; }
 
 
-        public ChessMatch(IGame<Chess> game, Player aPlayer, ChessMatchSettings settings, int uniqueId,  bool hasTimer = false)
+        public ChessMatch(IGame<Chess> game, Player aPlayer, GameMode mode, int uniqueId)
         {
             isStarted = false;
 
-            HasTimer = hasTimer;
+            HasTimer = ModePropertiesChecker.HasTimer(mode);
+            ExtraTime = ModePropertiesChecker.GetExtraTime(mode);
+            Duration = ModePropertiesChecker.GetDuration(mode);
 
             Chess = game.GetGame();
 
@@ -98,7 +100,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
         public MatchSettings GetSettings()
         {
-            return new ChessMatchSettings(gameMode, HasTimer, Duration, ExtraTime);
+            return new ChessMatchSettings(gameMode);
         }
 
 

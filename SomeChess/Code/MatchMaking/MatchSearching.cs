@@ -10,10 +10,10 @@ namespace SomeChess.Code.MatchMaking
 
         //todo damn, using sealed, such professionalism. bababoye
     public sealed class MatchSearching  
-    {   
-        private List<IMatch> matches;
+    {
+        private List<IMatch> matches = new();
 
-        private List<IMatch> offlineMatches;
+        private List<IMatch> offlineMatches ;
 
 
         private MatchSearching()
