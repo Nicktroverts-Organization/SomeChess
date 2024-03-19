@@ -225,7 +225,8 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     }
                 }
             }
-            Console.Write("\n");
+            if (Original)
+                Console.Write("\n");
 
             //set default state to playing
             GameState = ChessState.Playing;
