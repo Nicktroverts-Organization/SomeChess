@@ -160,44 +160,45 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <exception cref="ArgumentOutOfRangeException">If for some reason the Team enum does not equal any possible values it throws an exception</exception>
         public void UpdateGameState()
         {
-            bool LastWasTrue = true;
             ClearVariables();
-            if (Original)
+            if (OriginalChess.Clones.Count == 0)
                 logger.LogInformation($"{DateTime.Now.ToString("F")}" +
                                 $"\n                                                                        Move-{MadeMoves}                                                                   " +
                             "\n      ________________________________________________________________________________________________________________________________________________");
+            bool LastWasTrue = true;
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (Board.GetPiece($"{AlphConversionChars[i]}{j + 1}").PieceType != ChessPieceType.None)
+                    //Get From Piece
+                    var FromPiece = Board.GetPiece($"{AlphConversionChars[i]}{j + 1}");
+
+                    if (FromPiece.PieceType != ChessPieceType.None)
                     {
-                        if (Board.GetPiece($"{AlphConversionChars[i]}{j + 1}").Team == Team.White)
-                            WhitePieces.Add(Board.GetPiece($"{AlphConversionChars[i]}{j + 1}"));
+                        if (FromPiece.Team == Team.White)
+                            WhitePieces.Add(FromPiece);
                         else
-                            BlackPieces.Add(Board.GetPiece($"{AlphConversionChars[i]}{j + 1}"));
+                            BlackPieces.Add(FromPiece);
                     }
                     for (int x = 0; x < 8; x++)
                     {
-                        if (Original && LastWasTrue)
-                            Console.Write("      |");
                         LastWasTrue = false;
                         for (int y = 0; y < 8; y++)
                         {
-                            //Get From Piece
-                            var FromPiece = Board.GetPiece($"{AlphConversionChars[i]}{j + 1}");
+
+                            bool CanMoveTo = FromPiece.CanMove($"{FromPiece.Field}",
+                                $"{AlphConversionChars[x]}{y + 1}", GetGame());
 
                             //Check for Fields each Team can move to
                             if (FromPiece.Team == Team.White)
                             {
-
-                                if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
+                                if (CanMoveTo)
                                     if (FromPiece.PieceType != ChessPieceType.Pawn)
                                         FieldsWhiteCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
                             }
                             else if (FromPiece.Team == Team.Black)
                             {
-                                if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
+                                if (CanMoveTo)
                                     if (FromPiece.PieceType != ChessPieceType.Pawn)
                                         FieldsBlackCanMoveTo.Add($"{AlphConversionChars[x]}{y + 1}");
                             }
@@ -208,38 +209,25 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                                 switch (FromPiece.Team)
                                 {
                                     case Team.White:
-                                        whiteKingField = $"{AlphConversionChars[i]}{j + 1}";
-                                        if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
+                                        whiteKingField = FromPiece.Field;
+                                        if (CanMoveTo)
                                             WhiteKingCanMove = true;
                                         break;
                                     case Team.Black:
-                                        blackKingField = $"{AlphConversionChars[i]}{j + 1}";
-                                        if (FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
+                                        blackKingField = FromPiece.Field;
+                                        if (CanMoveTo)
                                             BlackKingCanMove = true;
                                         break;
                                     default:
                                         throw new ArgumentOutOfRangeException("FromPiece doesn't have a Team");
                                 }
                             }
-
-                            //Write colored debug message to console
-                            if (Original && FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()))
-                            {
-                                LastWasTrue = true;
-                                Console.Write($"{AlphConversionChars[i]}{j + 1} -> {AlphConversionChars[x]}{y + 1} : ");
-                                Console.ForegroundColor =
-                                    FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? ConsoleColor.Green : ConsoleColor.Red;
-                                Console.Write("True");
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Console.Write($"{(FromPiece.CanMove($"{AlphConversionChars[i]}{j + 1}", $"{AlphConversionChars[x]}{y + 1}", GetGame()) ? " " : "")}" + "| ");
-                            }
                         }
-                        if (Original && LastWasTrue)
-                            Console.Write("\n");
                     }
                 }
             }
-            if (Original)
+
+            if (OriginalChess.Clones.Count == 0)
                 Console.Write("\n");
 
             //set default state to playing
@@ -247,54 +235,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             if (OriginalChess.Clones.Count == 0)
             {
-                Chess? ChessCopy = (Chess)Clone();
-                OriginalChess.Clones.Add(ChessCopy);
-                ChessCopy.UpdateGameState();
-                ChessBoard _board = (ChessBoard)ChessCopy.Board.Clone();
+                Task CleanUpWhite = new Task(CleanUpFieldsWhiteCanMoveTo);
+                Task CleanUpBlack = new Task(() => CleanUpFieldsBlackCanMoveTo(CleanUpWhite));
 
-                if (OriginalChess.Clones.Count < 2)
-                {
-                    ChessCopy.Original = true;
-                }
-
-                for (int j = 0; j < FieldsWhiteCanMoveTo.Count; j++)
-                {
-                    bool CanMoveToFieldJ = false;
-
-                    foreach (var i in WhitePieces)
-                    {
-                        ChessCopy.Board = (ChessBoard)_board.Clone();
-                        if (ChessCopy.MovePiece(i.Field, FieldsWhiteCanMoveTo[j]))
-                            CanMoveToFieldJ = true;
-                    }
-
-                    if (!CanMoveToFieldJ)
-                    {
-                        FieldsWhiteCanMoveTo.RemoveAt(j);
-                        j--;
-                    }
-                }
-
-
-                for (int j = 0; j < FieldsBlackCanMoveTo.Count; j++)
-                {
-                    bool CanMoveToFieldJ = false;
-
-                    foreach (var i in BlackPieces)
-                    {
-                        ChessCopy.Board = (ChessBoard)_board.Clone();
-                        if (ChessCopy.MovePiece(i.Field, FieldsBlackCanMoveTo[j]))
-                            CanMoveToFieldJ = true;
-                    }
-
-                    if (!CanMoveToFieldJ)
-                    {
-                        FieldsBlackCanMoveTo.RemoveAt(j);
-                        j--;
-                    }
-                }
-
-                OriginalChess.Clones.Remove(ChessCopy);
+                CleanUpWhite.Start();
+                CleanUpBlack.Start();
+                Task.WaitAll(CleanUpWhite, CleanUpBlack);
             }
 
             //Check for conditions to gather correct states
@@ -306,6 +252,82 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = ChessState.Draw;
             if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(whiteKingField) && WhitePieces.Count == 1)
                 GameState = ChessState.Draw;
+
+            if (OriginalChess.Clones.Count == 0)
+                logger.LogInformation("Current Chess Game State: " + GameState);
+        }
+
+        private void CleanUpFieldsWhiteCanMoveTo()
+        {
+            Chess? ChessCopy = (Chess)Clone();
+            OriginalChess.Clones.Add(ChessCopy);
+            ChessCopy.UpdateGameState();
+            ChessBoard _board = (ChessBoard)ChessCopy.Board.Clone();
+
+            if (OriginalChess.Clones.Count < 4)
+            {
+                ChessCopy.Original = true;
+            }
+
+            for (int j = 0; j < FieldsWhiteCanMoveTo.Count; j++)
+            {
+                bool CanMoveToFieldJ = false;
+
+                foreach (var i in WhitePieces)
+                {
+                    ChessCopy.Board = (ChessBoard)_board.Clone();
+                    if (ChessCopy.MovePiece(i.Field, FieldsWhiteCanMoveTo[j]))
+                    {
+                        CanMoveToFieldJ = true;
+                        break;
+                    }
+                }
+
+                if (!CanMoveToFieldJ)
+                {
+                    FieldsWhiteCanMoveTo.RemoveAt(j);
+                    j--;
+                }
+            }
+
+            OriginalChess.Clones.Remove(ChessCopy);
+        }
+
+        private void CleanUpFieldsBlackCanMoveTo(Task other)
+        {
+            Chess? ChessCopy = (Chess)Clone();
+            OriginalChess.Clones.Add(ChessCopy);
+            ChessCopy.UpdateGameState();
+            ChessBoard _board = (ChessBoard)ChessCopy.Board.Clone();
+
+            if (OriginalChess.Clones.Count < 4)
+            {
+                ChessCopy.Original = true;
+            }
+
+            for (int j = 0; j < FieldsBlackCanMoveTo.Count; j++)
+            {
+                bool CanMoveToFieldJ = false;
+
+                foreach (var i in BlackPieces)
+                {
+                    ChessCopy.Board = (ChessBoard)_board.Clone();
+                    if (ChessCopy.MovePiece(i.Field, FieldsBlackCanMoveTo[j]))
+                    {
+                        CanMoveToFieldJ = true;
+                        break;
+                    }
+                }
+
+                if (!CanMoveToFieldJ)
+                {
+                    FieldsBlackCanMoveTo.RemoveAt(j);
+                    j--;
+                }
+            }
+
+            other.Wait();
+            OriginalChess.Clones.Remove(ChessCopy);
         }
 
         /// <summary>
@@ -319,9 +341,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             //Check that game is running
             if (GameState != ChessState.Playing)
                 throw new InvalidOperationException("Can't move piece while not game is not running!");
-
-            if (OriginalChess.Clones.Count == 0)
-                logger.LogDebug(Board.Board.ToString() + "\n Original: " + Original + "\n" + Board.GetPiece(From) + "\n" + Test);
 
             var FromPiece = Board.GetPiece(From);
 
@@ -364,23 +383,17 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 ChessCopy = null;
             }
 
-
-            //if ((TeamTurn == Team.White ? FieldsBlackCanMoveTo.Contains(To) : FieldsWhiteCanMoveTo.Contains(To)) && Board.GetPiece(From).PieceType == ChessPieceType.King) return false;
-
-            if (OriginalChess.Clones.Count == 0)
-                logger.LogDebug(Board.Board.ToString() + "\n Original: " + Original + "\n" + Board.GetPiece(From) + "\n" + Test);
-
             //Check if the given parameters are valid chess fields.
             Board.ValidateFields(new[] { From, To });
 
-            if (!Board.GetPiece(From).CanMove(From, To, this.GetGame()))
+            if (!FromPiece.CanMove(From, To, this.GetGame()))
                 return false; //If Piece can't move to field "To", return false.
 
-            Board.GetPiece(From).Field = To;
+            FromPiece.Field = To;
 
             //Moves the piece to the new position
-            Board.SetPiece(To, Board.GetPiece(From));
-            Board.SetPiece(From, new EmptyPiece(Board.GetPiece(From).Team, From));
+            Board.SetPiece(To, FromPiece);
+            Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
 
             //Successfully moved piece from field "From" to field "To"
             return true;

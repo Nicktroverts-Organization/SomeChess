@@ -241,7 +241,6 @@ else
         else if (Event == "mouseup")
         {
             ToID = id;
-            Console.WriteLine(ChessGame.GetGameState());
             if (ChessGame.MovePiece(FromID, ToID))
             {
                 ChessGame.EndTurn();
