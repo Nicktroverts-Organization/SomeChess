@@ -3,7 +3,7 @@
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
 
-    public abstract class ChessPiece
+    public abstract class ChessPiece : ICloneable
     {
         public ChessPieceType PieceType;
 
@@ -15,5 +15,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         }
 
         public abstract bool CanMove(string from, string to, Chess chess);
+        public abstract object Clone();
     }
 }
