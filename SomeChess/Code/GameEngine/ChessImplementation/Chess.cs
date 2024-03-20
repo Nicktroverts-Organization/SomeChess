@@ -256,6 +256,39 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = ChessState.WhiteWin;
             if (FieldsBlackCanMoveTo.Contains(whiteKingField) && FieldsWhiteCanMoveTo.Count == 0)
                 GameState = ChessState.BlackWin;
+            if (WhitePieces.Count == 1 && BlackPieces.Count == 1)
+                GameState = ChessState.Draw;
+            else
+            {
+                if (WhitePieces.Count == 1)
+                {
+                    for (int i = 0; i < FieldsWhiteCanMoveTo.Count; i++)
+                    {
+                        if (FieldsBlackCanMoveTo.Contains(FieldsWhiteCanMoveTo[i]))
+                        {
+                            FieldsWhiteCanMoveTo.RemoveAt(i);
+                            i--;
+                        }
+                    }
+
+                    if (FieldsWhiteCanMoveTo.Count == 0)
+                        WhiteKingCanMove = false;
+                }
+                else if (BlackPieces.Count == 1)
+                {
+                    for (int i = 0; i < FieldsBlackCanMoveTo.Count; i++)
+                    {
+                        if (FieldsWhiteCanMoveTo.Contains(FieldsBlackCanMoveTo[i]))
+                        {
+                            FieldsBlackCanMoveTo.RemoveAt(i);
+                            i--;
+                        }
+                    }
+
+                    if (FieldsBlackCanMoveTo.Count == 0)
+                        BlackKingCanMove = false;
+                }
+            }
             if (BlackKingCanMove == false && !FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackPieces.Count == 1)
                 GameState = ChessState.Draw;
             if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(whiteKingField) && WhitePieces.Count == 1)
