@@ -142,6 +142,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             UpdateGameState();
         }
 
+        /// <summary>
+        /// Quite self explanatory i think.
+        /// </summary>
         private void ClearVariables()
         {
             WhiteKingCanMove = false;
@@ -163,10 +166,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             ClearVariables();
             if (OriginalChess.Clones.Count == 0)
-                logger.LogInformation($"{DateTime.Now.ToString("F")}" +
-                                $"\n                                                                        Move-{MadeMoves}                                                                   " +
-                            "\n      ________________________________________________________________________________________________________________________________________________");
+                logger.LogInformation($"{DateTime.Now.ToString("F")}\n      Current Move: {(TeamTurn == Team.White ? "White" : "Black")}\n      Next Move: {(TeamTurn == Team.White ? "Black" : "White")}");
 
+            //witness the power of Quadruple loop!
             bool LastWasTrue = true;
             for (int i = 0; i < 8; i++)
             {
