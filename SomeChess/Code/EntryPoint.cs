@@ -12,6 +12,7 @@ namespace SomeChess.Code
             builder => builder
                 .AddConsole()
                 .AddDebug()
+                .AddSimpleConsole()
                 .SetMinimumLevel(LogLevel.Debug)
         );
 

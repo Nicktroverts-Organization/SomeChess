@@ -9,9 +9,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public Team Team;
 
-        protected ChessPiece(Team team)
+        public string Field;
+
+        protected ChessPiece(Team team, string field)
         {
             Team = team;
+            Field = field;
         }
 
         public abstract bool CanMove(string from, string to, Chess chess);

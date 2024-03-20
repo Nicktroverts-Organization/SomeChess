@@ -2,6 +2,8 @@
 @using Microsoft.AspNetCore.Components.Web
 @using SomeChess.Code.GameEngine.ChessImplementation
 @using SomeChess.Code.MatchMaking.ChessMatchImplementation
+@using SomeChess.Code.Social
+@using SomeChess.Code.MatchMaking.ChessMatchImplementation
 
 @if (!Reload)
 {
@@ -122,27 +124,27 @@ else
             <div>
                 <h2 class="anton-regular mt-5">Bullet</h2>
                 <div class="flex justify-evenly">
-                    <button @onclick="() => { SetButtonState(1);}" class="@((SelectedButton == 1) ? "selectedTimeShadow" : "")">1 Minutes</button>
-                    <button @onclick="() => { SetButtonState(2);}" class="@((SelectedButton == 2) ? "selectedTimeShadow" : "")">1 | 1</button>
-                    <button @onclick="() => { SetButtonState(3);}" class="@((SelectedButton == 3) ? "selectedTimeShadow" : "")">2 | 1</button>
+                    <button @onclick="() => {SetButtonState(1); CreateChessMatch(GameMode.OnlineOneMinute);}" class="@((SelectedButton == 1) ? "selectedTimeShadow" : "")">1 Minutes</button>
+                    <button @onclick="() => {SetButtonState(2); CreateChessMatch(GameMode.OnlineOneMinutePlusOne);}" class="@((SelectedButton == 2) ? "selectedTimeShadow" : "")">1 | 1</button>
+                    <button @onclick="() => {SetButtonState(3); CreateChessMatch(GameMode.OnlineTwoMinutesPlusOne);}" class="@((SelectedButton == 3) ? "selectedTimeShadow" : "")">2 | 1</button>
                 </div>
 
             </div>
             <div>
                 <h2 class="anton-regular  mt-7">Blitz</h2>
                 <div class="flex justify-evenly">
-                    <button @onclick="() => { SetButtonState(4);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
-                    <button @onclick="() => { SetButtonState(5);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
-                    <button @onclick="() => { SetButtonState(6);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
+                    <button @onclick="() => {SetButtonState(4); CreateChessMatch(GameMode.OnlineThreeMinutes);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
+                    <button @onclick="() => {SetButtonState(5); CreateChessMatch(GameMode.OnlineThreeMinutesPlusTwo);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
+                    <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
                 </div>
 
             </div>
             <div>
                 <h2 class="anton-regular mt-7">Rapid</h2>
                 <div class="flex justify-evenly">
-                    <button @onclick="() => { SetButtonState(7);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
-                    <button @onclick="() => { SetButtonState(8);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
-                    <button @onclick="() => { SetButtonState(9);}" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
+                    <button @onclick="() => {SetButtonState(7); CreateChessMatch(GameMode.OnlineTenMinutes);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
+                    <button @onclick="() => {SetButtonState(8); CreateChessMatch(GameMode.OnlineFifteenMinutesPlusTen);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
+                    <button @onclick="() => {SetButtonState(9); CreateChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
                 </div>
             </div>
             <div class="playButton flex justify-center mt-14 select-none">
@@ -188,6 +190,7 @@ else
     public bool Reload = true;
     int SelectedButton = 0;
     public Chess ChessGame = new Chess();
+    public ChessMatchConstructor constructor = new();
 
 
     public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
@@ -224,6 +227,12 @@ else
             Reload = false;
             StateHasChanged();
         }
+    }
+
+    public ChessMatch CreateChessMatch(GameMode mode)
+    {
+        ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", PlayerStorage.Create16DigitString()), mode);
+        return newMatch;
 
         if (!ChessGame.IsPlaying)
         {
@@ -233,14 +242,14 @@ else
 
     void SetButtonState(int buttonNumber)
     {
-        if (SelectedButton != buttonNumber)
-        {
-            SelectedButton = buttonNumber;
-        }
-        else
-        {
-            SelectedButton = 0;
-        }
+       if (SelectedButton != buttonNumber)
+       {
+           SelectedButton = buttonNumber;
+       }
+       else
+       {
+           SelectedButton = 0;
+       }
     }
 
     [JSInvokable("IdHandler")]
@@ -251,7 +260,6 @@ else
         else if (Event == "mouseup")
         {
             ToID = id;
-            Console.WriteLine(ChessGame.GetGameState());
             if (ChessGame.MovePiece(FromID, ToID))
             {
                 ChessGame.EndTurn();
