@@ -20,16 +20,16 @@
                         if (LoopI % 2 == 0) // LoopI ist gerade
                         {
                             if (LoopU % 2 != 0) // LoopU ist ungerade
-                                color = "blackCell";
-                            else //LoopU ist gerade
                                 color = "whiteCell";
+                            else //LoopU ist gerade
+                                color = "blackCell";
                         }
                         else //LoopI ist ungerade
                         {
                             if (LoopU % 2 != 0) //LoopU ist ungerade
-                                color = "whiteCell";
-                            else // LoopU ist gerade
                                 color = "blackCell";
+                            else // LoopU ist gerade
+                                color = "whiteCell";
                         }
 
                         string pieceColor;
@@ -74,16 +74,16 @@ else
                         if (LoopI % 2 == 0) // LoopI ist gerade
                         {
                             if (LoopU % 2 != 0) // LoopU ist ungerade
-                                color = "blackCell";
-                            else //LoopU ist gerade
                                 color = "whiteCell";
+                            else //LoopU ist gerade
+                                color = "blackCell";
                         }
                         else //LoopI ist ungerade
                         {
                             if (LoopU % 2 != 0) //LoopU ist ungerade
-                                color = "whiteCell";
-                            else // LoopU ist gerade
                                 color = "blackCell";
+                            else // LoopU ist gerade
+                                color = "whiteCell";
                         }
 
                         string pieceColor;
@@ -91,7 +91,7 @@ else
                             pieceColor = "w";
                         else pieceColor = "b";
 
-                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this, @(GameOver))" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
                             @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
                         </div>
                     }
@@ -113,7 +113,7 @@ else
         </div>
     </div>
 }
-@if (PlayOnline == true)
+@if (PlayOnline)
 {
     <div class="chooseTime flex flex-col">
         <div>
@@ -153,10 +153,10 @@ else
         </div>
     </div>
 }
-@if (!ChessGame.IsPlaying)
+@if (!ChessGame.IsPlaying && GameOver)
 {
     <div class="w-screen absolute h-screen gameOverScreen">
-        @if (GameWon == "white")
+        @if (ChessGame.GameState == ChessState.WhiteWin)
         {
             <span @onclick="() => { GameOver = false; }" class="material-symbols-outlined fixed absolute select-none ">cancel</span>
             <div class="w-96 h-2/6 flex flex-col justify-evenly items-center rounded-lg gameOverDesign">
@@ -168,21 +168,23 @@ else
                 </div>
             </div>
         }
-        else
+        else if (ChessGame.GameState == ChessState.BlackWin)
         {
             <span @onclick="() => { GameOver = false; }" class="material-symbols-outlined fixed absolute select-none">cancel</span>
-            <div>
-                <p class="anton-regular text-4xl">You lost the game!</p>
-            </div>
-            <div>
-                <a href="@("/")" class="playAgainLink">Play new one!</a>
+            <div class="w-96 h-2/6 flex flex-col justify-evenly items-center rounded-lg gameOverDesign">
+                <div>
+                    <p class="anton-regular text-4xl">You lost the game!</p>
+                </div>
+                <div>
+                    <a href="@("/")" class="playAgainLink">Play new one!</a>
+                </div>
             </div>
         }
     </div>
 }
  
 @code {
-    bool GameOver = false;
+    bool GameOver = true;
     string GameWon = "white";
     bool NotNewGame = true;
     public bool isDragging = true;
@@ -212,6 +214,9 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        // ChessGame.StartGame();
+        // ChessGame.UpdateGameState();
+        // ChessGame.StartGame();
         if (firstRender)
         {
             ChessGame.StartGame();
@@ -227,17 +232,18 @@ else
             Reload = false;
             StateHasChanged();
         }
+
+
+        if (!ChessGame.IsPlaying)
+        {
+            await JsRuntime.InvokeVoidAsync("Over", !ChessGame.IsPlaying);
+        }
     }
 
     public ChessMatch CreateChessMatch(GameMode mode)
     {
         ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", PlayerStorage.Create16DigitString()), mode);
         return newMatch;
-
-        if (!ChessGame.IsPlaying)
-        {
-            await JsRuntime.InvokeVoidAsync("Over", GameOver);
-        }
     }
 
     void SetButtonState(int buttonNumber)

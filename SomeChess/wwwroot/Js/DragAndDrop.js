@@ -8,9 +8,9 @@ window.setDotNetReference = function (dotNetReference) {
     dotNet = dotNetReference;
 }
 
-window.Over = function(gameOver) {
-    console.log("GameOver: ", gameOver);
-    gameOver = true;
+window.Over = function (_gameOver) {
+    console.log("GameOver: ", _gameOver);
+    gameOver = _gameOver;
 }
 
 window.getMouseDownID = function (e) {
@@ -24,10 +24,10 @@ window.getMouseDownID = function (e) {
     }
     return null;
 }
-window.getMouseUpElementID = function (e, GameOver) {
+window.getMouseUpElementID = function (e) {
     console.log("mouseup");
     console.log(e);
-    if (GameOver) {
+    if (!gameOver) {
         var position = document.elementsFromPoint(e.pageX, e.pageY);
         position.forEach((elt) => {
             if (elt.hasAttribute('id')) {
