@@ -262,7 +262,30 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = ChessState.Draw;
 
             if (OriginalChess.Clones.Count == 0)
-                logger.LogInformation("Current Chess Game State: " + GameState);
+            {
+                if (GameState == ChessState.Playing)
+                {
+                    Console.WriteLine("      Current Chess Game State: " + GameState + "\n");
+                    LoggingHandler.DrawSeperatorLine(ConsoleColor.DarkGray).Wait();
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.WriteLine("      Current Chess Game State: " + GameState + "\n");
+                    LoggingHandler.DrawSeperatorLine(ConsoleColor.Gray).Wait();
+                    Console.ResetColor();
+
+                    string winMessage;
+                    if (GameState == ChessState.BlackWin)
+                        winMessage = "Black Won";
+                    else if (GameState == ChessState.WhiteWin)
+                        winMessage = "White Won";
+                    else
+                        winMessage = "Draw";
+
+                    Console.WriteLine(String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - winMessage.Length)) + winMessage + String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - winMessage.Length)) + "\n\n");
+                }
+            }
         }
 
         private void CleanUpFieldsWhiteCanMoveTo()
