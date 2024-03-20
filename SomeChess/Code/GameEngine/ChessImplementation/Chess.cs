@@ -1,6 +1,7 @@
 ﻿//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
 //ispolzovat KakietoSchachmaty.Kod.IgrovoiDvighok;
 
+using System.Reflection.Metadata;
 using Newtonsoft.Json;
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
@@ -153,7 +154,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             blackKingField = "";
         }
 
-        /// <summary>ö
+        /// <summary>
         /// <para>Checks game state and changes some variables according to this game state</para>
         /// <para>Performance hell</para>
         /// </summary>
@@ -165,6 +166,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 logger.LogInformation($"{DateTime.Now.ToString("F")}" +
                                 $"\n                                                                        Move-{MadeMoves}                                                                   " +
                             "\n      ________________________________________________________________________________________________________________________________________________");
+
             bool LastWasTrue = true;
             for (int i = 0; i < 8; i++)
             {
@@ -241,6 +243,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 CleanUpWhite.Start();
                 CleanUpBlack.Start();
                 Task.WaitAll(CleanUpWhite, CleanUpBlack);
+                if (OriginalChess.Clones.Count != 0)
+                {
+                    OriginalChess.Clones.RemoveRange(0, OriginalChess.Clones.Count);
+                }
             }
 
             //Check for conditions to gather correct states
@@ -260,6 +266,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         private void CleanUpFieldsWhiteCanMoveTo()
         {
             Chess? ChessCopy = (Chess)Clone();
+            ChessCopy.TeamTurn = Team.White;
             OriginalChess.Clones.Add(ChessCopy);
             ChessCopy.UpdateGameState();
             ChessBoard _board = (ChessBoard)ChessCopy.Board.Clone();
@@ -290,12 +297,21 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
             }
 
-            OriginalChess.Clones.Remove(ChessCopy);
+            try
+            {
+                OriginalChess.Clones.RemoveAt(0);
+            }
+            catch
+            {
+                if (OriginalChess.Clones.Count != 0)
+                    OriginalChess.Clones.RemoveAt(0);
+            }
         }
 
         private void CleanUpFieldsBlackCanMoveTo(Task other)
         {
             Chess? ChessCopy = (Chess)Clone();
+            ChessCopy.TeamTurn = Team.Black;
             OriginalChess.Clones.Add(ChessCopy);
             ChessCopy.UpdateGameState();
             ChessBoard _board = (ChessBoard)ChessCopy.Board.Clone();
@@ -326,8 +342,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
             }
 
-            other.Wait();
-            OriginalChess.Clones.Remove(ChessCopy);
+            try
+            {
+                OriginalChess.Clones.RemoveAt(0);
+            }
+            catch
+            {
+                if (OriginalChess.Clones.Count != 0)
+                    OriginalChess.Clones.RemoveAt(0);
+            }
         }
 
         /// <summary>
@@ -340,7 +363,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             //Check that game is running
             if (GameState != ChessState.Playing)
-                throw new InvalidOperationException("Can't move piece while not game is not running!");
+            {
+                logger.LogWarning("Trying to move piece even though game is not running!");
+                return false;
+            }
 
             var FromPiece = Board.GetPiece(From);
 
@@ -362,7 +388,8 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     ChessCopy.EndTurn();
                     if (ChessCopy.FieldsBlackCanMoveTo.Contains(ChessCopy.whiteKingField))
                     {
-                        OriginalChess.Clones.Remove(ChessCopy);
+
+                        OriginalChess.Clones.RemoveAt(0);
                         ChessCopy = null;
                         return false;
                     }
@@ -373,13 +400,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     ChessCopy.EndTurn();
                     if (ChessCopy.FieldsWhiteCanMoveTo.Contains(ChessCopy.blackKingField))
                     {
-                        OriginalChess.Clones.Remove(ChessCopy);
+
+                        OriginalChess.Clones.RemoveAt(0);
                         ChessCopy = null;
                         return false;
                     }
                 }
 
-                OriginalChess.Clones.Remove(ChessCopy);
+
+                OriginalChess.Clones.RemoveAt(0);
                 ChessCopy = null;
             }
 
