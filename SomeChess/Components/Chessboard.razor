@@ -3,10 +3,11 @@
 @using SomeChess.Code.GameEngine.ChessImplementation
 @using SomeChess.Code.MatchMaking.ChessMatchImplementation
 @using SomeChess.Code.Social
+@using SomeChess.Code.MatchMaking.ChessMatchImplementation
 
 @if (!Reload)
 {
-    <div class="flex text-center justify-center place-content-evenly mt-7">
+    <div class="flex text-center justify-center place-content-evenly mt-7" draggable="@(!GameOver)">
         <div class="chessboard select-none flex text-center justify-center">
             @for (int i = 0; i < 8; i++)
             {
@@ -36,7 +37,7 @@
                             pieceColor = "w";
                         else pieceColor = "b";
 
-                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" onmouseover="SelectedPeace(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
                             @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
                         </div>
                     }
@@ -90,7 +91,7 @@ else
                             pieceColor = "w";
                         else pieceColor = "b";
 
-                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" onmouseover="SelectedPeace(event)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this, @(GameOver))" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
                             @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
                         </div>
                     }
@@ -151,33 +152,46 @@ else
             </div>
         </div>
     </div>
-
-@*     @if (GameOver)
-    {
-        <span @onclick="() => { NotNewGame = true; }" class="material-symbols-outlined fixed absolute select-none">cancel</span>
-        <div class="bg-green-300 w-4/12 h-3/6 ml-32">
-            @if(GameWon == "white")
-            {
-                <p class="anton-regular text-lg">You won the game!</p>
-            }
-            else
-            {
-                <p class="anton-regular text-lg ">You lost the game</p>
-            }
-            <button>PLay new one!</button>
-        </div>
-    } *@
 }
-
-
+@if (!ChessGame.IsPlaying)
+{
+    <div class="w-screen absolute h-screen gameOverScreen">
+        @if (GameWon == "white")
+        {
+            <span @onclick="() => { GameOver = false; }" class="material-symbols-outlined fixed absolute select-none ">cancel</span>
+            <div class="w-96 h-2/6 flex flex-col justify-evenly items-center rounded-lg gameOverDesign">
+                <div>
+                    <p class="anton-regular text-4xl">You won the game!</p>
+                </div>
+                <div>
+                    <a href="@("/")" class="playAgainLink">Play new one!</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <span @onclick="() => { GameOver = false; }" class="material-symbols-outlined fixed absolute select-none">cancel</span>
+            <div>
+                <p class="anton-regular text-4xl">You lost the game!</p>
+            </div>
+            <div>
+                <a href="@("/")" class="playAgainLink">Play new one!</a>
+            </div>
+        }
+    </div>
+}
+ 
 @code {
-    bool NotNewGame = false;
+    bool GameOver = false;
+    string GameWon = "white";
+    bool NotNewGame = true;
     public bool isDragging = true;
     public bool PlayOnline = false;
     public bool Reload = true;
     int SelectedButton = 0;
     public Chess ChessGame = new Chess();
     public ChessMatchConstructor constructor = new();
+
 
     public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
     {
@@ -219,6 +233,11 @@ else
     {
         ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", PlayerStorage.Create16DigitString()), mode);
         return newMatch;
+
+        if (!ChessGame.IsPlaying)
+        {
+            await JsRuntime.InvokeVoidAsync("Over", GameOver);
+        }
     }
 
     void SetButtonState(int buttonNumber)

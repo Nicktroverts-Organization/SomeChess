@@ -216,3 +216,28 @@
 .chessPiece[draggable] {
     cursor: pointer;
 }
+
+.gameOverScreen {
+    right: 50%;
+    bottom: 50%;
+    transform: translate(72.5%, 80.2%);
+}
+.gameOverDesign {
+    background-color: #2c5d63;
+    color: white;
+}
+.gameOverScreen span {
+    cursor: pointer;
+    color: #ff6262;
+}
+.gameOverScreen span:hover {
+    color: #ff1f1f;
+}
+.gameOverDesign a {
+    font-size: 200%;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 15px 15px;
+    background-color: #008080;
+}
