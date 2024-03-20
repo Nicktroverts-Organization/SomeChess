@@ -290,11 +290,39 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {
                 if (chess.FieldsBlackCanMoveTo.Contains(to))
                     return false;
+                if (chess.Original && chess.BlackKing.Field != "")
+                {
+                    Chess checkers = (Chess)chess.Clone();
+                    checkers.Original = false;
+                    chess.OriginalChess.Clones.Add(checkers);
+                    checkers.UpdateGameState();
+                    if (checkers.MovePiece(chess.BlackKing.Field, to))
+                    {
+                        chess.OriginalChess.Clones.Remove(checkers);
+                        chess.FieldsBlackCanMoveTo.Add(to);
+                        return false;
+                    }
+                    chess.OriginalChess.Clones.Remove(checkers);
+                }
             }
             else
             {
                 if (chess.FieldsWhiteCanMoveTo.Contains(to))
                     return false;
+                if (chess.Original && chess.WhiteKing.Field != "")
+                {
+                    Chess checkers = (Chess)chess.Clone();
+                    checkers.Original = false;
+                    chess.OriginalChess.Clones.Add(checkers);
+                    checkers.UpdateGameState();
+                    if (checkers.MovePiece(chess.WhiteKing.Field, to))
+                    {
+                        chess.OriginalChess.Clones.Remove(checkers);
+                        chess.FieldsWhiteCanMoveTo.Add(to);
+                        return false;
+                    }
+                    chess.OriginalChess.Clones.Remove(checkers);
+                }
             }
 
             // Check if the move is within one square in any direction
