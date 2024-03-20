@@ -388,8 +388,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     ChessCopy.EndTurn();
                     if (ChessCopy.FieldsBlackCanMoveTo.Contains(ChessCopy.whiteKingField))
                     {
-
-                        OriginalChess.Clones.RemoveAt(0);
+                        try
+                        {
+                            OriginalChess.Clones.RemoveAt(0);
+                        }
+                        catch
+                        {
+                            if (OriginalChess.Clones.Count != 0)
+                                OriginalChess.Clones.RemoveAt(0);
+                        }
                         ChessCopy = null;
                         return false;
                     }
@@ -401,14 +408,30 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     if (ChessCopy.FieldsWhiteCanMoveTo.Contains(ChessCopy.blackKingField))
                     {
 
-                        OriginalChess.Clones.RemoveAt(0);
+                        try
+                        {
+                            OriginalChess.Clones.RemoveAt(0);
+                        }
+                        catch
+                        {
+                            if (OriginalChess.Clones.Count != 0)
+                                OriginalChess.Clones.RemoveAt(0);
+                        }
                         ChessCopy = null;
                         return false;
                     }
                 }
 
 
-                OriginalChess.Clones.RemoveAt(0);
+                try
+                {
+                    OriginalChess.Clones.RemoveAt(0);
+                }
+                catch
+                {
+                    if (OriginalChess.Clones.Count != 0)
+                        OriginalChess.Clones.RemoveAt(0);
+                }
                 ChessCopy = null;
             }
 
