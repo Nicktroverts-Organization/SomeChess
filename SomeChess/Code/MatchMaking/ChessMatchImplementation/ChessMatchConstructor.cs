@@ -32,12 +32,12 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             //extraTime = ModePropertiesChecker.GetExtraTime(newMode);
         //}
 
+
         public ChessMatch CreateMatch(Player player, GameMode mode)
         {
             Chess newChess = new();
 
             ChessMatch match = new(newChess, player, mode, MatchSearching.GetInstance().GetUniqueID());
-            MatchSearching.GetInstance().AddMatch(match);
             return match;
         }
 

@@ -60,116 +60,6 @@
         </div>
     </div>
 }
-else
-{
-    <div class="flex text-center justify-center place-content-evenly mt-7">
-        <div class="chessboard select-none flex text-center justify-center">
-            @for (int i = 0; i < 8; i++)
-            {
-                int LoopI = i;
-                <div>
-                    @for (int u = 7; u >= 0; u--)
-                    {
-                        int LoopU = u;
-                        string color = "";
-                        if (LoopI % 2 == 0) // LoopI ist gerade
-                        {
-                            if (LoopU % 2 != 0) // LoopU ist ungerade
-                                color = "blackCell";
-                            else //LoopU ist gerade
-                                color = "whiteCell";
-                        }
-                        else //LoopI ist ungerade
-                        {
-                            if (LoopU % 2 != 0) //LoopU ist ungerade
-                                color = "whiteCell";
-                            else // LoopU ist gerade
-                                color = "blackCell";
-                        }
-
-                        string pieceColor;
-                        @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
-                            pieceColor = "w";
-                        else pieceColor = "b";
-
-                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" onmouseover="SelectedPeace(event)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
-                            @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
-                        </div>
-                    }
-                </div>
-            }
-        </div>
-        <div class="backholder ml-24 flex flex-col text-center ">
-            <h1 class="greengradient anton-regular">
-                Play Chess<br />
-                Online<br />
-                on the #1 Site!
-            </h1>
-            <div>
-                <button @onclick="() => { PlayOnline = true;}" class="playOnline"><img width="72" height="2" src="images/online-icon.png" />Play Online<br /><span>Play with a real person online!</span></button>
-            </div>
-            <div>
-                <button class="playComputer"><img width="72" height="2" src="images/computer-icon.png" /> Computer<br /><span class="smalltextPlayComputer">Play vs training bots</span></button>
-            </div>
-        </div>
-    </div>
-}
-@if (PlayOnline == true)
-{
-    <div class="chooseTime flex flex-col">
-        <div>
-            <span @onclick="() => { PlayOnline = false; }" class="material-symbols-outlined fixed absolute select-none">cancel</span>
-            <h1 class="greengradient ml-16">Choose a Time</h1>
-        </div>
-        <div class="ml-8">
-            <div>
-                <h2 class="anton-regular mt-5">Bullet</h2>
-                <div class="flex justify-evenly">
-                    <button @onclick="() => {SetButtonState(1); CreateChessMatch(GameMode.OnlineOneMinute);}" class="@((SelectedButton == 1) ? "selectedTimeShadow" : "")">1 Minutes</button>
-                    <button @onclick="() => {SetButtonState(2); CreateChessMatch(GameMode.OnlineOneMinutePlusOne);}" class="@((SelectedButton == 2) ? "selectedTimeShadow" : "")">1 | 1</button>
-                    <button @onclick="() => {SetButtonState(3); CreateChessMatch(GameMode.OnlineTwoMinutesPlusOne);}" class="@((SelectedButton == 3) ? "selectedTimeShadow" : "")">2 | 1</button>
-                </div>
-
-            </div>
-            <div>
-                <h2 class="anton-regular  mt-7">Blitz</h2>
-                <div class="flex justify-evenly">
-                    <button @onclick="() => {SetButtonState(4); CreateChessMatch(GameMode.OnlineThreeMinutes);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
-                    <button @onclick="() => {SetButtonState(5); CreateChessMatch(GameMode.OnlineThreeMinutesPlusTwo);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
-                    <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
-                </div>
-
-            </div>
-            <div>
-                <h2 class="anton-regular mt-7">Rapid</h2>
-                <div class="flex justify-evenly">
-                    <button @onclick="() => {SetButtonState(7); CreateChessMatch(GameMode.OnlineTenMinutes);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
-                    <button @onclick="() => {SetButtonState(8); CreateChessMatch(GameMode.OnlineFifteenMinutesPlusTen);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
-                    <button @onclick="() => {SetButtonState(9); CreateChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
-                </div>
-            </div>
-            <!--<div class="playButton flex justify-center mt-14 select-none">
-                <a class="flex text-center justify-center">Play</a>
-            </div>-->
-        </div>
-    </div>
-
-@*     @if (GameOver)
-    {
-        <span @onclick="() => { NotNewGame = true; }" class="material-symbols-outlined fixed absolute select-none">cancel</span>
-        <div class="bg-green-300 w-4/12 h-3/6 ml-32">
-            @if(GameWon == "white")
-            {
-                <p class="anton-regular text-lg">You won the game!</p>
-            }
-            else
-            {
-                <p class="anton-regular text-lg ">You lost the game</p>
-            }
-            <button>PLay new one!</button>
-        </div>
-    } *@
-}
 
 
 @code {
@@ -196,7 +86,7 @@ else
     public static string ToID = "";
     public bool isFirstClick = true;
 
-    private DotNetObjectReference<Chessboard> dotNetReference;
+    private DotNetObjectReference<ChessField> dotNetReference;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

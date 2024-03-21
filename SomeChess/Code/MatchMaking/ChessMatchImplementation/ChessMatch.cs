@@ -1,6 +1,8 @@
 ﻿using SomeChess.Code.GameEngine.ChessImplementation;
+using Microsoft.AspNetCore.SignalR;
 using SomeChess.Code.GameEngine;
 using SomeChess.Code.Social;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 {
@@ -43,6 +45,8 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
         public ChessPlayer White { get; set; }
 
+        public Page MatchPage { get; set; }
+
 
         public ChessMatch(IGame<Chess> game, Player aPlayer, GameMode mode, int uniqueId)
         {
@@ -53,6 +57,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             Duration = ModePropertiesChecker.GetDuration(mode);
 
             Chess = game.GetGame();
+
 
             Random rndm = new();
 

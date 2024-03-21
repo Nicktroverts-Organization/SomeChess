@@ -1,0 +1,19 @@
+﻿@page "/chess/{MatchID:int}"
+@inject IJSRuntime JsRuntime;
+@using SomeChess.Components
+
+<body style="background-color: var(--BackgroundColor);">
+
+</body>
+<div class="flex h-24 justify-center content-center items-center">
+    <h1 class="font-bold text-5xl" style="color: var(--TextColor)">bebebebe</h1>
+</div>
+
+<ChessField></ChessField>
+
+
+@code
+{
+    [Parameter]
+    public int MatchID { get; set; }
+}
