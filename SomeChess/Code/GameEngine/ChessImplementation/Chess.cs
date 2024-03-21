@@ -2,6 +2,7 @@
 //ispolzovat KakietoSchachmaty.Kod.IgrovoiDvighok;
 
 using System.Reflection.Metadata;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using Newtonsoft.Json;
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
@@ -164,7 +165,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             ClearVariables();
             if (OriginalChess.Clones.Count == 0)
+            {
+                LoggingHandler.DrawSeperatorLine(ConsoleColor.Gray);
+                Console.WriteLine(String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 8)) + $"Move-{MadeMoves}" + String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 8)));
+                LoggingHandler.DrawSeperatorLine(ConsoleColor.Gray);
                 logger.LogInformation($"{DateTime.Now.ToString("F")}\n      Current Move: {(TeamTurn == Team.White ? "White" : "Black")}\n      Next Move: {(TeamTurn == Team.White ? "Black" : "White")}");
+            }
 
             //witness the power of Quadruple loop!
             bool LastWasTrue = true;
@@ -314,7 +320,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     else
                         winMessage = "Draw";
 
-                    Console.WriteLine(String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - winMessage.Length)) + winMessage + String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - winMessage.Length)) + "\n\n");
+                    Console.WriteLine(String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - winMessage.Length)) + winMessage + String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - winMessage.Length)));
+
+                    LoggingHandler.DrawSeperatorLine(ConsoleColor.Gray).Wait();
                 }
             }
         }

@@ -264,6 +264,12 @@
         if (Reload)
         {
             Reload = false;
+            foreach (var a in MoveHistory)
+            {
+                logger.LogDebug(a.Item1 + " -> " + a.Item2);
+            }
+
+            LoggingHandler.DrawSeperatorLine(ConsoleColor.Magenta);
             StateHasChanged();
         }
 
@@ -272,13 +278,6 @@
         {
             await JsRuntime.InvokeVoidAsync("Over", !ChessGame.IsPlaying);
         }
-
-        foreach (var a in MoveHistory)
-        {
-            logger.LogDebug(a.Item1 + " -> " + a.Item2);
-        }
-
-        LoggingHandler.DrawSeperatorLine(ConsoleColor.Magenta);
     }
 
     public ChessMatch CreateChessMatch(GameMode mode)
