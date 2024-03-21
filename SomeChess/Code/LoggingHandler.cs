@@ -19,7 +19,7 @@
         public static Task DrawSeperatorLine(ConsoleColor color)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine("\n" + String.Concat(Enumerable.Repeat("\u2500", Console.WindowWidth)) + "\n");
+            //Console.WriteLine("\n" + String.Concat(Enumerable.Repeat("\u2500", Console.WindowWidth)) + "\n");
             Console.ResetColor();
             return Task.CompletedTask;
         }
