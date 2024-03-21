@@ -25,8 +25,8 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public List<string> FieldsBlackCanMoveTo = new();
         public List<string> FieldsWhiteCanMoveTo = new();
 
-        public string whiteKingField = "";
-        public string blackKingField = "";
+        public ChessPiece WhiteKing = new KingPiece(Team.White, "");
+        public ChessPiece BlackKing = new KingPiece(Team.White, "");
 
         public bool? WhiteKingCanMove;
         public bool? BlackKingCanMove;
@@ -153,8 +153,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             BlackPieces = new();
             FieldsWhiteCanMoveTo = new();
             FieldsBlackCanMoveTo = new();
-            whiteKingField = "";
-            blackKingField = "";
         }
 
         /// <summary>
@@ -213,12 +211,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                                 switch (FromPiece.Team)
                                 {
                                     case Team.White:
-                                        whiteKingField = FromPiece.Field;
+                                        WhiteKing = FromPiece;
                                         if (CanMoveTo)
                                             WhiteKingCanMove = true;
                                         break;
                                     case Team.Black:
-                                        blackKingField = FromPiece.Field;
+                                        BlackKing = FromPiece;
                                         if (CanMoveTo)
                                             BlackKingCanMove = true;
                                         break;
@@ -252,9 +250,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
 
             //Check for conditions to gather correct states
-            if (FieldsWhiteCanMoveTo.Contains(blackKingField) && FieldsBlackCanMoveTo.Count == 0)
+            if (FieldsWhiteCanMoveTo.Contains(BlackKing.Field) && FieldsBlackCanMoveTo.Count == 0)
                 GameState = ChessState.WhiteWin;
-            if (FieldsBlackCanMoveTo.Contains(whiteKingField) && FieldsWhiteCanMoveTo.Count == 0)
+            if (FieldsBlackCanMoveTo.Contains(WhiteKing.Field) && FieldsWhiteCanMoveTo.Count == 0)
                 GameState = ChessState.BlackWin;
             if (WhitePieces.Count == 1 && BlackPieces.Count == 1)
                 GameState = ChessState.Draw;
@@ -289,9 +287,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         BlackKingCanMove = false;
                 }
             }
-            if (BlackKingCanMove == false && !FieldsWhiteCanMoveTo.Contains(blackKingField) && BlackPieces.Count == 1)
+            if (BlackKingCanMove == false && !FieldsWhiteCanMoveTo.Contains(BlackKing.Field) && BlackPieces.Count == 1)
                 GameState = ChessState.Draw;
-            if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(whiteKingField) && WhitePieces.Count == 1)
+            if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(WhiteKing.Field) && WhitePieces.Count == 1)
                 GameState = ChessState.Draw;
 
             if (OriginalChess.Clones.Count == 0)
@@ -444,7 +442,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 {
                     ChessCopy.MovePiece(From, To);
                     ChessCopy.EndTurn();
-                    if (ChessCopy.FieldsBlackCanMoveTo.Contains(ChessCopy.whiteKingField))
+                    if (ChessCopy.FieldsBlackCanMoveTo.Contains(ChessCopy.WhiteKing.Field))
                     {
                         try
                         {
@@ -463,7 +461,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 {
                     ChessCopy.MovePiece(From, To);
                     ChessCopy.EndTurn();
-                    if (ChessCopy.FieldsWhiteCanMoveTo.Contains(ChessCopy.blackKingField))
+                    if (ChessCopy.FieldsWhiteCanMoveTo.Contains(ChessCopy.BlackKing.Field))
                     {
 
                         try
