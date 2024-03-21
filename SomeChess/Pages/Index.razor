@@ -17,7 +17,14 @@
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         Console.Clear();
-        Console.WriteLine(String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 5)) + "Chess" + String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 5)));
+        try
+        {
+            Console.WriteLine(String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 5)) + "Chess" + String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 5)));
+        }
+        catch
+        {
+            Console.WriteLine("      Chess      ");
+        }
         LoggingHandler.DrawSeperatorLine(ConsoleColor.Gray);
         return base.OnAfterRenderAsync(firstRender);
     }
