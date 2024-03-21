@@ -451,7 +451,7 @@
             string moveHistoryString = "";
             foreach (var a in MoveHistory)
             {
-                moveHistoryString += (a.Item1.Team + " " + a.Item1.PieceType + " -> " + a.Item2.Team + a.Item2.PieceType + "\n      ");
+                moveHistoryString += (a.Item1.Team + " " + a.Item1.Field + " " + a.Item1.PieceType + " -> " + a.Item2.Team + " " + a.Item2.Field + " " + a.Item2.PieceType + "\n      ");
             }
 
             logger.LogDebug(moveHistoryString);
