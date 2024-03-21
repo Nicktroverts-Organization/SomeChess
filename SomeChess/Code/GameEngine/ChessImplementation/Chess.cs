@@ -50,7 +50,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
 
         public int MadeMoves = 0;
-        public List<Tuple<ChessPiece, ChessPiece>> ChessPieceMoveHistory = new();
+        public List<Tuple<ChessPiece, ChessPiece, bool>> ChessPieceMoveHistory = new();
 
         /// <summary>
         /// <para>Whether or not the game is currently running</para>
@@ -552,7 +552,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 if (CheckCastling(To, FieldsBlackCanMoveTo, 1))
                 {
                     if (OriginalChess.Clones.Count == 0)
-                        ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone()));
+                        ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
 
                     FromPiece.Field = To;
 
@@ -568,7 +568,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 if (CheckCastling(To, FieldsWhiteCanMoveTo, 8))
                 {
                     if (OriginalChess.Clones.Count == 0)
-                        ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone()));
+                        ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
 
                     FromPiece.Field = To;
 
@@ -592,7 +592,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
 
             if (OriginalChess.Clones.Count == 0)
-                ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone()));
+                ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), false));
 
             FromPiece.Field = To;
 
