@@ -21,7 +21,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
 
 
-        public ChessMatchConstructor() { }
+        //public ChessMatchConstructor() { }
 
         //public void ChangeMode(GameMode newMode)
         //{
@@ -35,7 +35,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
         public ChessMatch CreateMatch(Player player, GameMode mode)
         {
-            Chess newChess = new();
+            Chess newChess = new(Tools.Create16DigitID());
 
             ChessMatch match = new(newChess, player, mode, MatchSearching.GetInstance().GetUniqueID());
             return match;

@@ -1,6 +1,8 @@
 ﻿@page "/chess/{MatchID:int}"
-@inject IJSRuntime JsRuntime;
+@inject IJSRuntime JsRuntime
+@inject UserAuthentication social
 @using SomeChess.Components
+@using SomeChess.Code.Social
 
 <body style="background-color: var(--BackgroundColor);">
 
@@ -16,4 +18,10 @@
 {
     [Parameter]
     public int MatchID { get; set; }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await social.UpdateCurrentPlayerAsync();
+    }
 }

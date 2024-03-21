@@ -4,6 +4,7 @@
 @using SomeChess.Code.MatchMaking.ChessMatchImplementation
 @using SomeChess.Code.Social
 @using SomeChess.Code.MatchMaking
+@using SomeChess.Code
 @inject NavigationManager NavigationManager
 
 @if (!Reload)
@@ -68,7 +69,7 @@
     public bool PlayOnline = false;
     public bool Reload = true;
     int SelectedButton = 0;
-    public Chess ChessGame = new Chess();
+    public Chess ChessGame = new Chess(Tools.Create16DigitID());
     public ChessMatchConstructor constructor = new();
 
     public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
@@ -109,7 +110,7 @@
 
     public ChessMatch CreateChessMatch(GameMode mode)
     {
-        ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", PlayerStorage.Create16DigitString()), mode);
+        ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", Tools.Create16DigitID()), mode);
         MatchSearching.GetInstance().AddMatch(newMatch);
         NavigationManager.NavigateTo("/chess/" + newMatch.GetMatchID(), true);
         return newMatch;

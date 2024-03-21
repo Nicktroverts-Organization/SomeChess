@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Xml.Linq;
+using SomeChess.Code;
 
 namespace SomeChess.Code.Social
 {
@@ -20,7 +21,7 @@ namespace SomeChess.Code.Social
 
     public sealed class PlayerStorage
     {
-        private List<Player> _players;
+        private List<Player> _players = new();
 
         private static PlayerStorage instance;
 
@@ -35,11 +36,11 @@ namespace SomeChess.Code.Social
             return instance;
         }
 
-        public Player GetPlayerByID(string id)
+        public Player GetPlayerByName(string name)
         {
             try
             {
-                Player player = _players.Where(p => p.ID == id).FirstOrDefault();
+                Player player = _players.Where(p => p.Name == name).FirstOrDefault();
                 return player;
             }
             catch (Exception e)
@@ -49,17 +50,7 @@ namespace SomeChess.Code.Social
             }
         }
 
-        public static string Create16DigitString()
-        {
-            Random rndm = new Random();
-            var builder = new StringBuilder();
-            while (builder.Length < 16)
-            {
-                builder.Append(rndm.Next(10).ToString());
-            }
-            
-            return builder.ToString();
-        }
+
 
 
         public Player CreatePlayer(string name, bool addToStorage = true)
@@ -69,9 +60,9 @@ namespace SomeChess.Code.Social
 
             while(!isIdUnique)
             {
-                newID = Create16DigitString();
+                newID = Tools.Create16DigitID();
 
-                if (GetPlayerByID(newID) == null)
+                if (GetPlayerByName(newID) == null)
                     isIdUnique = true;
             }
 

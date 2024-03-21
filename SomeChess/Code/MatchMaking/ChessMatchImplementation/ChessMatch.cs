@@ -6,6 +6,42 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 {
+    public sealed class ChessStorage
+    {
+        List<Chess> _chessPlays = new();
+
+        private static ChessStorage _instance;
+
+        public static ChessStorage GetInstance()
+        {
+            if(_instance == null)
+            {
+                _instance = new ChessStorage();
+            }
+
+            return _instance;
+        }
+
+        public void RemoveMatchByID(string id)
+        {
+            try
+            {
+                Chess chess = _chessPlays.Where(c => c.ChessID == id).FirstOrDefault();
+                if(chess != null)
+                {
+                    _chessPlays.Remove(chess);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Cannot remove a player by ID: " + e);
+            }
+        }
+    }
+
+
+
+
     public class ChessPlayer
     {
         public Player Player { get; set; }

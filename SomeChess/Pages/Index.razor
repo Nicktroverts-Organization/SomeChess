@@ -1,11 +1,21 @@
 ﻿@page "/"
 @inject IJSRuntime JsRuntime;
+@inject UserAuthentication social
 @using SomeChess.Components
+@using SomeChess.Code.Social
 <body style="background-color: var(--BackgroundColor);">
 
 </body>
 <div class="flex h-24 justify-center content-center items-center">
-    <h1 class="font-bold text-5xl" style="color: var(--TextColor)">The best app to play chess!</h1>
+    <h1 class="font-bold text-5xl" style="color: var(--TextColor)">Die beste App für Schach!</h1>
+
+    <input id="newNameInput" style="margin-left: 20px" name="newNameInput" placeholder="Enter your nickname" @bind="@NewName"/>
+    <button style="margin-left: 40px color: white; font-size: 24px; border: 2px solid yellow" @onclick="() => ChangeUsername()">Enter Name</button>
+    @if(social.CurrentPlayer != null)
+    {
+        <label style="margin-left: 20px; color: white; font-size: 24px">@social.CurrentPlayer.Name</label>
+    }
+    
 </div>
 
 <Chessboard></Chessboard>
@@ -13,5 +23,13 @@
 
 @code
 {
+    public string NewName { get; set; }
 
+
+    public void ChangeUsername()
+    {
+        Player newPlayer = social.AuthenticatePlayer(NewName).Result;
+
+        social.PersistPlayerAsync(newPlayer);
+    }
 }

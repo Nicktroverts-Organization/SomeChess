@@ -10,7 +10,7 @@
 {
     <div class="flex text-center justify-center place-content-evenly mt-7">
         <div class="chessboard select-none flex text-center justify-center">
-            @for (int i = 0; i < 8; i++)
+            @for (int i = 0; i <8; i++)
             {
                 int LoopI = i;
                 <div>
@@ -219,7 +219,7 @@ else
 
     public ChessMatch CreateChessMatch(GameMode mode)
     {
-        ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", PlayerStorage.Create16DigitString()), mode);
+        ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", PlayerStorage.Create16DigitID()), mode);
         MatchSearching.GetInstance().AddMatch(newMatch);
         NavigationManager.NavigateTo("/chess/" + newMatch.GetMatchID(), true);
         return newMatch;
