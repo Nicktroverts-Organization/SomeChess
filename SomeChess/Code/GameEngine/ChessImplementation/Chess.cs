@@ -437,7 +437,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 if (Board.GetPiece($"f{row}").PieceType == ChessPieceType.None && Board.GetPiece($"g{row}").PieceType == ChessPieceType.None && Board.GetPiece($"h{row}").PieceType == ChessPieceType.Rook)
                 {
                     if (!fieldsEnemyCanMoveTo.Contains(To) && !fieldsEnemyCanMoveTo.Contains($"f{row}") &&
-                        !fieldsEnemyCanMoveTo.Contains("e1"))
+                        !fieldsEnemyCanMoveTo.Contains($"e{row}"))
                     {
                         Board.SetPiece($"f{row}", Board.GetPiece($"h{row}"));
                         Board.SetPiece($"h{row}", new EmptyPiece(Team.White, $"h{row}"));
