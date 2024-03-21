@@ -245,3 +245,6 @@
 .move-history {
     overflow: scroll;
 }
+.d-block {
+    display: block;
+}

@@ -64,14 +64,25 @@
             }
             else
             {
-                <div class="backholder ml-24 flex flex-col text-center ">
-                    <div class="move-history flex-col h-5/6">
-                        @foreach (var move in MoveHistory)
+                <div class="backholder ml-24 flex flex-col text-center">
+                    <div class="move-history flex justify-start h-5/6 flex-wrap w-4/5">
+                        @for (int i = 0; i < MoveHistory.Count; i += 2)
                         {
-                            <p>@move.Item1 - @move.Item2</p>
+                            <div class="flex w-full">
+                                <div class="w-1/2">
+                                    <p class="d-block h-10">@MoveHistory[i].Item1 - @MoveHistory[i].Item2</p>
+                                </div>
+                                @if(i + 1 < MoveHistory.Count)
+                                {
+                                    <div class="w-1/2">
+                                        <p class="d-block h-10">@MoveHistory[i + 1].Item1 - @MoveHistory[i + 1].Item2</p>
+                                    </div>
+                                }
+                            </div>
                         }
                     </div>
                 </div>
+
             }
         </div>
     }
@@ -132,11 +143,21 @@
             }
             else
             {
-                <div class="backholder ml-24 flex flex-col text-center ">
-                    <div class="move-history flex-col h-5/6">
-                        @foreach (var move in MoveHistory)
+                <div class="backholder ml-24 flex flex-col text-center">
+                    <div class="move-history flex justify-start h-5/6 flex-wrap w-4/5">
+                        @for (int i = 0; i < MoveHistory.Count; i += 2)
                         {
-                            <p>@move.Item1 - @move.Item2</p>
+                            <div class="flex w-full">
+                                <div class="w-1/2">
+                                    <p class="d-block h-10">@MoveHistory[i].Item1 - @MoveHistory[i].Item2</p>
+                                </div>
+                                @if(i + 1 < MoveHistory.Count)
+                                {
+                                    <div class="w-1/2">
+                                        <p class="d-block h-10">@MoveHistory[i + 1].Item1 - @MoveHistory[i + 1].Item2</p>
+                                    </div>
+                                }
+                            </div>
                         }
                     </div>
                 </div>
@@ -205,6 +226,18 @@
             <div class="w-96 h-2/6 flex flex-col justify-evenly items-center rounded-lg gameOverDesign">
                 <div>
                     <p class="anton-regular text-4xl">You lost the game!</p>
+                </div>
+                <div>
+                    <a href="@("/")" class="playAgainLink">Play new one!</a>
+                </div>
+            </div>
+        }
+        else if (ChessGame.GameState == ChessState.Draw)
+        {
+            <span @onclick="() => { GameOver = false; }" class="material-symbols-outlined fixed absolute select-none ">cancel</span>
+            <div class="w-96 h-2/6 flex flex-col justify-evenly items-center rounded-lg gameOverDesign">
+                <div>
+                    <p class="anton-regular text-4xl">Draw!</p>
                 </div>
                 <div>
                     <a href="@("/")" class="playAgainLink">Play new one!</a>
