@@ -65,19 +65,91 @@
             else
             {
                 <div class="backholder ml-24 flex flex-col text-center">
-                    <div class="move-history flex justify-start h-5/6 flex-wrap w-4/5">
+                    <div class="move-history flex-col justify-start h-5/6 w-4/5">
                         @for (int i = 0; i < MoveHistory.Count; i += 2)
                         {
-                            <div class="flex w-full">
+                            <div class="w-3/6 flex">
                                 <div class="w-1/2">
-                                    <p class="d-block h-10">@MoveHistory[i].Item1 - @MoveHistory[i].Item2</p>
+                                    <p class="w-3/6 h-10">
+                                        @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
+                                        {
+                                            @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                            {
+                                                @(MoveHistory[i].Item1.Field[0] + "x" + @MoveHistory[i].Item2.Field)
+                                            }
+                                            else
+                                            {
+                                                @MoveHistory[i].Item2.Field
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
+                                            {
+                                                @((MoveHistory[i].Item1.PieceType.ToString().ToUpper())[1])
+
+                                                @MoveHistory[i].Item2.Field
+                                                ;
+                                            }
+                                            else
+                                            {
+                                                @MoveHistory[i].Item1.PieceType.ToString()[0]
+
+                                                @MoveHistory[i].Item2.Field
+                                                ;
+                                            }
+                                        }
+                                    </p>
                                 </div>
-                                @if(i + 1 < MoveHistory.Count)
-                                {
-                                    <div class="w-1/2">
-                                        <p class="d-block h-10">@MoveHistory[i + 1].Item1 - @MoveHistory[i + 1].Item2</p>
-                                    </div>
-                                }
+                                <div class="w-1/2">
+                                    @if (i + 1 < MoveHistory.Count)
+                                    {
+                                        <p class="w-3/6 h-10">
+                                            @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
+                                            {
+                                                @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i + 1].Item1.Field[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @MoveHistory[i + 1].Item2.Field
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Knight)
+                                                {
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1]
+
+                                                        @MoveHistory[i + 1].Item2.Field
+                                                        ;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @MoveHistory[i + 1].Item1.PieceType.ToString()[0]
+
+                                                        @MoveHistory[i + 1].Item2.Field
+                                                        ;
+                                                    }
+                                                }
+                                            }
+                                        </p>
+                                    }
+                                </div>
                             </div>
                         }
                     </div>
@@ -129,8 +201,8 @@
             {
                 <div class="backholder ml-24 flex flex-col text-center ">
                     <h1 class="greengradient anton-regular">
-                        Play Chess<br/>
-                        Online<br/>
+                        Play Chess<br />
+                        Online<br />
                         on the #1 Site!
                     </h1>
                     <div>
@@ -144,19 +216,91 @@
             else
             {
                 <div class="backholder ml-24 flex flex-col text-center">
-                    <div class="move-history flex justify-start h-5/6 flex-wrap w-4/5">
+                    <div class="move-history flex-col justify-start h-5/6 w-4/5">
                         @for (int i = 0; i < MoveHistory.Count; i += 2)
                         {
-                            <div class="flex w-full">
+                            <div class="w-3/6 flex">
                                 <div class="w-1/2">
-                                    <p class="d-block h-10">@MoveHistory[i].Item1 - @MoveHistory[i].Item2</p>
+                                    <p class="w-3/6 h-10">
+                                        @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
+                                        {
+                                            @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                            {
+                                                @(MoveHistory[i].Item1.Field[0] + "x" + @MoveHistory[i].Item2.Field)
+                                            }
+                                            else
+                                            {
+                                                @MoveHistory[i].Item2.Field
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
+                                            {
+                                                @((MoveHistory[i].Item1.PieceType.ToString().ToUpper())[1])
+
+                                                @MoveHistory[i].Item2.Field
+                                                ;
+                                            }
+                                            else
+                                            {
+                                                @MoveHistory[i].Item1.PieceType.ToString()[0]
+
+                                                @MoveHistory[i].Item2.Field
+                                                ;
+                                            }
+                                        }
+                                    </p>
                                 </div>
-                                @if(i + 1 < MoveHistory.Count)
-                                {
-                                    <div class="w-1/2">
-                                        <p class="d-block h-10">@MoveHistory[i + 1].Item1 - @MoveHistory[i + 1].Item2</p>
-                                    </div>
-                                }
+                                <div class="w-1/2">
+                                    @if (i + 1 < MoveHistory.Count)
+                                    {
+                                        <p class="w-3/6 h-10">
+                                            @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
+                                            {
+                                                @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i + 1].Item1.Field[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @MoveHistory[i + 1].Item2.Field
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Knight)
+                                                {
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1]
+
+                                                        @MoveHistory[i + 1].Item2.Field
+                                                        ;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @MoveHistory[i + 1].Item1.PieceType.ToString()[0]
+
+                                                        @MoveHistory[i + 1].Item2.Field
+                                                        ;
+                                                    }
+                                                }
+                                            }
+                                        </p>
+                                    }
+                                </div>
                             </div>
                         }
                     </div>
@@ -246,7 +390,7 @@
         }
     </div>
 }
- 
+
 @code {
     bool GameOver = true;
     string GameWon = "white";
@@ -259,7 +403,7 @@
     public ChessMatchConstructor constructor = new();
     public ILogger logger = LoggingHandler.GetLogger<Chessboard>();
 
-    List<Tuple<ChessPieceType, string>> MoveHistory { get; set; } = new();
+    List<Tuple<ChessPiece, ChessPiece>> MoveHistory { get; set; } = new();
 
     public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
     {
@@ -322,14 +466,14 @@
 
     void SetButtonState(int buttonNumber)
     {
-       if (SelectedButton != buttonNumber)
-       {
-           SelectedButton = buttonNumber;
-       }
-       else
-       {
-           SelectedButton = 0;
-       }
+        if (SelectedButton != buttonNumber)
+        {
+            SelectedButton = buttonNumber;
+        }
+        else
+        {
+            SelectedButton = 0;
+        }
     }
 
     [JSInvokable("IdHandler")]
@@ -345,7 +489,7 @@
             {
                 ChessGame.EndTurn();
                 Reload = true;
-                MoveHistory.Add(new Tuple<ChessPieceType, string>(FromPiece.PieceType, ToID));
+                MoveHistory.Add(new Tuple<ChessPiece, ChessPiece>((ChessPiece)FromPiece.Clone(), (ChessPiece)ChessGame.Board.GetPiece(ToID).Clone()));
                 StateHasChanged();
             }
             else
