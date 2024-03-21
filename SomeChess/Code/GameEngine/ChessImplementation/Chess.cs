@@ -32,6 +32,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public bool? WhiteKingCanMove;
         public bool? BlackKingCanMove;
 
+        public bool WhiteKingHasMoved = false;
+        public bool BlackKingHasMoved = false;
+
         public bool Original = true;
         public Chess OriginalChess;
         public List<Chess>? Clones;
@@ -417,6 +420,38 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
         }
 
+        private bool CheckCastling(string To, List<string> fieldsEnemyCanMoveTo, int row)
+        {
+            if (To == $"g{row}")
+            {
+                if (Board.GetPiece($"f{row}").PieceType == ChessPieceType.None && Board.GetPiece($"g{row}").PieceType == ChessPieceType.None && Board.GetPiece($"h{row}").PieceType == ChessPieceType.Rook)
+                {
+                    if (!fieldsEnemyCanMoveTo.Contains(To) && !fieldsEnemyCanMoveTo.Contains($"f{row}") &&
+                        !fieldsEnemyCanMoveTo.Contains("e1"))
+                    {
+                        Board.SetPiece($"f{row}", Board.GetPiece($"h{row}"));
+                        Board.SetPiece($"h{row}", new EmptyPiece(Team.White, $"h{row}"));
+                        return true;
+                    }
+                }
+            }
+            else if (To == $"c{row}")
+            {
+                if (Board.GetPiece($"d{row}").PieceType == ChessPieceType.None && Board.GetPiece($"c{row}").PieceType == ChessPieceType.None && Board.GetPiece($"a{row}").PieceType == ChessPieceType.Rook)
+                {
+                    if (!fieldsEnemyCanMoveTo.Contains(To) && !fieldsEnemyCanMoveTo.Contains($"d{row}") &&
+                        !fieldsEnemyCanMoveTo.Contains($"e{row}"))
+                    {
+                        Board.SetPiece($"d{row}", Board.GetPiece($"a{row}"));
+                        Board.SetPiece($"a{row}", new EmptyPiece(Team.White, $"a{row}"));
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// <para>Moves the piece from field <paramref name="From"/> to the field <paramref name="To"/>.</para>
         /// </summary>
@@ -502,8 +537,44 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             //Check if the given parameters are valid chess fields.
             Board.ValidateFields(new[] { From, To });
 
+            if (FromPiece.Team == Team.White)
+            {
+                if (CheckCastling(To, FieldsBlackCanMoveTo, 1))
+                {
+                    FromPiece.Field = To;
+
+                    //Moves the piece to the new position
+                    Board.SetPiece(To, FromPiece);
+                    Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
+
+                    return true;
+                }
+            }
+            else
+            {
+                if (CheckCastling(To, FieldsWhiteCanMoveTo, 8))
+                {
+                    FromPiece.Field = To;
+
+                    //Moves the piece to the new position
+                    Board.SetPiece(To, FromPiece);
+                    Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
+
+                    return true;
+                }
+            }
+
             if (!FromPiece.CanMove(From, To, this.GetGame()))
                 return false; //If Piece can't move to field "To", return false.
+
+            if (FromPiece.PieceType == ChessPieceType.King)
+            {
+                if (FromPiece.Team == Team.White)
+                    WhiteKingHasMoved = true;
+                else
+                    BlackKingHasMoved = true;
+            }
+
 
             FromPiece.Field = To;
 
