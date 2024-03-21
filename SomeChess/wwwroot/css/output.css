@@ -696,12 +696,20 @@ video {
   height: 1.25rem;
 }
 
+.h-5\/6 {
+  height: 83.333333%;
+}
+
 .h-52 {
   height: 13rem;
 }
 
 .h-64 {
   height: 16rem;
+}
+
+.h-96 {
+  height: 24rem;
 }
 
 .h-screen {
@@ -724,8 +732,16 @@ video {
   width: 0.75rem;
 }
 
+.w-3\/6 {
+  width: 50%;
+}
+
 .w-4 {
   width: 1rem;
+}
+
+.w-4\/5 {
+  width: 80%;
 }
 
 .w-5 {
@@ -753,6 +769,14 @@ video {
   width: 100vw;
 }
 
+.w-1\/2 {
+  width: 50%;
+}
+
+.w-full {
+  width: 100%;
+}
+
 .border-collapse {
   border-collapse: collapse;
 }
@@ -775,6 +799,10 @@ video {
   flex-direction: column;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .place-content-evenly {
   place-content: space-evenly;
 }
@@ -787,6 +815,10 @@ video {
   align-items: center;
 }
 
+.justify-start {
+  justify-content: flex-start;
+}
+
 .justify-center {
   justify-content: center;
 }
@@ -797,6 +829,10 @@ video {
 
 .justify-self-center {
   justify-self: center;
+}
+
+.overflow-scroll {
+  overflow: scroll;
 }
 
 .rounded-lg {
@@ -1092,6 +1128,7 @@ video {
   background-color: var(--SecondBackgroundColor);
   border-radius: 10px;
   width: 30vw;
+  height: 68vh;
 }
 
 .chooseTime {
@@ -1194,4 +1231,12 @@ video {
   border-radius: 5px;
   padding: 15px 15px;
   background-color: #008080;
+}
+
+.move-history {
+  overflow: scroll;
+}
+
+.d-block {
+  display: block;
 }

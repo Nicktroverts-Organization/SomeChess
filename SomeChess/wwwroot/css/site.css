@@ -154,6 +154,7 @@
     background-color: var(--SecondBackgroundColor);
     border-radius: 10px;
     width: 30vw;
+    height: 68vh;
 }
 .chooseTime {
     background-color: var(--SecondBackgroundColor);
@@ -240,4 +241,10 @@
     border-radius: 5px;
     padding: 15px 15px;
     background-color: #008080;
+}
+.move-history {
+    overflow: scroll;
+}
+.d-block {
+    display: block;
 }
