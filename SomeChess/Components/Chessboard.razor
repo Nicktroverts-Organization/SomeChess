@@ -407,7 +407,7 @@
     public ChessMatchConstructor constructor = new();
     public ILogger logger = LoggingHandler.GetLogger<Chessboard>();
 
-    List<Tuple<ChessPiece, ChessPiece>> MoveHistory { get; set; } = new();
+    List<Tuple<ChessPiece, ChessPiece, bool>> MoveHistory { get; set; } = new();
 
     public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
     {
