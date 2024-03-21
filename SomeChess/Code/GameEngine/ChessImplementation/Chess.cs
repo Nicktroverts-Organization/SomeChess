@@ -9,16 +9,20 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 {
     public class Chess : IGame<Chess>, ICloneable
     {
-        public ChessBoard Board = new();
-
         public static List<char> AlphConversionChars = new()
             { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
+
+        public ChessBoard Board = new();
+
         public ILogger logger = LoggingHandler.GetLogger<Chess>();
 
+        
         public ChessState GameState = ChessState.None;
 
+        
         public Team TeamTurn = Team.White;
+
 
         public List<ChessPiece> BlackPieces = new();
         public List<ChessPiece> WhitePieces = new();
@@ -35,13 +39,18 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public bool WhiteKingHasMoved = false;
         public bool BlackKingHasMoved = false;
 
+
         public bool Original = true;
         public Chess OriginalChess;
         public List<Chess>? Clones;
 
-        public Guid Test = Guid.NewGuid();
+
+
+        public Guid ChessID = Guid.NewGuid();
+
 
         public int MadeMoves = 0;
+        public List<Tuple<ChessPiece, ChessPiece>> ChessPieceMoveHistory = new();
 
         /// <summary>
         /// <para>Whether or not the game is currently running</para>
@@ -106,6 +115,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public void StartGame()
         {
+            ChessPieceMoveHistory = new();
             ResetBoard();
             GameState = ChessState.Playing;
         }
@@ -541,6 +551,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {
                 if (CheckCastling(To, FieldsBlackCanMoveTo, 1))
                 {
+                    if (OriginalChess.Clones.Count == 0)
+                        ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone()));
+
                     FromPiece.Field = To;
 
                     //Moves the piece to the new position
@@ -554,6 +567,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {
                 if (CheckCastling(To, FieldsWhiteCanMoveTo, 8))
                 {
+                    if (OriginalChess.Clones.Count == 0)
+                        ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone()));
+
                     FromPiece.Field = To;
 
                     //Moves the piece to the new position
@@ -575,6 +591,8 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     BlackKingHasMoved = true;
             }
 
+            if (OriginalChess.Clones.Count == 0)
+                ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone()));
 
             FromPiece.Field = To;
 

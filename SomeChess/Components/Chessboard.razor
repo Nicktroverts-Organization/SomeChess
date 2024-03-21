@@ -297,10 +297,14 @@
         if (Reload)
         {
             Reload = false;
+
+            string moveHistoryString = "";
             foreach (var a in MoveHistory)
             {
-                logger.LogDebug(a.Item1 + " -> " + a.Item2);
+                moveHistoryString += (a.Item1 + " -> " + a.Item2 + "\n");
             }
+
+            logger.LogDebug(moveHistoryString);
 
             LoggingHandler.DrawSeperatorLine(ConsoleColor.Magenta);
             StateHasChanged();
