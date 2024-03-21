@@ -704,8 +704,16 @@ video {
   height: 16rem;
 }
 
+.h-96 {
+  height: 24rem;
+}
+
 .h-screen {
   height: 100vh;
+}
+
+.h-5\/6 {
+  height: 83.333333%;
 }
 
 .w-1 {
@@ -797,6 +805,10 @@ video {
 
 .justify-self-center {
   justify-self: center;
+}
+
+.overflow-scroll {
+  overflow: scroll;
 }
 
 .rounded-lg {
@@ -1092,6 +1104,7 @@ video {
   background-color: var(--SecondBackgroundColor);
   border-radius: 10px;
   width: 30vw;
+  height: 68vh;
 }
 
 .chooseTime {
@@ -1194,4 +1207,8 @@ video {
   border-radius: 5px;
   padding: 15px 15px;
   background-color: #008080;
+}
+
+.move-history {
+  overflow: scroll;
 }

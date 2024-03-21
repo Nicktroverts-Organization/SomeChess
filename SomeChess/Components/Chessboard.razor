@@ -65,7 +65,7 @@
             else
             {
                 <div class="backholder ml-24 flex flex-col text-center ">
-                    <div class="move-history">
+                    <div class="move-history flex-col h-5/6">
                         @foreach (var move in MoveHistory)
                         {
                             <p>@move.Item1 - @move.Item2</p>
@@ -133,7 +133,7 @@
             else
             {
                 <div class="backholder ml-24 flex flex-col text-center ">
-                    <div class="move-history">
+                    <div class="move-history flex-col h-5/6">
                         @foreach (var move in MoveHistory)
                         {
                             <p>@move.Item1 - @move.Item2</p>
@@ -179,7 +179,7 @@
                 </div>
             </div>
             <div class="playButton flex justify-center mt-14 select-none">
-                <a class="flex text-center justify-center">Play</a>
+                <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center justify-center">Play</a>
             </div>
         </div>
     </div>
