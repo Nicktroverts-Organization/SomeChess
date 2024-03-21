@@ -79,24 +79,32 @@
                                             }
                                             else
                                             {
-                                                @MoveHistory[i].Item2.Field
+                                                @MoveHistory[i].Item2.Field;
                                             }
                                         }
                                         else
                                         {
                                             if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
                                             {
-                                                @((MoveHistory[i].Item1.PieceType.ToString().ToUpper())[1])
-
-                                                @MoveHistory[i].Item2.Field
-                                                ;
+                                                @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i].Item2.Field)
+                                                }
                                             }
                                             else
                                             {
-                                                @MoveHistory[i].Item1.PieceType.ToString()[0]
-
-                                                @MoveHistory[i].Item2.Field
-                                                ;
+                                                @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString()[0] + @MoveHistory[i].Item2.Field)
+                                                }
                                             }
                                         }
                                     </p>
@@ -113,7 +121,7 @@
                                                 }
                                                 else
                                                 {
-                                                    @MoveHistory[i + 1].Item2.Field
+                                                    @MoveHistory[i + 1].Item2.Field;
                                                 }
                                             }
                                             else
@@ -126,10 +134,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1]
-
-                                                        @MoveHistory[i + 1].Item2.Field
-                                                        ;
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i + 1].Item2.Field)
                                                     }
                                                 }
                                                 else
@@ -140,10 +145,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @MoveHistory[i + 1].Item1.PieceType.ToString()[0]
-
-                                                        @MoveHistory[i + 1].Item2.Field
-                                                        ;
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + @MoveHistory[i + 1].Item2.Field)
                                                     }
                                                 }
                                             }
@@ -230,24 +232,32 @@
                                             }
                                             else
                                             {
-                                                @MoveHistory[i].Item2.Field
+                                                @MoveHistory[i].Item2.Field;
                                             }
                                         }
                                         else
                                         {
                                             if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
                                             {
-                                                @((MoveHistory[i].Item1.PieceType.ToString().ToUpper())[1])
-
-                                                @MoveHistory[i].Item2.Field
-                                                ;
+                                                @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i].Item2.Field)
+                                                }
                                             }
                                             else
                                             {
-                                                @MoveHistory[i].Item1.PieceType.ToString()[0]
-
-                                                @MoveHistory[i].Item2.Field
-                                                ;
+                                                @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString()[0] + @MoveHistory[i].Item2.Field)
+                                                }
                                             }
                                         }
                                     </p>
@@ -264,7 +274,7 @@
                                                 }
                                                 else
                                                 {
-                                                    @MoveHistory[i + 1].Item2.Field
+                                                    @MoveHistory[i + 1].Item2.Field;
                                                 }
                                             }
                                             else
@@ -277,10 +287,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1]
-
-                                                        @MoveHistory[i + 1].Item2.Field
-                                                        ;
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i + 1].Item2.Field)
                                                     }
                                                 }
                                                 else
@@ -291,10 +298,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @MoveHistory[i + 1].Item1.PieceType.ToString()[0]
-
-                                                        @MoveHistory[i + 1].Item2.Field
-                                                        ;
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + @MoveHistory[i + 1].Item2.Field)
                                                     }
                                                 }
                                             }
@@ -424,6 +428,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        MoveHistory = ChessGame.ChessPieceMoveHistory;
         // ChessGame.MadeMoves
         // ChessGame.StartGame();
         // ChessGame.UpdateGameState();
@@ -434,6 +439,7 @@
             ChessGame.UpdateGameState();
             ChessGame.ResetBoard();
             ChessGame.StartGame();
+
             // See warning about memory above in the article
             dotNetReference = DotNetObjectReference.Create(this);
             await JsRuntime.InvokeVoidAsync("setDotNetReference", dotNetReference);
@@ -492,7 +498,6 @@
             {
                 ChessGame.EndTurn();
                 Reload = true;
-                MoveHistory.Add(new Tuple<ChessPiece, ChessPiece>((ChessPiece)FromPiece.Clone(), (ChessPiece)ChessGame.Board.GetPiece(ToID).Clone()));
                 StateHasChanged();
             }
             else
