@@ -1,8 +1,13 @@
 ﻿@page "/Chess/{SomeVariable}"
+@using SomeChess.Components
 
-<h3>PlayOnlinePage</h3>
+<body style="background-color: var(--BackgroundColor);">
+
+</body>
+<Chessboard></Chessboard>
+
 
 @code {
     [Parameter]
-    string SomeVariable { get; set; }
+    public string SomeVariable { get; set; }
 }
