@@ -1,118 +1,149 @@
 ﻿@inject IJSRuntime JsRuntime;
+@inject NavigationManager NavMan;
 @using Microsoft.AspNetCore.Components.Web
+@using SomeChess.Code
 @using SomeChess.Code.GameEngine.ChessImplementation
 @using SomeChess.Code.MatchMaking.ChessMatchImplementation
 @using SomeChess.Code.Social
-@using SomeChess.Code.MatchMaking.ChessMatchImplementation
 
-@if (!Reload)
-{
-    <div class="flex text-center justify-center place-content-evenly mt-7" draggable="@(!GameOver)">
-        <div class="chessboard select-none flex text-center justify-center">
-            @for (int i = 0; i < 8; i++)
+<div>
+    @if (!Reload)
+    {
+        <div class="flex text-center justify-center place-content-evenly mt-7">
+            <div class="chessboard select-none flex text-center justify-center">
+                @for (int i = 0; i < 8; i++)
+                {
+                    int LoopI = i;
+                    <div>
+                        @for (int u = 7; u >= 0; u--)
+                        {
+                            int LoopU = u;
+                            string color = "";
+                            if (LoopI % 2 == 0) // LoopI ist gerade
+                            {
+                                if (LoopU % 2 != 0) // LoopU ist ungerade
+                                    color = "whiteCell";
+                                else //LoopU ist gerade
+                                    color = "blackCell";
+                            }
+                            else //LoopI ist ungerade
+                            {
+                                if (LoopU % 2 != 0) //LoopU ist ungerade
+                                    color = "blackCell";
+                                else // LoopU ist gerade
+                                    color = "whiteCell";
+                            }
+
+                            string pieceColor;
+                            @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
+                                pieceColor = "w";
+                            else pieceColor = "b";
+
+                            <div class="item @color" onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                                @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            @if (!NavMan.Uri.ToLower().Contains("/chess/"))
             {
-                int LoopI = i;
-                <div>
-                    @for (int u = 7; u >= 0; u--)
-                    {
-                        int LoopU = u;
-                        string color = "";
-                        if (LoopI % 2 == 0) // LoopI ist gerade
+                <div class="backholder ml-24 flex flex-col text-center ">
+                    <h1 class="greengradient anton-regular">
+                        Play Chess<br />
+                        Online<br />
+                        on the #1 Site!
+                    </h1>
+                    <div>
+                        <button @onclick="() => { PlayOnline = true;}" class="playOnline"><img width="72" height="2" src="images/online-icon.png" />Play Online<br /><span>Play with a real person online!</span></button>
+                    </div>
+                    <div>
+                        <button class="playComputer"><img width="72" height="2" src="images/computer-icon.png" /> Computer<br /><span class="smalltextPlayComputer">Play vs training bots</span></button>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="backholder ml-24 flex flex-col text-center ">
+                    <div class="move-history">
+                        @foreach (var move in MoveHistory)
                         {
-                            if (LoopU % 2 != 0) // LoopU ist ungerade
-                                color = "whiteCell";
-                            else //LoopU ist gerade
-                                color = "blackCell";
+                            <p>@move.Item1 - @move.Item2</p>
                         }
-                        else //LoopI ist ungerade
-                        {
-                            if (LoopU % 2 != 0) //LoopU ist ungerade
-                                color = "blackCell";
-                            else // LoopU ist gerade
-                                color = "whiteCell";
-                        }
-
-                        string pieceColor;
-                        @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
-                            pieceColor = "w";
-                        else pieceColor = "b";
-
-                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
-                            @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
-                        </div>
-                    }
+                    </div>
                 </div>
             }
         </div>
-        <div class="backholder ml-24 flex flex-col text-center ">
-            <h1 class="greengradient anton-regular">
-                Play Chess<br />
-                Online<br />
-                on the #1 Site!
-            </h1>
-            <div>
-                <button @onclick="() => { PlayOnline = true;}" class="playOnline"><img width="72" height="2" src="images/online-icon.png" />Play Online<br /><span>Play with a real person online!</span></button>
+    }
+    else
+    {
+        <div class="flex text-center justify-center place-content-evenly mt-7">
+            <div class="chessboard select-none flex text-center justify-center">
+                @for (int i = 0; i < 8; i++)
+                {
+                    int LoopI = i;
+                    <div>
+                        @for (int u = 7; u >= 0; u--)
+                        {
+                            int LoopU = u;
+                            string color = "";
+                            if (LoopI % 2 == 0) // LoopI ist gerade
+                            {
+                                if (LoopU % 2 != 0) // LoopU ist ungerade
+                                    color = "whiteCell";
+                                else //LoopU ist gerade
+                                    color = "blackCell";
+                            }
+                            else //LoopI ist ungerade
+                            {
+                                if (LoopU % 2 != 0) //LoopU ist ungerade
+                                    color = "blackCell";
+                                else // LoopU ist gerade
+                                    color = "whiteCell";
+                            }
+
+                            string pieceColor;
+                            @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
+                                pieceColor = "w";
+                            else pieceColor = "b";
+
+                            <div class="item @color" onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                                @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                            </div>
+                        }
+                    </div>
+                }
             </div>
-            <div>
-                <button class="playComputer"><img width="72" height="2" src="images/computer-icon.png" /> Computer<br /><span class="smalltextPlayComputer">Play vs training bots</span></button>
-            </div>
-        </div>
-    </div>
-}
-else
-{
-    <div class="flex text-center justify-center place-content-evenly mt-7">
-        <div class="chessboard select-none flex text-center justify-center">
-            @for (int i = 0; i < 8; i++)
+            @if (!NavMan.Uri.ToLower().Contains("/chess/"))
             {
-                int LoopI = i;
-                <div>
-                    @for (int u = 7; u >= 0; u--)
-                    {
-                        int LoopU = u;
-                        string color = "";
-                        if (LoopI % 2 == 0) // LoopI ist gerade
+                <div class="backholder ml-24 flex flex-col text-center ">
+                    <h1 class="greengradient anton-regular">
+                        Play Chess<br/>
+                        Online<br/>
+                        on the #1 Site!
+                    </h1>
+                    <div>
+                        <button @onclick="() => { PlayOnline = true;}" class="playOnline"><img width="72" height="2" src="images/online-icon.png" />Play Online<br /><span>Play with a real person online!</span></button>
+                    </div>
+                    <div>
+                        <button class="playComputer"><img width="72" height="2" src="images/computer-icon.png" /> Computer<br /><span class="smalltextPlayComputer">Play vs training bots</span></button>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="backholder ml-24 flex flex-col text-center ">
+                    <div class="move-history">
+                        @foreach (var move in MoveHistory)
                         {
-                            if (LoopU % 2 != 0) // LoopU ist ungerade
-                                color = "whiteCell";
-                            else //LoopU ist gerade
-                                color = "blackCell";
+                            <p>@move.Item1 - @move.Item2</p>
                         }
-                        else //LoopI ist ungerade
-                        {
-                            if (LoopU % 2 != 0) //LoopU ist ungerade
-                                color = "blackCell";
-                            else // LoopU ist gerade
-                                color = "whiteCell";
-                        }
-
-                        string pieceColor;
-                        @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
-                            pieceColor = "w";
-                        else pieceColor = "b";
-
-                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
-                            @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
-                        </div>
-                    }
+                    </div>
                 </div>
             }
         </div>
-        <div class="backholder ml-24 flex flex-col text-center ">
-            <h1 class="greengradient anton-regular">
-                Play Chess<br />
-                Online<br />
-                on the #1 Site!
-            </h1>
-            <div>
-                <button @onclick="() => { PlayOnline = true;}" class="playOnline"><img width="72" height="2" src="images/online-icon.png" />Play Online<br /><span>Play with a real person online!</span></button>
-            </div>
-            <div>
-                <button class="playComputer"><img width="72" height="2" src="images/computer-icon.png" /> Computer<br /><span class="smalltextPlayComputer">Play vs training bots</span></button>
-            </div>
-        </div>
-    </div>
-}
+    }
+</div>
 @if (PlayOnline)
 {
     <div class="chooseTime flex flex-col">
@@ -193,16 +224,18 @@ else
     int SelectedButton = 0;
     public Chess ChessGame = new Chess();
     public ChessMatchConstructor constructor = new();
+    public ILogger logger = LoggingHandler.GetLogger<Chessboard>();
 
+    List<Tuple<ChessPieceType, string>> MoveHistory { get; set; } = new();
 
     public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
     {
-        { ChessPieceType.Pawn, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"powns chessPiece\" src=\"images/w_pawn.png\" />\r\n</div>" },
-        { ChessPieceType.Knight, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"knight chessPiece\" src=\"images/w_knight.png\" />\r\n</div>"},
-        { ChessPieceType.Bishop, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece chessPiece\" src=\"images/w_bishop.png\" />\r\n</div>"},
-        { ChessPieceType.Rook, "<div class=\"@((isDragging) ? \"selected\" : \"\")\">\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"rook chessPiece\" src=\"images/w_rook.png\" />\r\n</div>" },
-        { ChessPieceType.Queen, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece\" src=\"images/w_queen.png\" />\r\n </div>"},
-        { ChessPieceType.King, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece chessPiece\" src=\"images/w_king.png\" />\r\n\r\n</div>" },
+        { ChessPieceType.Pawn, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"powns chessPiece\" src=\"images/w_pawn.png\" />\r\n</div>" },
+        { ChessPieceType.Knight, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"knight chessPiece\" src=\"images/w_knight.png\" />\r\n</div>"},
+        { ChessPieceType.Bishop, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece chessPiece\" src=\"images/w_bishop.png\" />\r\n</div>"},
+        { ChessPieceType.Rook, "<div class=\"@((isDragging) ? \"selected\" : \"\")\">\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"rook chessPiece\" src=\"images/w_rook.png\" />\r\n</div>" },
+        { ChessPieceType.Queen, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece\" src=\"images/w_queen.png\" />\r\n </div>"},
+        { ChessPieceType.King, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece chessPiece\" src=\"images/w_king.png\" />\r\n\r\n</div>" },
         { ChessPieceType.None, ""},
     };
 
@@ -214,6 +247,7 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        // ChessGame.MadeMoves
         // ChessGame.StartGame();
         // ChessGame.UpdateGameState();
         // ChessGame.StartGame();
@@ -238,6 +272,13 @@ else
         {
             await JsRuntime.InvokeVoidAsync("Over", !ChessGame.IsPlaying);
         }
+
+        foreach (var a in MoveHistory)
+        {
+            logger.LogDebug(a.Item1 + " -> " + a.Item2);
+        }
+
+        LoggingHandler.DrawSeperatorLine(ConsoleColor.Magenta);
     }
 
     public ChessMatch CreateChessMatch(GameMode mode)
@@ -266,10 +307,12 @@ else
         else if (Event == "mouseup")
         {
             ToID = id;
+            ChessPiece FromPiece = ChessGame.Board.GetPiece(FromID);
             if (ChessGame.MovePiece(FromID, ToID))
             {
                 ChessGame.EndTurn();
                 Reload = true;
+                MoveHistory.Add(new Tuple<ChessPieceType, string>(FromPiece.PieceType, ToID));
                 StateHasChanged();
             }
             else
