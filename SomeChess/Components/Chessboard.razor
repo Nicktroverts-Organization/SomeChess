@@ -39,10 +39,18 @@
                             @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
                                 pieceColor = "w";
                             else pieceColor = "b";
-
-                            <div class="item @color" onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
-                                @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
-                            </div>
+                            @if (!NavMan.Uri.ToLower().Contains("/chess/"))
+                            {
+                                <div class="item @color" draggable="false">
+                                    @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="item @color" onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                                    @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                                </div>
+                            }
                         }
                     </div>
                 }
@@ -80,7 +88,21 @@
                                             }
                                             else
                                             {
-                                                @MoveHistory[i].Item2.Field;
+                                                @MoveHistory[i].Item2.Field
+                                                ;
+                                            }
+                                        }
+                                        else if (MoveHistory[i].Item3 == true)
+                                        {
+                                            if (MoveHistory[i].Item2.Field.ToString()[0] == 'c')
+                                            {
+                                                @("0-0-0")
+                                                ;
+                                            }
+                                            else
+                                            {
+                                                @("0-0")
+                                                ;
                                             }
                                         }
                                         else
@@ -122,7 +144,21 @@
                                                 }
                                                 else
                                                 {
-                                                    @MoveHistory[i + 1].Item2.Field;
+                                                    @MoveHistory[i + 1].Item2.Field
+                                                    ;
+                                                }
+                                            }
+                                            else if (MoveHistory[i + 1].Item3 == true)
+                                            {
+                                                if (MoveHistory[i + 1].Item2.Field.ToString()[0] == 'c')
+                                                {
+                                                    @("0-0-0")
+                                                    ;
+                                                }
+                                                else
+                                                {
+                                                    @("0-0")
+                                                    ;
                                                 }
                                             }
                                             else
@@ -202,7 +238,7 @@
             </div>
             @if (!NavMan.Uri.ToLower().Contains("/chess/"))
             {
-                <div class="backholder ml-24 flex flex-col text-center ">
+                <div class="backholder ml-24 flex flex-col text-center " draggable="false">
                     <h1 class="greengradient anton-regular">
                         Play Chess<br />
                         Online<br />
@@ -233,7 +269,21 @@
                                             }
                                             else
                                             {
-                                                @MoveHistory[i].Item2.Field;
+                                                @MoveHistory[i].Item2.Field
+                                                ;
+                                            }
+                                        }
+                                        else if (MoveHistory[i].Item3 == true)
+                                        {
+                                            if (MoveHistory[i].Item2.Field.ToString()[0] == 'c')
+                                            {
+                                                @("0-0-0")
+                                                ;
+                                            }
+                                            else
+                                            {
+                                                @("0-0")
+                                                ;
                                             }
                                         }
                                         else
@@ -275,7 +325,21 @@
                                                 }
                                                 else
                                                 {
-                                                    @MoveHistory[i + 1].Item2.Field;
+                                                    @MoveHistory[i + 1].Item2.Field
+                                                    ;
+                                                }
+                                            }
+                                            else if (MoveHistory[i + 1].Item3 == true)
+                                            {
+                                                if (MoveHistory[i + 1].Item2.Field.ToString()[0] == 'c')
+                                                {
+                                                    @("0-0-0")
+                                                    ;
+                                                }
+                                                else
+                                                {
+                                                    @("0-0")
+                                                    ;
                                                 }
                                             }
                                             else
