@@ -302,7 +302,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         chess.FieldsBlackCanMoveTo.Add(to);
                         return false;
                     }
-                    chess.OriginalChess.Clones.Remove(checkers);
+                    try
+                    {
+                        chess.OriginalChess.Clones.RemoveAt(0);
+                    }
+                    catch
+                    {
+                        if (chess.OriginalChess.Clones.Count != 0)
+                            chess.OriginalChess.Clones.RemoveAt(0);
+                    }
                 }
             }
             else
@@ -321,7 +329,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         chess.FieldsWhiteCanMoveTo.Add(to);
                         return false;
                     }
-                    chess.OriginalChess.Clones.Remove(checkers);
+                    try
+                    {
+                        chess.OriginalChess.Clones.RemoveAt(0);
+                    }
+                    catch
+                    {
+                        if (chess.OriginalChess.Clones.Count != 0)
+                            chess.OriginalChess.Clones.RemoveAt(0);
+                    }
                 }
             }
 

@@ -1,7 +1,7 @@
 ﻿using SomeChess.Code.GameEngine.ChessImplementation;
 using SomeChess.Code.MatchMaking.ChessMatchImplementation;
 using SomeChess.Code.Social;
-
+using SomeChess.Components;
 
 
 namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
@@ -32,9 +32,9 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             //extraTime = ModePropertiesChecker.GetExtraTime(newMode);
         //}
 
-        public ChessMatch CreateMatch(Player player, GameMode mode)
+        public ChessMatch CreateMatch(Player player, GameMode mode, Chessboard cb)
         {
-            Chess newChess = new();
+            Chess newChess = new(cb);
 
             ChessMatch match = new(newChess, player, mode, MatchSearching.GetInstance().GetUniqueID());
             MatchSearching.GetInstance().AddMatch(match);

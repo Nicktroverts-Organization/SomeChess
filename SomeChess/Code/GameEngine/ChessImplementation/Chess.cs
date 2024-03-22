@@ -1,9 +1,7 @@
 ﻿//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
 //ispolzovat KakietoSchachmaty.Kod.IgrovoiDvighok;
 
-using System.Reflection.Metadata;
-using Microsoft.AspNetCore.SignalR.Protocol;
-using Newtonsoft.Json;
+using SomeChess.Components;
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
@@ -19,6 +17,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         
         public ChessState GameState = ChessState.None;
+
+
+        public Chessboard FrontendPageChessBoard;
 
         
         public Team TeamTurn = Team.White;
@@ -45,7 +46,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public List<Chess>? Clones;
 
 
-
         public Guid ChessID = Guid.NewGuid();
 
 
@@ -68,6 +68,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             get => GameState == ChessState.Playing;
             set => throw new InvalidOperationException(nameof(IsRunning) + "can't be set!");
+        }
+
+        /// <summary>
+        /// <para>Whether or not the game ended in a Draw</para>
+        /// </summary>
+        public bool IsDraw
+        {
+            get => GameState == ChessState.Draw;
+            set => throw new InvalidOperationException(nameof(IsDraw) + "can't be set!");
         }
 
         /// <summary>
@@ -96,8 +105,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             set => throw new InvalidOperationException(nameof(Game) + "can't be set!");
         }
 
-        public Chess()
+        public Chess(Chessboard cb)
         {
+            FrontendPageChessBoard = cb;
             OriginalChess = this;
             if (Clones == null)
                 Clones = new();
@@ -590,7 +600,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
             }
 
-            if (!FromPiece.CanMove(From, To, this.GetGame()))
+            if (!FromPiece.CanMove(From, To, GetGame()))
                 return false; //If Piece can't move to field "To", return false.
 
             if (FromPiece.PieceType == ChessPieceType.King)
@@ -602,7 +612,20 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
 
             if (OriginalChess.Clones.Count == 0)
+            {
+                if (FromPiece.PieceType == ChessPieceType.Pawn)
+                {
+                    if (To[1] == '8' || To[1] == '1')
+                    {
+                        //ChessPiece PawnToChessPiece = FrontendPageChessBoard.TransformPawn(FromPiece.Team, Board.GetPiece(To));
+                        //Board.SetPiece(To, PawnToChessPiece);
+                        //Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From);
+                        //return true;
+                    }
+                }
+
                 ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), false));
+            }
 
             FromPiece.Field = To;
 
@@ -616,7 +639,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public object Clone()
         {
-            var chess = new Chess();
+            var chess = new Chess(FrontendPageChessBoard);
             chess.TeamTurn = TeamTurn;
             chess.Board = (ChessBoard)Board.Clone();
             chess.Original = !Original;
