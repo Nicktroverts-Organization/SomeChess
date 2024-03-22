@@ -547,36 +547,46 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             //Check if the given parameters are valid chess fields.
             Board.ValidateFields(new[] { From, To });
 
-            if (FromPiece.Team == Team.White)
+
+            if (FromPiece.PieceType == ChessPieceType.King)
             {
-                if (CheckCastling(To, FieldsBlackCanMoveTo, 1))
+                if (FromPiece.Team == Team.White)
                 {
-                    if (OriginalChess.Clones.Count == 0)
-                        ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
+                    if (!WhiteKingHasMoved)
+                    {
+                        if (CheckCastling(To, FieldsBlackCanMoveTo, 1))
+                        {
+                            if (OriginalChess.Clones.Count == 0)
+                                ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
 
-                    FromPiece.Field = To;
+                            FromPiece.Field = To;
 
-                    //Moves the piece to the new position
-                    Board.SetPiece(To, FromPiece);
-                    Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
+                            //Moves the piece to the new position
+                            Board.SetPiece(To, FromPiece);
+                            Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
 
-                    return true;
+                            return true;
+                        }
+                    }
                 }
-            }
-            else
-            {
-                if (CheckCastling(To, FieldsWhiteCanMoveTo, 8))
+                else
                 {
-                    if (OriginalChess.Clones.Count == 0)
-                        ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
+                    if (!BlackKingHasMoved)
+                    {
+                        if (CheckCastling(To, FieldsWhiteCanMoveTo, 8))
+                        {
+                            if (OriginalChess.Clones.Count == 0)
+                                ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
 
-                    FromPiece.Field = To;
+                            FromPiece.Field = To;
 
-                    //Moves the piece to the new position
-                    Board.SetPiece(To, FromPiece);
-                    Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
+                            //Moves the piece to the new position
+                            Board.SetPiece(To, FromPiece);
+                            Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
 
-                    return true;
+                            return true;
+                        }
+                    }
                 }
             }
 
