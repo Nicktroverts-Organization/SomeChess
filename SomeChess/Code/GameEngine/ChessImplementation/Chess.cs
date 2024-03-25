@@ -7,7 +7,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 {
     public class Chess : IGame<Chess>, ICloneable
     {
-        public string ChessID;
+        //public string ChessID;
 
         public ChessBoard Board = new();
 
@@ -84,9 +84,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             set => throw new InvalidOperationException(nameof(Game) + "can't be set!");
         }
 
-        public Chess(string id)
+        public Chess()//string id)
         {
-            ChessID = id;
+            //ChessID = id;
             OriginalChess = this;
             if (Clones == null)
                 Clones = new();
@@ -391,7 +391,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public object Clone()
         {
-            var chess = new Chess(Tools.Create16DigitID());
+            var chess = new Chess();
             chess.TeamTurn = TeamTurn;
             chess.Board = (ChessBoard)Board.Clone();
             chess.Original = !Original;

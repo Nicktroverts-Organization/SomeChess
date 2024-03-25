@@ -4,6 +4,7 @@
 @using SomeChess.Code.MatchMaking.ChessMatchImplementation
 @using SomeChess.Code.Social
 @using SomeChess.Code.MatchMaking
+@using SomeChess.Code
 @inject NavigationManager NavigationManager
 
 @if (!Reload)
@@ -219,9 +220,9 @@ else
 
     public ChessMatch CreateChessMatch(GameMode mode)
     {
-        ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", PlayerStorage.Create16DigitID()), mode);
+        ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", Tools.Create16DigitID()), mode);
         MatchSearching.GetInstance().AddMatch(newMatch);
-        NavigationManager.NavigateTo("/chess/" + newMatch.GetMatchID(), true);
+        NavigationManager.NavigateTo("/chess/", true);
         return newMatch;
     }
 

@@ -22,11 +22,11 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             return _instance;
         }
 
-        public void RemoveMatchByID(string id)
+        public void RemoveChessGameByID(Guid id)
         {
             try
             {
-                Chess chess = _chessPlays.Where(c => c.ChessID == id).FirstOrDefault();
+                Chess? chess = _chessPlays.Where(c => c.Test == id).FirstOrDefault();
                 if(chess != null)
                 {
                     _chessPlays.Remove(chess);
@@ -36,6 +36,27 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             {
                 Console.WriteLine("Cannot remove a player by ID: " + e);
             }
+        }
+
+        public Chess? FindChessGameById(Guid id)
+        {
+            Chess? chess = _chessPlays.Where(c => c.Test == id).FirstOrDefault();
+
+            if( chess != null )
+            {
+                return chess;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public Chess CreateChessGame()
+        {
+            Chess chess = new Chess();
+            _chessPlays.Add(chess);
+            return chess;
         }
     }
 

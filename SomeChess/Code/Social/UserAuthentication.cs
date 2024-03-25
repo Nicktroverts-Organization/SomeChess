@@ -54,6 +54,7 @@ namespace SomeChess.Code.Social
                 {
                     var player = JsonConvert.DeserializeObject<Player>(fetchedUserResult.Value);
                     Console.WriteLine("Fetch user was successfull");
+                    CurrentPlayer = player;
                     return player;
                 }
             }
@@ -68,21 +69,22 @@ namespace SomeChess.Code.Social
 
 
 
-        public async Task<Player> AuthenticatePlayer(string name)
+        public async Task<Player?> CreateNewPlayer(string name)
         {
             PlayerStorage storage = PlayerStorage.GetInstence();
 
-            Player player = storage.GetPlayerByName(name);
+            Player? player = storage.GetPlayerByName(name);
 
 
             if (player == null)
             {
                 Player newPlayer = storage.CreatePlayer(name);
+                CurrentPlayer = newPlayer;
                 return newPlayer;
             }
             else
             {
-                return player;
+                return null;
             }
         }
 

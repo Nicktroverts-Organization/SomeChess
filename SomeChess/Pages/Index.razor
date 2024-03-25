@@ -10,10 +10,11 @@
     <h1 class="font-bold text-5xl" style="color: var(--TextColor)">Die beste App für Schach!</h1>
 
     <input id="newNameInput" style="margin-left: 20px" name="newNameInput" placeholder="Enter your nickname" @bind="@NewName"/>
-    <button style="margin-left: 40px color: white; font-size: 24px; border: 2px solid yellow" @onclick="() => ChangeUsername()">Enter Name</button>
+    <button id="submitName" style="margin-left: 20px; color: white; background-color: green; padding: 5px; font-size: 24px; border: 2px solid white; border-radius: 10px" @onclick="() => ChangeUsername()">Enter Name</button>
     @if(social.CurrentPlayer != null)
     {
-        <label style="margin-left: 20px; color: white; font-size: 24px">@social.CurrentPlayer.Name</label>
+        <label id="infoLabel" style="margin-left: 20px; color: white; font-size: 24px">@InfoText</label>
+        <label id="NameLabel" style="margin-left: 20px; color: white; font-size: 24px">@social.CurrentPlayer.Name</label>
     }
     
 </div>
@@ -23,13 +24,43 @@
 
 @code
 {
-    public string NewName { get; set; }
+    public string NewName { get; set; } = "";
+
+    public string InfoText { get; set; } = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            await social.ClearBrowserUserDataAsync();
+        }
+    }
 
 
     public void ChangeUsername()
     {
-        Player newPlayer = social.AuthenticatePlayer(NewName).Result;
+        Player? player = social.FetchPlayerAsync().Result;
 
-        social.PersistPlayerAsync(newPlayer);
+        if(player == null)
+        {
+            PlayerStorage storage = PlayerStorage.GetInstence();
+            if (storage.IsNameFree(NewName) && NewName != "")
+            {
+                Player? newPlayer = social.CreateNewPlayer(NewName).Result;
+                if(newPlayer != null)
+                {
+                    social.PersistPlayerAsync(newPlayer);
+                }
+                InfoText = "Your new name is: ";
+            }
+            else
+            {
+                InfoText = "This name is already taken!";
+            }
+        }
+        else
+        {
+            InfoText = "You are already logged in! Your name is:";
+        }
     }
 }

@@ -6,6 +6,7 @@
 @using SomeChess.Code.MatchMaking
 @using SomeChess.Code
 @inject NavigationManager NavigationManager
+@inject UserAuthentication social
 
 @if (!Reload)
 {
@@ -69,7 +70,7 @@
     public bool PlayOnline = false;
     public bool Reload = true;
     int SelectedButton = 0;
-    public Chess ChessGame = new Chess(Tools.Create16DigitID());
+    public Chess ChessGame;
     public ChessMatchConstructor constructor = new();
 
     public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
@@ -93,6 +94,34 @@
     {
         if (firstRender)
         {
+            await social.FetchPlayerAsync();
+
+            if(social.CurrentPlayer == null)
+            {
+                NavigationManager.NavigateTo("/", forceLoad: true);
+            }
+
+            ChessStorage chesses = ChessStorage.GetInstance();
+
+            if(social.CurrentPlayer.PlayersMatch != Guid.Empty)
+            {
+                Chess? chess = chesses.FindChessGameById(social.CurrentPlayer.PlayersMatch);
+
+                if(chess != null)
+                {
+                    ChessGame = chess;
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/", forceLoad: true);
+                }
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/", forceLoad: true);
+            }
+            
+
             ChessGame.StartGame();
             ChessGame.UpdateGameState();
             ChessGame.ResetBoard();

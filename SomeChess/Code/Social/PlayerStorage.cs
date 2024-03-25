@@ -10,6 +10,8 @@ namespace SomeChess.Code.Social
 
         public string ID { get; set; }
 
+        public Guid PlayersMatch { get; set; }
+
         public Player(string name, string id)
         {
             Name = name;
@@ -36,17 +38,34 @@ namespace SomeChess.Code.Social
             return instance;
         }
 
-        public Player GetPlayerByName(string name)
+        public Player? GetPlayerByName(string name)
         {
             try
             {
-                Player player = _players.Where(p => p.Name == name).FirstOrDefault();
+                Player? player = _players.Where(p => p.Name == name).FirstOrDefault();
                 return player;
             }
             catch (Exception e)
             {
                 Console.WriteLine("Cannot find a player by ID: " + e);
                 return null;
+            }
+        }
+
+
+
+        public bool IsNameFree(string name)
+        {
+            PlayerStorage storage = PlayerStorage.GetInstence();
+            Player? player = _players.Where(player => player.Name == name).FirstOrDefault();
+
+            if(player == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
