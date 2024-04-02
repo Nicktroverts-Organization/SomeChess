@@ -77,3 +77,7 @@ window.addEventListener('dragstart', function (event) {
     event.target.offsetY = event.clientY - event.target.getBoundingClientRect().top;
     event.target.style.position = 'absolute';
 });
+window.setInterval(function () {
+    var objDiv = document.getElementById("move-history");
+    objDiv.scrollTop = objDiv.scrollHeight;
+}, 1000);

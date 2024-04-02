@@ -469,7 +469,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <param name="To">The field to move the piece to.</param>
         /// <returns>Returns whether or not it was successfully moved</returns>
         public bool MovePiece(string From, string To)
-        {
+         {
             //Check that game is running
             if (GameState != ChessState.Playing)
             {
@@ -530,7 +530,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         return false;
                     }
                 }
-
 
                 try
                 {
