@@ -79,9 +79,19 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
     public class ChessMatch : IMatch
     {
-        public Chess Chess { get; }
+        public Chess Chess
+        {
+            get => Chess;
+            private set
+            {
+                Chess = value;
+                GameID = value.Test;
+            }
+        }
 
         private int MatchID { get; }
+
+        private Guid GameID { get; set; }
 
         private bool isStarted;
 
@@ -130,6 +140,12 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             }
             
             
+        }
+
+
+        public Guid GetGameID()
+        {
+            return GameID;
         }
 
 

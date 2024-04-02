@@ -1,8 +1,9 @@
 ﻿@page "/chess/"
 @inject IJSRuntime JsRuntime
-@inject UserAuthentication social
 @using SomeChess.Components
 @using SomeChess.Code.Social
+@inject UserAuthentication social
+@inject NavigationManager NavigationManager
 
 <body style="background-color: var(--BackgroundColor);">
 
@@ -22,6 +23,14 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await social.UpdateCurrentPlayerAsync();
+        if(firstRender)
+        {
+            await social.UpdateCurrentPlayerAsync();
+            if (social.CurrentPlayer == null)
+            {
+                Console.WriteLine("Cannot fetch: user is null");
+                NavigationManager.NavigateTo("/", forceLoad: true);
+            }
+        }
     }
 }

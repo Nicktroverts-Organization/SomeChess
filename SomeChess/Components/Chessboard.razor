@@ -6,6 +6,7 @@
 @using SomeChess.Code.MatchMaking
 @using SomeChess.Code
 @inject NavigationManager NavigationManager
+@inject UserAuthentication social
 
 @if (!Reload)
 {
@@ -220,7 +221,8 @@ else
 
     public ChessMatch CreateChessMatch(GameMode mode)
     {
-        ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", Tools.Create16DigitID()), mode);
+        ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode);
+        social.CurrentPlayer.PlayersMatch = newMatch.GetMatchID();
         MatchSearching.GetInstance().AddMatch(newMatch);
         NavigationManager.NavigateTo("/chess/", true);
         return newMatch;

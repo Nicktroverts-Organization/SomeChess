@@ -34,6 +34,8 @@ namespace SomeChess.Code.Social
             if (player != null)
             {
                 CurrentPlayer = player;
+                PlayerStorage storage = PlayerStorage.GetInstence();
+                storage.UpdateUserList(player);
             }
             else
             {
@@ -57,14 +59,16 @@ namespace SomeChess.Code.Social
                     CurrentPlayer = player;
                     return player;
                 }
+
+                return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Fetch user went wrong");
                 Console.WriteLine(ex.ToString());
-            }
 
-            return null;
+                return null;
+            }
         }
 
 
@@ -73,12 +77,16 @@ namespace SomeChess.Code.Social
         {
             PlayerStorage storage = PlayerStorage.GetInstence();
 
-            Player? player = storage.GetPlayerByName(name);
+            bool isFree = storage.IsNameFree(name);
 
 
-            if (player == null)
+            if (isFree)
             {
                 Player newPlayer = storage.CreatePlayer(name);
+                newPlayer.PlayersMatch = 0;
+                if(CurrentPlayer != null)
+                    storage.RemovePlayerByID(CurrentPlayer.ID);
+
                 CurrentPlayer = newPlayer;
                 return newPlayer;
             }

@@ -92,54 +92,66 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        try
         {
-            await social.FetchPlayerAsync();
-
-            if(social.CurrentPlayer == null)
+            if (firstRender)
             {
-                NavigationManager.NavigateTo("/", forceLoad: true);
-            }
 
-            ChessStorage chesses = ChessStorage.GetInstance();
+                await social.FetchPlayerAsync();
 
-            if(social.CurrentPlayer.PlayersMatch != Guid.Empty)
-            {
-                Chess? chess = chesses.FindChessGameById(social.CurrentPlayer.PlayersMatch);
 
-                if(chess != null)
+
+                ChessStorage chesses = ChessStorage.GetInstance();
+
+                if (social.CurrentPlayer.PlayersMatch != 0)
                 {
-                    ChessGame = chess;
+                    var chessMatch = MatchSearching.GetInstance().GetMatchByID(social.CurrentPlayer.PlayersMatch);
+
+                    
+                    Chess? chess = chesses.FindChessGameById(chessMatch.GetGameID());
+                    
+
+                    if (chess != null)
+                    {
+                        ChessGame = chess;
+                    }
+                    else
+                    {
+                        NavigationManager.NavigateTo("/", forceLoad: true);
+                    }
                 }
                 else
                 {
                     NavigationManager.NavigateTo("/", forceLoad: true);
                 }
-            }
-            else
-            {
-                NavigationManager.NavigateTo("/", forceLoad: true);
-            }
-            
 
-            ChessGame.StartGame();
-            ChessGame.UpdateGameState();
-            ChessGame.ResetBoard();
-            ChessGame.StartGame();
-            // See warning about memory above in the article
-            dotNetReference = DotNetObjectReference.Create(this);
-            await JsRuntime.InvokeVoidAsync("setDotNetReference", dotNetReference);
+
+                ChessGame.StartGame();
+                ChessGame.UpdateGameState();
+                ChessGame.ResetBoard();
+                ChessGame.StartGame();
+                // See warning about memory above in the article
+                dotNetReference = DotNetObjectReference.Create(this);
+                await JsRuntime.InvokeVoidAsync("setDotNetReference", dotNetReference);
+                StateHasChanged();
+            }
+            if (Reload)
+            {
+                Reload = false;
+                StateHasChanged();
+            }
         }
-        if (Reload)
+        catch
         {
-            Reload = false;
-            StateHasChanged();
+            Console.WriteLine("Something went wrong");
         }
+
     }
 
     public ChessMatch CreateChessMatch(GameMode mode)
     {
-        ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", Tools.Create16DigitID()), mode);
+        ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode);
+        social.CurrentPlayer.PlayersMatch = newMatch.GetMatchID();
         MatchSearching.GetInstance().AddMatch(newMatch);
         NavigationManager.NavigateTo("/chess/" + newMatch.GetMatchID(), true);
         return newMatch;

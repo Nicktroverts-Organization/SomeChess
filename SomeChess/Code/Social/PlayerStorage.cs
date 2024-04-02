@@ -10,7 +10,7 @@ namespace SomeChess.Code.Social
 
         public string ID { get; set; }
 
-        public Guid PlayersMatch { get; set; }
+        public int PlayersMatch { get; set; }
 
         public Player(string name, string id)
         {
@@ -70,6 +70,13 @@ namespace SomeChess.Code.Social
         }
 
 
+        public void UpdateUserList(Player player)
+        {
+            if(GetPlayerByName(player.Name) == null)
+            {
+                _players.Add(player);
+            }
+        }
 
 
         public Player CreatePlayer(string name, bool addToStorage = true)
