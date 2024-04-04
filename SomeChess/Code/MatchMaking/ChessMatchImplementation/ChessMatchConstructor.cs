@@ -21,7 +21,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
 
 
-        public ChessMatchConstructor() { }
+        //public ChessMatchConstructor() { }
 
         //public void ChangeMode(GameMode newMode)
         //{
@@ -32,12 +32,10 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             //extraTime = ModePropertiesChecker.GetExtraTime(newMode);
         //}
 
-        public ChessMatch CreateMatch(Player player, GameMode mode, Chessboard cb)
-        {
-            Chess newChess = new(cb);
 
-            ChessMatch match = new(newChess, player, mode, MatchSearching.GetInstance().GetUniqueID());
-            MatchSearching.GetInstance().AddMatch(match);
+        public ChessMatch CreateMatch(Player player, GameMode mode)
+        {
+            ChessMatch match = new(player, mode, MatchSearching.GetInstance().GetUniqueID());
             return match;
         }
 

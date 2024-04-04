@@ -7,6 +7,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 {
     public class Chess : IGame<Chess>, ICloneable
     {
+        //public string ChessID;
+
+        public ChessBoard Board = new();
+
+
         public static List<char> AlphConversionChars = new()
             { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
@@ -105,9 +110,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             set => throw new InvalidOperationException(nameof(Game) + "can't be set!");
         }
 
+
         public Chess(Chessboard cb)
         {
             FrontendPageChessBoard = cb;
+
             OriginalChess = this;
             if (Clones == null)
                 Clones = new();
