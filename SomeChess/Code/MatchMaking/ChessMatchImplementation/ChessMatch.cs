@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using SomeChess.Code.GameEngine;
 using SomeChess.Code.Social;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SomeChess.Components;
 
 namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 {
@@ -52,9 +53,9 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             }
         }
 
-        public Chess CreateChessGame()
+        public Chess CreateChessGame(Chessboard cb)
         {
-            Chess chess = new Chess();
+            Chess chess = new Chess(cb);
             _chessPlays.Add(chess);
             return chess;
         }
@@ -107,7 +108,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
         public Page MatchPage { get; set; }
 
 
-        public ChessMatch(Player aPlayer, GameMode mode, int uniqueId)
+        public ChessMatch(Player aPlayer, GameMode mode, int uniqueId, Chessboard kz)
         {
             isStarted = false;
 
@@ -115,7 +116,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             ExtraTime = ModePropertiesChecker.GetExtraTime(mode);
             Duration = ModePropertiesChecker.GetDuration(mode);
 
-            Chess = new();
+            Chess = new(kz);
             Chess.ResetBoard();
             Chess.UpdateGameState();
 
