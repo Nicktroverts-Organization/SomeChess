@@ -222,10 +222,17 @@ else
     public ChessMatch CreateChessMatch(GameMode mode)
     {
         ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode);
-        social.CurrentPlayer.PlayersMatch = newMatch.GetMatchID();
+        social.CurrentPlayer.PlayersMatch = newMatch.MatchID;
         MatchSearching.GetInstance().AddMatch(newMatch);
-        NavigationManager.NavigateTo("/chess/", true);
+
+
+        social.PersistPlayerAsync(social.CurrentPlayer);
+        
+
+        NavigationManager.NavigateTo("/chess/" + newMatch.MatchID.ToString(), false);
+
         return newMatch;
+
     }
 
     void SetButtonState(int buttonNumber)

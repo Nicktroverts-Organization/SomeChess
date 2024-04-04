@@ -32,10 +32,17 @@
     {
         if(firstRender)
         {
-            await social.UpdateCurrentPlayerAsync();
-            Console.WriteLine("Current user was updated");
-            InfoText = "Your name:";
-            StateHasChanged();
+            await social.FetchPlayerAsync();
+            if(social.CurrentPlayer == null)
+            {
+                Console.WriteLine("Index.razor: Current user is null");
+            }
+            else
+            {
+                Console.WriteLine("Index.razor: Current user was updated");
+                InfoText = "Your name:";
+                StateHasChanged();
+            }
         }
     }
 

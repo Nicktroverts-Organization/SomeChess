@@ -36,12 +36,12 @@
                         }
 
                         string pieceColor;
-                        @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
+                        @if (Match.Chess.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
                             pieceColor = "w";
                         else pieceColor = "b";
 
                         <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" onmouseover="SelectedPeace(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
-                            @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                            @((MarkupString)PieceToHTML[Match.Chess.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
                         </div>
                     }
                 </div>
@@ -70,7 +70,7 @@
     public bool PlayOnline = false;
     public bool Reload = true;
     int SelectedButton = 0;
-    public Chess ChessGame;
+    public ChessMatch Match;
     public ChessMatchConstructor constructor = new();
 
     public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
@@ -90,6 +90,7 @@
 
     private DotNetObjectReference<ChessField> dotNetReference;
 
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         try
@@ -97,43 +98,47 @@
             if (firstRender)
             {
 
-                await social.FetchPlayerAsync();
-
-
-
-                ChessStorage chesses = ChessStorage.GetInstance();
+                if (social.CurrentPlayer == null)
+                {
+                    Console.WriteLine("Cannot fetch: user is null");
+                    NavigationManager.NavigateTo("/", forceLoad: true);
+                }
+                //ChessStorage chesses = ChessStorage.GetInstance();
 
                 if (social.CurrentPlayer.PlayersMatch != 0)
                 {
-                    var chessMatch = MatchSearching.GetInstance().GetMatchByID(social.CurrentPlayer.PlayersMatch);
+                    ChessMatch chessMatch = (ChessMatch)MatchSearching.GetInstance().GetMatchByID(social.CurrentPlayer.PlayersMatch);
 
-                    
-                    Chess? chess = chesses.FindChessGameById(chessMatch.GetGameID());
-                    
 
-                    if (chess != null)
+                    //Chess? chess = (Chess?)chesses.FindChessGameById(chessMatch.GetGameID());
+
+
+                    //if (chess != null)
+                    //{
+                    //    //ChessGame = chess;
+                    //}
+                    if(chessMatch == null)
                     {
-                        ChessGame = chess;
+                        NavigationManager.NavigateTo("/", forceLoad: true);
                     }
                     else
                     {
-                        NavigationManager.NavigateTo("/", forceLoad: true);
+                        Match = chessMatch;
+
+                        Match.Chess.StartGame();
+                        Match.Chess.UpdateGameState();
+                        Match.Chess.ResetBoard();
+                        Match.Chess.StartGame();
+                        // See warning about memory above in the article
+                        dotNetReference = DotNetObjectReference.Create(this);
+                        await JsRuntime.InvokeVoidAsync("setDotNetReference", dotNetReference);
+                        StateHasChanged();
                     }
                 }
                 else
                 {
                     NavigationManager.NavigateTo("/", forceLoad: true);
                 }
-
-
-                ChessGame.StartGame();
-                ChessGame.UpdateGameState();
-                ChessGame.ResetBoard();
-                ChessGame.StartGame();
-                // See warning about memory above in the article
-                dotNetReference = DotNetObjectReference.Create(this);
-                await JsRuntime.InvokeVoidAsync("setDotNetReference", dotNetReference);
-                StateHasChanged();
             }
             if (Reload)
             {
@@ -146,15 +151,6 @@
             Console.WriteLine("Something went wrong");
         }
 
-    }
-
-    public ChessMatch CreateChessMatch(GameMode mode)
-    {
-        ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode);
-        social.CurrentPlayer.PlayersMatch = newMatch.GetMatchID();
-        MatchSearching.GetInstance().AddMatch(newMatch);
-        NavigationManager.NavigateTo("/chess/" + newMatch.GetMatchID(), true);
-        return newMatch;
     }
 
     void SetButtonState(int buttonNumber)
@@ -183,10 +179,10 @@
         else if (Event == "mouseup")
         {
             ToID = id;
-            Console.WriteLine(ChessGame.GetGameState());
-            if (ChessGame.MovePiece(FromID, ToID))
+            Console.WriteLine(Match.Chess.GetGameState());
+            if (Match.Chess.MovePiece(FromID, ToID))
             {
-                ChessGame.EndTurn();
+                Match.Chess.EndTurn();
                 Reload = true;
                 StateHasChanged();
             }

@@ -8,7 +8,7 @@ namespace SomeChess.Code.Social
         public readonly ProtectedLocalStorage _protectedPlayerStorage;
         public readonly string _storageKey = "chess-googolplex";
 
-        public Player? CurrentPlayer { get; private set; }
+        public Player? CurrentPlayer { get; set; }
 
 
         public UserAuthentication(ProtectedLocalStorage storage)
@@ -19,11 +19,20 @@ namespace SomeChess.Code.Social
 
         public async Task PersistPlayerAsync(Player player)
         {
-            await ClearBrowserUserDataAsync();
-            string userJson = JsonConvert.SerializeObject(player);
-            await _protectedPlayerStorage.SetAsync(_storageKey, userJson);
+            try
+            {
+                await ClearBrowserUserDataAsync();
+                string userJson = JsonConvert.SerializeObject(player);
+                await _protectedPlayerStorage.SetAsync(_storageKey, userJson);
 
-            await UpdateCurrentPlayerAsync();
+                Console.WriteLine("PersistPlayerAsync(): user wassuccessfully persisted");
+            }
+            catch
+            {
+                Console.WriteLine("PersistPlayerAsync(): doesnt work");
+            }
+            
+            //await UpdateCurrentPlayerAsync();
         }
 
 
@@ -39,7 +48,7 @@ namespace SomeChess.Code.Social
             }
             else
             {
-                Console.WriteLine("CurrentUser is null");
+                Console.WriteLine("CurrentUser is NULL");
                 CurrentPlayer = null;
             }
         }
@@ -52,19 +61,20 @@ namespace SomeChess.Code.Social
             {
                 var fetchedUserResult = await _protectedPlayerStorage.GetAsync<string>(_storageKey);
 
-                if (fetchedUserResult.Success && !string.IsNullOrEmpty(fetchedUserResult.Value))
+                if (fetchedUserResult.Success)
                 {
                     var player = JsonConvert.DeserializeObject<Player>(fetchedUserResult.Value);
-                    Console.WriteLine("Fetch user was successfull");
+                    Console.WriteLine("FetchPlayerAsync(): fetching of user was successfull");
                     CurrentPlayer = player;
                     return player;
                 }
 
+                Console.WriteLine("FetchPlayerAsync(): fetched user in NULL");
                 return null;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Fetch user went wrong");
+                Console.WriteLine("FetchPlayerAsync(): fetching of user went wrong");
                 Console.WriteLine(ex.ToString());
 
                 return null;

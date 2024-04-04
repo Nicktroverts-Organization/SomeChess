@@ -79,17 +79,9 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
     public class ChessMatch : IMatch
     {
-        public Chess Chess
-        {
-            get => Chess;
-            private set
-            {
-                Chess = value;
-                GameID = value.Test;
-            }
-        }
+        public Chess Chess { get; set; }
 
-        private int MatchID { get; }
+        public int MatchID { get; }
 
         private Guid GameID { get; set; }
 
@@ -115,7 +107,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
         public Page MatchPage { get; set; }
 
 
-        public ChessMatch(IGame<Chess> game, Player aPlayer, GameMode mode, int uniqueId)
+        public ChessMatch(Player aPlayer, GameMode mode, int uniqueId)
         {
             isStarted = false;
 
@@ -123,7 +115,13 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             ExtraTime = ModePropertiesChecker.GetExtraTime(mode);
             Duration = ModePropertiesChecker.GetDuration(mode);
 
-            Chess = game.GetGame();
+            Chess = new();
+            Chess.ResetBoard();
+            Chess.UpdateGameState();
+
+            GameID = Chess.Test;
+
+            MatchID = MatchSearching.GetInstance().GetUniqueID();
 
 
             Random rndm = new();
