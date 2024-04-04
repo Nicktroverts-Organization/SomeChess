@@ -264,6 +264,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             //set default state to playing
             GameState = ChessState.Playing;
 
+
+            //Beispiel//
+
+
             if (OriginalChess.Clones.Count == 0)
             {
                 Task CleanUpWhite = new Task(CleanUpFieldsWhiteCanMoveTo);
@@ -349,6 +353,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
             }
         }
+
+
+        //Beispiel//
+
 
         private void CleanUpFieldsWhiteCanMoveTo()
         {
