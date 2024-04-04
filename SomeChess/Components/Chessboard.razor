@@ -9,6 +9,10 @@
 @using System.Security.Cryptography.X509Certificates
 @using System.Threading.Tasks.Dataflow
 @using Microsoft.AspNetCore.Mvc.ModelBinding
+@using SomeChess.Code.MatchMaking
+@using SomeChess.Code
+@inject NavigationManager NavigationManager
+@inject UserAuthentication social
 
 @if (ChessGame != null)
 {
@@ -469,6 +473,7 @@
                         <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
                     </div>
                 </div>
+
                 <div>
                     <h2 class="anton-regular mt-7">Rapid</h2>
                     <div class="flex justify-evenly">
@@ -481,6 +486,7 @@
                     <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center justify-center">Play</a>
                 </div>
             </div>
+
         </div>
     }
     @if (!ChessGame.IsPlaying && GameOver)
@@ -605,8 +611,19 @@
 
     public ChessMatch CreateChessMatch(GameMode mode)
     {
-        ChessMatch newMatch = constructor.CreateMatch(new Player("Someone", PlayerStorage.Create16DigitString()), mode, this);
+
+        ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode);
+        social.CurrentPlayer.PlayersMatch = newMatch.MatchID;
+        MatchSearching.GetInstance().AddMatch(newMatch);
+
+
+        social.PersistPlayerAsync(social.CurrentPlayer);
+        
+
+        NavigationManager.NavigateTo("/chess/" + newMatch.MatchID.ToString(), false);
+
         return newMatch;
+
     }
 
     void SetButtonState(int buttonNumber)
@@ -619,6 +636,13 @@
         {
             SelectedButton = 0;
         }
+
+    }
+
+    public void ReloadGame()
+    {
+        Reload = true;
+        StateHasChanged();
     }
 
     [JSInvokable("IdHandler")]

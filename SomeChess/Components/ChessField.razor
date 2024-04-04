@@ -1,0 +1,198 @@
+﻿@inject IJSRuntime JsRuntime;
+@using Microsoft.AspNetCore.Components.Web
+@using SomeChess.Code.GameEngine.ChessImplementation
+@using SomeChess.Code.MatchMaking.ChessMatchImplementation
+@using SomeChess.Code.Social
+@using SomeChess.Code.MatchMaking
+@using SomeChess.Code
+@inject NavigationManager NavigationManager
+@inject UserAuthentication social
+
+@if (!Reload)
+{
+    <div class="flex text-center justify-center place-content-evenly mt-7">
+        <div class="chessboard select-none flex text-center justify-center">
+            @for (int i = 0; i < 8; i++)
+            {
+                int LoopI = i;
+                <div>
+                    @for (int u = 7; u >= 0; u--)
+                    {
+                        int LoopU = u;
+                        string color = "";
+                        if (LoopI % 2 == 0) // LoopI ist gerade
+                        {
+                            if (LoopU % 2 != 0) // LoopU ist ungerade
+                                color = "blackCell";
+                            else //LoopU ist gerade
+                                color = "whiteCell";
+                        }
+                        else //LoopI ist ungerade
+                        {
+                            if (LoopU % 2 != 0) //LoopU ist ungerade
+                                color = "whiteCell";
+                            else // LoopU ist gerade
+                                color = "blackCell";
+                        }
+
+                        string pieceColor;
+                        @if (Match.Chess.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
+                            pieceColor = "w";
+                        else pieceColor = "b";
+
+                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" onmouseover="SelectedPeace(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                            @((MarkupString)PieceToHTML[Match.Chess.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <div class="backholder ml-24 flex flex-col text-center ">
+            <h1 class="greengradient anton-regular">
+                Play Chess<br />
+                Online<br />
+                on the #1 Site!
+            </h1>
+            <div>
+                <button @onclick="() => { PlayOnline = true;}" class="playOnline"><img width="72" height="2" src="images/online-icon.png" />Play Online<br /><span>Play with a real person online!</span></button>
+            </div>
+            <div>
+                <button class="playComputer"><img width="72" height="2" src="images/computer-icon.png" /> Computer<br /><span class="smalltextPlayComputer">Play vs training bots</span></button>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    bool NotNewGame = false;
+    public bool isDragging = true;
+    public bool PlayOnline = false;
+    public bool Reload = true;
+    int SelectedButton = 0;
+    public ChessMatch Match;
+    public ChessMatchConstructor constructor = new();
+
+    public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
+    {
+        { ChessPieceType.Pawn, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"powns chessPiece\" src=\"images/w_pawn.png\" />\r\n</div>" },
+        { ChessPieceType.Knight, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"knight chessPiece\" src=\"images/w_knight.png\" />\r\n</div>"},
+        { ChessPieceType.Bishop, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece chessPiece\" src=\"images/w_bishop.png\" />\r\n</div>"},
+        { ChessPieceType.Rook, "<div class=\"@((isDragging) ? \"selected\" : \"\")\">\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"rook chessPiece\" src=\"images/w_rook.png\" />\r\n</div>" },
+        { ChessPieceType.Queen, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece\" src=\"images/w_queen.png\" />\r\n </div>"},
+        { ChessPieceType.King, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece chessPiece\" src=\"images/w_king.png\" />\r\n\r\n</div>" },
+        { ChessPieceType.None, ""},
+    };
+
+    public static string FromID = "";
+    public static string ToID = "";
+    public bool isFirstClick = true;
+
+    private DotNetObjectReference<ChessField> dotNetReference;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            if (firstRender)
+            {
+
+                if (social.CurrentPlayer == null)
+                {
+                    Console.WriteLine("Cannot fetch: user is null");
+                    NavigationManager.NavigateTo("/", forceLoad: true);
+                }
+                //ChessStorage chesses = ChessStorage.GetInstance();
+
+                if (social.CurrentPlayer.PlayersMatch != 0)
+                {
+                    ChessMatch chessMatch = (ChessMatch)MatchSearching.GetInstance().GetMatchByID(social.CurrentPlayer.PlayersMatch);
+
+
+                    //Chess? chess = (Chess?)chesses.FindChessGameById(chessMatch.GetGameID());
+
+
+                    //if (chess != null)
+                    //{
+                    //    //ChessGame = chess;
+                    //}
+                    if(chessMatch == null)
+                    {
+                        NavigationManager.NavigateTo("/", forceLoad: true);
+                    }
+                    else
+                    {
+                        Match = chessMatch;
+
+                        Match.Chess.StartGame();
+                        Match.Chess.UpdateGameState();
+                        Match.Chess.ResetBoard();
+                        Match.Chess.StartGame();
+                        // See warning about memory above in the article
+                        dotNetReference = DotNetObjectReference.Create(this);
+                        await JsRuntime.InvokeVoidAsync("setDotNetReference", dotNetReference);
+                        StateHasChanged();
+                    }
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/", forceLoad: true);
+                }
+            }
+            if (Reload)
+            {
+                Reload = false;
+                StateHasChanged();
+            }
+        }
+        catch
+        {
+            Console.WriteLine("Something went wrong");
+        }
+
+    }
+
+    void SetButtonState(int buttonNumber)
+    {
+        if (SelectedButton != buttonNumber)
+        {
+            SelectedButton = buttonNumber;
+        }
+        else
+        {
+            SelectedButton = 0;
+        }
+    }
+
+    public void ReloadGame()
+    {
+        Reload = true;
+        StateHasChanged();
+    }
+
+    [JSInvokable("IdHandler")]
+    public async Task IdHandler(string id, string Event)
+    {
+        if (Event == "mousedown")
+            FromID = id;
+        else if (Event == "mouseup")
+        {
+            ToID = id;
+            Console.WriteLine(Match.Chess.GetGameState());
+            if (Match.Chess.MovePiece(FromID, ToID))
+            {
+                Match.Chess.EndTurn();
+                Reload = true;
+                StateHasChanged();
+            }
+            else
+            {
+                ToID = FromID;
+                Reload = true;
+                StateHasChanged();
+                //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+            }
+        }
+    }
+}

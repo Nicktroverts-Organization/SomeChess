@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Xml.Linq;
+using SomeChess.Code;
 
 namespace SomeChess.Code.Social
 {
@@ -8,6 +9,8 @@ namespace SomeChess.Code.Social
         public string Name { get; set; }
 
         public string ID { get; set; }
+
+        public int PlayersMatch { get; set; }
 
         public Player(string name, string id)
         {
@@ -20,7 +23,7 @@ namespace SomeChess.Code.Social
 
     public sealed class PlayerStorage
     {
-        private List<Player> _players;
+        private List<Player> _players = new();
 
         private static PlayerStorage instance;
 
@@ -35,11 +38,11 @@ namespace SomeChess.Code.Social
             return instance;
         }
 
-        public Player GetPlayerByID(string id)
+        public Player? GetPlayerByName(string name)
         {
             try
             {
-                Player player = _players.Where(p => p.ID == id).FirstOrDefault();
+                Player? player = _players.Where(p => p.Name == name).FirstOrDefault();
                 return player;
             }
             catch (Exception e)
@@ -49,16 +52,30 @@ namespace SomeChess.Code.Social
             }
         }
 
-        public static string Create16DigitString()
+
+
+        public bool IsNameFree(string name)
         {
-            Random rndm = new Random();
-            var builder = new StringBuilder();
-            while (builder.Length < 16)
+            PlayerStorage storage = PlayerStorage.GetInstence();
+            Player? player = _players.Where(player => player.Name == name).FirstOrDefault();
+
+            if(player == null)
             {
-                builder.Append(rndm.Next(10).ToString());
+                return true;
             }
-            
-            return builder.ToString();
+            else
+            {
+                return false;
+            }
+        }
+
+
+        public void UpdateUserList(Player player)
+        {
+            if(GetPlayerByName(player.Name) == null)
+            {
+                _players.Add(player);
+            }
         }
 
 
@@ -69,9 +86,9 @@ namespace SomeChess.Code.Social
 
             while(!isIdUnique)
             {
-                newID = Create16DigitString();
+                newID = Tools.Create16DigitID();
 
-                if (GetPlayerByID(newID) == null)
+                if (GetPlayerByName(newID) == null)
                     isIdUnique = true;
             }
 
