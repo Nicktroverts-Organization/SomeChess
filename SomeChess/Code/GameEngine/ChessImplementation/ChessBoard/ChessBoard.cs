@@ -88,17 +88,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public object Clone()
         {
             var board = new ChessBoard();
-            ChessPiece[,]? _boardClone = Boards.CloneDefault();
             ChessPiece[,]? boardClone = new ChessPiece[8, 8];
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    boardClone[i, j] = (ChessPiece)_boardClone[i, j].Clone();
+                    boardClone[i, j] = (ChessPiece)Board[i, j].Clone();
                 }
             }
-            board.Board = (ChessPiece[,])boardClone.Clone();
-            _boardClone = null;
+            board.Board = boardClone;
             boardClone = null;
             return board;
         }

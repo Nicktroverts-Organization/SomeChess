@@ -568,12 +568,40 @@ video {
   position: relative;
 }
 
-.ml-12 {
-  margin-left: 3rem;
+.bottom-0 {
+  bottom: 0px;
 }
 
-.ml-14 {
-  margin-left: 3.5rem;
+.bottom-72 {
+  bottom: 18rem;
+}
+
+.right-36 {
+  right: 9rem;
+}
+
+.right-56 {
+  right: 14rem;
+}
+
+.right-72 {
+  right: 18rem;
+}
+
+.right-80 {
+  right: 20rem;
+}
+
+.mb-0 {
+  margin-bottom: 0px;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.ml-0 {
+  margin-left: 0px;
 }
 
 .ml-16 {
@@ -584,28 +612,32 @@ video {
   margin-left: 6rem;
 }
 
-.ml-52 {
-  margin-left: 13rem;
-}
-
 .ml-8 {
   margin-left: 2rem;
 }
 
-.ml-80 {
-  margin-left: 20rem;
+.mt-0 {
+  margin-top: 0px;
 }
 
-.ml-96 {
-  margin-left: 24rem;
+.mt-1 {
+  margin-top: 0.25rem;
 }
 
-.mr-0 {
-  margin-right: 0px;
+.mt-1\.5 {
+  margin-top: 0.375rem;
 }
 
 .mt-14 {
   margin-top: 3.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-32 {
+  margin-top: 8rem;
 }
 
 .mt-5 {
@@ -614,10 +646,6 @@ video {
 
 .mt-7 {
   margin-top: 1.75rem;
-}
-
-.ml-32 {
-  margin-left: 8rem;
 }
 
 .block {
@@ -648,6 +676,14 @@ video {
   height: 2.5rem;
 }
 
+.h-2 {
+  height: 0.5rem;
+}
+
+.h-2\/6 {
+  height: 33.333333%;
+}
+
 .h-24 {
   height: 6rem;
 }
@@ -656,44 +692,52 @@ video {
   height: 1.25rem;
 }
 
-.h-52 {
-  height: 13rem;
+.h-5\/6 {
+  height: 83.333333%;
 }
 
-.h-64 {
-  height: 16rem;
+.h-8 {
+  height: 2rem;
 }
 
-.h-3\/6 {
-  height: 50%;
+.h-screen {
+  height: 100vh;
 }
 
-.h-3 {
-  height: 0.75rem;
+.w-1 {
+  width: 0.25rem;
 }
 
-.w-24 {
-  width: 6rem;
+.w-1\/2 {
+  width: 50%;
 }
 
-.w-5 {
-  width: 1.25rem;
+.w-1\/6 {
+  width: 16.666667%;
 }
 
-.w-52 {
-  width: 13rem;
+.w-3 {
+  width: 0.75rem;
+}
+
+.w-4 {
+  width: 1rem;
 }
 
 .w-96 {
   width: 24rem;
 }
 
-.w-4\/12 {
-  width: 33.333333%;
+.w-screen {
+  width: 100vw;
 }
 
-.w-4 {
-  width: 1rem;
+.w-3\/6 {
+  width: 50%;
+}
+
+.w-4\/5 {
+  width: 80%;
 }
 
 .border-collapse {
@@ -702,6 +746,10 @@ video {
 
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .select-none {
@@ -730,46 +778,65 @@ video {
   align-items: center;
 }
 
+.justify-start {
+  justify-content: flex-start;
+}
+
 .justify-center {
   justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
 }
 
 .justify-evenly {
   justify-content: space-evenly;
 }
 
-.justify-self-center {
-  justify-self: center;
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+.rounded-sm {
+  border-radius: 0.125rem;
 }
 
 .border {
   border-width: 1px;
 }
 
-.bg-black {
+.bg-white {
   --tw-bg-opacity: 1;
-  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-green-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(134 239 172 / var(--tw-bg-opacity));
-}
-
-.p-2 {
-  padding: 0.5rem;
-}
-
-.p-5 {
-  padding: 1.25rem;
-}
-
-.pl-2 {
-  padding-left: 0.5rem;
+.from-orange-800 {
+  --tw-gradient-from: #9a3412 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(154 52 18 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
 .text-center {
   text-align: center;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .text-5xl {
@@ -777,53 +844,13 @@ video {
   line-height: 1;
 }
 
-.text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-.text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-}
-
 .font-bold {
   font-weight: 700;
-}
-
-.text-blue-400 {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
 }
 
 .text-gray-100 {
   --tw-text-opacity: 1;
   color: rgb(243 244 246 / var(--tw-text-opacity));
-}
-
-.text-green-400 {
-  --tw-text-opacity: 1;
-  color: rgb(74 222 128 / var(--tw-text-opacity));
-}
-
-.text-neutral-50 {
-  --tw-text-opacity: 1;
-  color: rgb(250 250 250 / var(--tw-text-opacity));
-}
-
-.text-red-400 {
-  --tw-text-opacity: 1;
-  color: rgb(248 113 113 / var(--tw-text-opacity));
-}
-
-.text-yellow-500 {
-  --tw-text-opacity: 1;
-  color: rgb(234 179 8 / var(--tw-text-opacity));
 }
 
 .underline {
@@ -832,15 +859,6 @@ video {
 
 .outline {
   outline-style: solid;
-}
-
-.filter {
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
-.backdrop-filter {
-  -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-          backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 
 #blazor-error-ui {
@@ -925,12 +943,10 @@ video {
   background-color: #769656;
 }
 
+/*buttons*/
+
 .playOnline {
-  transition-duration: 0.25s;
-  transition-property: all;
-  transition-timing-function: ease;
   border-style: solid;
-  margin-top: 3vh;
   height: 10vh;
   width: 400px;
   border-radius: 15px;
@@ -943,18 +959,6 @@ video {
   background-color: #72c21f;
 }
 
-.playOnline img, .playOnline span {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.playOnline img {
-  display: inline-block;
-  vertical-align: middle;
-  margin-top: 1.5vh;
-  margin-left: -5vw;
-}
-
 .playOnline span {
   margin-top: -9.5vh;
   margin-left: 1.5vw;
@@ -962,9 +966,7 @@ video {
 }
 
 .playComputer {
-  transition-duration: 0.25s;
-  transition-property: all;
-  transition-timing-function: ease;
+  border-style: solid;
   height: 10vh;
   width: 400px;
   border-radius: 15px;
@@ -973,27 +975,28 @@ video {
   background-color: #696969;
 }
 
-.playComputer img, .playComputer span {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.playComputer img {
-  display: inline-block;
-  vertical-align: middle;
-  margin-top: 1.5vh;
-  margin-left: -6vw;
-}
-
 .playComputer span {
   margin-top: -9.5vh;
-  margin-right: 1vw;
   font-size: 50%;
 }
 
 .playComputer:hover {
   background-color: #636363;
 }
+
+.textInButton {
+  width: 310px;
+}
+
+.playOnline button {
+  line-height: 0.8em;
+}
+
+.playComputer button {
+  line-height: 0.8em;
+}
+
+/*buttons*/
 
 .greengradient {
   font-size: 400%;
@@ -1012,6 +1015,7 @@ video {
   background-color: var(--SecondBackgroundColor);
   border-radius: 10px;
   width: 30vw;
+  height: 68vh;
 }
 
 .chooseTime {
@@ -1083,4 +1087,86 @@ video {
 
 .chessPiece[draggable] {
   cursor: pointer;
+}
+
+.gameOverScreen {
+  right: 50%;
+  bottom: 50%;
+  transform: translate(72.5%, 80.2%);
+}
+
+.gameOverDesign {
+  background-color: #2c5d63;
+  color: white;
+}
+
+.gameOverScreen span {
+  cursor: pointer;
+  color: #ff6262;
+}
+
+.gameOverScreen span:hover {
+  color: #ff1f1f;
+}
+
+.gameOverDesign a {
+  font-size: 200%;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 15px 15px;
+  background-color: #008080;
+}
+
+.move-history {
+  overflow: scroll;
+}
+
+.d-block {
+  display: block;
+}
+
+.pawnTransformationChoice {
+  right: 70.5%;
+  bottom: 57.5%;
+  transform: translate(77.5%, 5%);
+}
+
+.peaceChoiceHolder {
+  background-color: #32581f;
+}
+
+.peaceChoiceHolder img {
+  cursor: pointer;
+}
+
+.selector {
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.movesNotationHolder {
+  font-size: 120%;
+  color: white;
+}
+
+.movesNotationHolder:nth-child(even) {
+  background-color: #2c5d63;
+}
+
+.movesNotationHolder:nth-child(odd) {
+  background-color: rgb(25, 113, 74);
+}
+
+.drawButton {
+  background-color: #636363;
+}
+
+.giveUpButton {
+  background-color: red;
 }

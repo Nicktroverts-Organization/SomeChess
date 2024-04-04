@@ -14,7 +14,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
          * B B B B B B B B
          * T P L K Q L P T
          */
-        public static ChessPiece[,] Default = new ChessPiece[8, 8]
+        private static readonly ChessPiece[,] _Default = new ChessPiece[8, 8]
         {
             {new RookPiece(Team.White, "a1"), new PawnPiece(Team.White, "a2"), new EmptyPiece(Team.White, "a3"), new EmptyPiece(Team.White, "a4"), new EmptyPiece(Team.Black, "a5"), new EmptyPiece(Team.Black, "a6"), new PawnPiece(Team.Black, "a7"), new RookPiece(Team.Black, "a8")},
             {new KnightPiece(Team.White, "b1"), new PawnPiece(Team.White, "b2"), new EmptyPiece(Team.White, "b3"), new EmptyPiece(Team.White, "b4"), new EmptyPiece(Team.Black, "b5"), new EmptyPiece(Team.Black, "b6"), new PawnPiece(Team.Black, "b7"), new KnightPiece(Team.Black, "b8")},
@@ -26,6 +26,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {new RookPiece(Team.White, "h1"), new PawnPiece(Team.White, "h2"), new EmptyPiece(Team.White, "h3"), new EmptyPiece(Team.White, "h4"), new EmptyPiece(Team.Black, "h5"), new EmptyPiece(Team.Black, "h6"), new PawnPiece(Team.Black, "h7"), new RookPiece(Team.Black, "h8")},
         };
 
+        public static ChessPiece[,] Default
+        {
+            get => CloneDefault();
+            set => throw new InvalidOperationException();
+        }
+
         public static ChessPiece[,] CloneDefault()
         {
             ChessPiece[,] clone = new ChessPiece[8, 8];
@@ -33,7 +39,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    clone[i, j] = (ChessPiece)Default[i, j].Clone();
+                    clone[i, j] = (ChessPiece)_Default[i, j].Clone();
                 }
             }
 

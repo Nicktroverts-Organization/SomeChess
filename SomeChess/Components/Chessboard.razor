@@ -1,122 +1,453 @@
 ﻿@inject IJSRuntime JsRuntime;
+@inject NavigationManager NavMan;
 @using Microsoft.AspNetCore.Components.Web
+@using SomeChess.Code
 @using SomeChess.Code.GameEngine.ChessImplementation
 @using SomeChess.Code.MatchMaking.ChessMatchImplementation
 @using SomeChess.Code.Social
+@using System.Diagnostics.Eventing.Reader
+@using Microsoft.AspNetCore.Mvc.ModelBinding
 @using SomeChess.Code.MatchMaking
 @using SomeChess.Code
 @inject NavigationManager NavigationManager
 @inject UserAuthentication social
 
-@if (!Reload)
+@if (ChessGame != null)
 {
-    <div class="flex text-center justify-center place-content-evenly mt-7">
-        <div class="chessboard select-none flex text-center justify-center">
-            @for (int i = 0; i <8; i++)
-            {
-                int LoopI = i;
-                <div>
-                    @for (int u = 7; u >= 0; u--)
+    <div>
+        @if (!Reload)
+        {
+            <div class="flex text-center justify-center place-content-evenly mt-7">
+                <div class="chessboard select-none flex text-center justify-center">
+                    @for (int i = 0; i < 8; i++)
                     {
-                        int LoopU = u;
-                        string color = "";
-                        if (LoopI % 2 == 0) // LoopI ist gerade
-                        {
-                            if (LoopU % 2 != 0) // LoopU ist ungerade
-                                color = "blackCell";
-                            else //LoopU ist gerade
-                                color = "whiteCell";
-                        }
-                        else //LoopI ist ungerade
-                        {
-                            if (LoopU % 2 != 0) //LoopU ist ungerade
-                                color = "whiteCell";
-                            else // LoopU ist gerade
-                                color = "blackCell";
-                        }
+                        int LoopI = i;
+                        <div>
+                            @for (int u = 7; u >= 0; u--)
+                            {
+                                int LoopU = u;
+                                string color = "";
+                                if (LoopI % 2 == 0) // LoopI ist gerade
+                                {
+                                    if (LoopU % 2 != 0) // LoopU ist ungerade
+                                        color = "whiteCell";
+                                    else //LoopU ist gerade
+                                        color = "blackCell";
+                                }
+                                else //LoopI ist ungerade
+                                {
+                                    if (LoopU % 2 != 0) //LoopU ist ungerade
+                                        color = "blackCell";
+                                    else // LoopU ist gerade
+                                        color = "whiteCell";
+                                }
 
-                        string pieceColor;
-                        @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
-                            pieceColor = "w";
-                        else pieceColor = "b";
-
-                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" onmouseover="SelectedPeace(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
-                            @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                            string pieceColor;
+                            @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
+                                pieceColor = "w";
+                            else pieceColor = "b";
+                            @if (!NavMan.Uri.ToLower().Contains("/chess/"))
+                            {
+                                <div class="item @color" draggable="false">
+                                    @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="item @color" onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                                    @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            </div>
+            @if (ChoicePeace)
+            {
+                <div class="flex absolute pawnTransformationChoice">
+                    <div class="peaceChoiceHolder rounded-md">
+                        <div class="bg-white rounded-sm">
+                            <p class="text-3xl from-orange-800">Which peace do you want?</p>
                         </div>
-                    }
+                        <div class="flex text-center justify-around">
+                            <div><img src="images/w_queen.png" class="normalefiguren chessPiece mt-2 selector" /></div>
+                            <div><img src="images/w_rook.png" class="rook chessPiece mt-1.5 selector" /></div>
+                            <div><img src="images/w_knight.png" class="knight chessPiece selector" /></div>
+                            <div><img src="images/w_bishop.png" class="normalefiguren chessPiece chessPiece selector" /></div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (!NavMan.Uri.ToLower().Contains("/chess/"))
+            {
+                <div class="backholder ml-24 flex flex-col text-center">
+                    <h1 class="greengradient anton-regular">
+                        Play Chess<br />
+                        Online<br />
+                        on the #1 Site!
+                    </h1>
+                    <div class="flex text-center flex-col ml-24 mt-5">
+                        <div class="flex justify-between playOnline">
+                                <img @onclick="() => { PlayOnline = true; }" width="90" height="2" src="images/online-icon.png" class="selector cursor-pointer" />
+                            <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
+                        </div>
+                        <div class="flex justify-between playComputer mt-5">
+                            <img width="90" height="2" src="images/computer-icon.png" class="selector cursor-pointer" />
+                            <button class="textInButton">Computer<br /><span class="smalltextPlayComputer">Play vs training bots offline!</span></button>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="backholder ml-24 flex flex-col text-center">
+                    <h1 class="greengradient anton-regular">Moves Notation</h1>
+                    <div id="move-history" class="move-history flex-col justify-start h-5/6">
+                        @for (int i = 0; i < MoveHistory.Count; i += 2)
+                        {
+                            int moveNumber = i/2+1;
+                            <div class="flex movesNotationHolder">
+                                <div class="w-1/6">
+                                    <p class="h-8">
+                                        @(moveNumber.ToString() + ". ")
+                                        @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
+                                        {
+                                            @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                            {
+                                                @(MoveHistory[i].Item1.Field[0] + "x" + @MoveHistory[i].Item2.Field)
+                                            }
+                                            else
+                                            {
+                                                @MoveHistory[i].Item2.Field
+                                                ;
+                                            }
+                                        }
+                                        else if (MoveHistory[i].Item3 == true)
+                                        {
+                                            if (MoveHistory[i].Item2.Field.ToString()[0] == 'c')
+                                            {
+                                                @("0-0-0")
+                                                ;
+                                            }
+                                            else
+                                            {
+                                                @("0-0")
+                                                ;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
+                                            {
+                                                @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i].Item2.Field)
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString()[0] + @MoveHistory[i].Item2.Field)
+                                                }
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                                <div class="w-1/2">
+                                    @if (i + 1 < MoveHistory.Count)
+                                    {
+                                        <p class="h-8">
+                                            @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
+                                            {
+                                                @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i + 1].Item1.Field[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @MoveHistory[i + 1].Item2.Field
+                                                    ;
+                                                }
+                                            }
+                                            else if (MoveHistory[i + 1].Item3 == true)
+                                            {
+                                                if (MoveHistory[i + 1].Item2.Field.ToString()[0] == 'c')
+                                                {
+                                                    @("0-0-0")
+                                                    ;
+                                                }
+                                                else
+                                                {
+                                                    @("0-0")
+                                                    ;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Knight)
+                                                {
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                }
+                                            }
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        <div class="flex absolute bottom-72 right-80">
+                            <button class="giveUpButton ml-8">Give Up</button>
+                            <button class="drawButton">Draw</button>
+                        </div>
+                    </div>
                 </div>
             }
         </div>
-        <div class="backholder ml-24 flex flex-col text-center ">
-            <h1 class="greengradient anton-regular">
-                Play Chess<br />
-                Online<br />
-                on the #1 Site!
-            </h1>
-            <div>
-                <button @onclick="() => { PlayOnline = true;}" class="playOnline"><img width="72" height="2" src="images/online-icon.png" />Play Online<br /><span>Play with a real person online!</span></button>
+    }
+    else
+    {
+        <div class="flex text-center justify-center place-content-evenly mt-7">
+            <div class="chessboard select-none flex text-center justify-center">
+                @for (int i = 0; i < 8; i++)
+                {
+                    int LoopI = i;
+                    <div>
+                        @for (int u = 7; u >= 0; u--)
+                        {
+                            int LoopU = u;
+                            string color = "";
+                            if (LoopI % 2 == 0) // LoopI ist gerade
+                            {
+                                if (LoopU % 2 != 0) // LoopU ist ungerade
+                                    color = "whiteCell";
+                                else //LoopU ist gerade
+                                    color = "blackCell";
+                            }
+                            else //LoopI ist ungerade
+                            {
+                                if (LoopU % 2 != 0) //LoopU ist ungerade
+                                    color = "blackCell";
+                                else // LoopU ist gerade
+                                    color = "whiteCell";
+                            }
+
+                                string pieceColor;
+                                @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
+                                    pieceColor = "w";
+                                else pieceColor = "b";
+
+                            @if (!NavMan.Uri.ToLower().Contains("/chess/"))
+                            {
+                                <div class="item @color" draggable="false">
+                                    @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="item @color" onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
+                                    @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                                </div>
+                            }
+                        }
+                    </div>
+                }
             </div>
-            <div>
-                <button class="playComputer"><img width="72" height="2" src="images/computer-icon.png" /> Computer<br /><span class="smalltextPlayComputer">Play vs training bots</span></button>
-            </div>
-        </div>
-    </div>
-}
-else
-{
-    <div class="flex text-center justify-center place-content-evenly mt-7">
-        <div class="chessboard select-none flex text-center justify-center">
-            @for (int i = 0; i < 8; i++)
+            @if (ChoicePeace)
             {
-                int LoopI = i;
-                <div>
-                    @for (int u = 7; u >= 0; u--)
-                    {
-                        int LoopU = u;
-                        string color = "";
-                        if (LoopI % 2 == 0) // LoopI ist gerade
-                        {
-                            if (LoopU % 2 != 0) // LoopU ist ungerade
-                                color = "blackCell";
-                            else //LoopU ist gerade
-                                color = "whiteCell";
-                        }
-                        else //LoopI ist ungerade
-                        {
-                            if (LoopU % 2 != 0) //LoopU ist ungerade
-                                color = "whiteCell";
-                            else // LoopU ist gerade
-                                color = "blackCell";
-                        }
-
-                        string pieceColor;
-                        @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
-                            pieceColor = "w";
-                        else pieceColor = "b";
-
-                        <div class="item @color " onmouseup="getMouseUpElementID(event)" onmousedown="getMouseDownID(this)" onmouseover="SelectedPeace(event)" id="@(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString())">
-                            @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                <div class="flex absolute pawnTransformationChoice">
+                    <div class="peaceChoiceHolder rounded-md">
+                        <div class="bg-white rounded-sm">
+                            <p class="text-3xl from-orange-800">Which peace do you want?</p>
                         </div>
-                    }
+                        <div class="flex text-center justify-around">
+                            <div><img src="images/w_queen.png" class="normalefiguren chessPiece mt-2 selector" /></div>
+                            <div><img src="images/w_rook.png" class="rook chessPiece mt-1.5 selector" /></div>
+                            <div><img src="images/w_knight.png" class="knight chessPiece selector" /></div>
+                            <div><img src="images/w_bishop.png" class="normalefiguren chessPiece chessPiece selector" /></div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (!NavMan.Uri.ToLower().Contains("/chess/"))
+            {
+                <div class="backholder ml-24 flex flex-col text-center">
+                    <h1 class="greengradient anton-regular">
+                        Play Chess<br />
+                        Online<br />
+                        on the #1 Site!
+                    </h1>
+                    <div class="flex text-center flex-col ml-24 mt-5">
+                        <div class="flex justify-between playOnline">
+                            <img @onclick="() => { PlayOnline = true; }" width="90" height="2" src="images/online-icon.png" class="selector cursor-pointer" />
+                            <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
+                        </div>
+                        <div class="flex justify-between playComputer mt-5">
+                            <img width="90" height="2" src="images/computer-icon.png" class="selector cursor-pointer" />
+                            <button class="textInButton">Computer<br /><span class="smalltextPlayComputer">Play vs training bots offline!</span></button>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="backholder ml-24 flex flex-col text-center">
+                    <h1 class="greengradient anton-regular">Moves Notation</h1>
+                    <div id="move-history" class="move-history flex-col justify-start h-5/6">
+                        @for (int i = 0; i < MoveHistory.Count; i += 2)
+                        {
+                            int moveNumber = i / 2 + 1;
+                            <div class="flex movesNotationHolder">
+                                <div class="w-1/6">
+                                    <p class="h-8">
+                                        @(moveNumber.ToString() + ". ")
+                                        @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
+                                        {
+                                            @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                            {
+                                                @(MoveHistory[i].Item1.Field[0] + "x" + @MoveHistory[i].Item2.Field)
+                                            }
+                                            else
+                                            {
+                                                @MoveHistory[i].Item2.Field
+                                                ;
+                                            }
+                                        }
+                                        else if (MoveHistory[i].Item3 == true)
+                                        {
+                                            if (MoveHistory[i].Item2.Field.ToString()[0] == 'c')
+                                            {
+                                                @("0-0-0")
+                                                ;
+                                            }
+                                            else
+                                            {
+                                                @("0-0")
+                                                ;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
+                                            {
+                                                @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i].Item2.Field)
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString()[0] + @MoveHistory[i].Item2.Field)
+                                                }
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                                <div class="w-1/2">
+                                    @if (i + 1 < MoveHistory.Count)
+                                    {
+                                        <p class="h-8">
+                                            @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
+                                            {
+                                                @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i + 1].Item1.Field[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @MoveHistory[i + 1].Item2.Field
+                                                    ;
+                                                }
+                                            }
+                                            else if (MoveHistory[i + 1].Item3 == true)
+                                            {
+                                                if (MoveHistory[i + 1].Item2.Field.ToString()[0] == 'c')
+                                                {
+                                                    @("0-0-0")
+                                                    ;
+                                                }
+                                                else
+                                                {
+                                                    @("0-0")
+                                                    ;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Knight)
+                                                {
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                }
+                                            }
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="flex absolute bottom-72 right-80">
+                    <button class="giveUpButton ml-8">Give Up</button>
+                    <button class="drawButton">Draw</button>
                 </div>
             }
         </div>
-        <div class="backholder ml-24 flex flex-col text-center ">
-            <h1 class="greengradient anton-regular">
-                Play Chess<br />
-                Online<br />
-                on the #1 Site!
-            </h1>
-            <div>
-                <button @onclick="() => { PlayOnline = true;}" class="playOnline"><img width="72" height="2" src="images/online-icon.png" />Play Online<br /><span>Play with a real person online!</span></button>
-            </div>
-            <div>
-                <button class="playComputer"><img width="72" height="2" src="images/computer-icon.png" /> Computer<br /><span class="smalltextPlayComputer">Play vs training bots</span></button>
-            </div>
-        </div>
-    </div>
-}
-@if (PlayOnline == true)
+    }
+</div>
+@if (PlayOnline)
 {
     <div class="chooseTime flex flex-col">
         <div>
@@ -132,65 +463,98 @@ else
                     <button @onclick="() => {SetButtonState(3); CreateChessMatch(GameMode.OnlineTwoMinutesPlusOne);}" class="@((SelectedButton == 3) ? "selectedTimeShadow" : "")">2 | 1</button>
                 </div>
 
-            </div>
-            <div>
-                <h2 class="anton-regular  mt-7">Blitz</h2>
-                <div class="flex justify-evenly">
-                    <button @onclick="() => {SetButtonState(4); CreateChessMatch(GameMode.OnlineThreeMinutes);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
-                    <button @onclick="() => {SetButtonState(5); CreateChessMatch(GameMode.OnlineThreeMinutesPlusTwo);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
-                    <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
+                </div>
+                <div>
+                    <h2 class="anton-regular  mt-7">Blitz</h2>
+                    <div class="flex justify-evenly">
+                        <button @onclick="() => {SetButtonState(4); CreateChessMatch(GameMode.OnlineThreeMinutes);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
+                        <button @onclick="() => {SetButtonState(5); CreateChessMatch(GameMode.OnlineThreeMinutesPlusTwo);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
+                        <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
+                    </div>
+
                 </div>
 
-            </div>
-            <div>
-                <h2 class="anton-regular mt-7">Rapid</h2>
-                <div class="flex justify-evenly">
-                    <button @onclick="() => {SetButtonState(7); CreateChessMatch(GameMode.OnlineTenMinutes);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
-                    <button @onclick="() => {SetButtonState(8); CreateChessMatch(GameMode.OnlineFifteenMinutesPlusTen);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
-                    <button @onclick="() => {SetButtonState(9); CreateChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
+                <div>
+                    <h2 class="anton-regular mt-7">Rapid</h2>
+                    <div class="flex justify-evenly">
+                        <button @onclick="() => {SetButtonState(7); CreateChessMatch(GameMode.OnlineTenMinutes);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
+                        <button @onclick="() => {SetButtonState(8); CreateChessMatch(GameMode.OnlineFifteenMinutesPlusTen);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
+                        <button @onclick="() => {SetButtonState(9); CreateChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
+                    </div>
+                </div>
+                <div class="playButton flex justify-center mt-14 select-none">
+                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center justify-center">Play</a>
                 </div>
             </div>
-            <!--<div class="playButton flex justify-center mt-14 select-none">
-                <a class="flex text-center justify-center">Play</a>
-            </div>-->
+
         </div>
-    </div>
-
-@*     @if (GameOver)
+    }
+    @if (!ChessGame.IsPlaying && GameOver)
     {
-        <span @onclick="() => { NotNewGame = true; }" class="material-symbols-outlined fixed absolute select-none">cancel</span>
-        <div class="bg-green-300 w-4/12 h-3/6 ml-32">
-            @if(GameWon == "white")
+        <div class="w-screen absolute h-screen gameOverScreen">
+            @if (ChessGame.GameState == ChessState.WhiteWin)
             {
-                <p class="anton-regular text-lg">You won the game!</p>
+                <span @onclick="() => { GameOver = false; }" class="material-symbols-outlined fixed absolute select-none ">cancel</span>
+                <div class="w-96 h-2/6 flex flex-col justify-evenly items-center rounded-lg gameOverDesign">
+                    <div>
+                        <p class="anton-regular text-4xl">You won the game!</p>
+                    </div>
+                    <div>
+                        <a href="@("/")" class="playAgainLink">Play new one!</a>
+                    </div>
+                </div>
             }
-            else
+            else if (ChessGame.GameState == ChessState.BlackWin)
             {
-                <p class="anton-regular text-lg ">You lost the game</p>
+                <span @onclick="() => { GameOver = false; }" class="material-symbols-outlined fixed absolute select-none">cancel</span>
+                <div class="w-96 h-2/6 flex flex-col justify-evenly items-center rounded-lg gameOverDesign">
+                    <div>
+                        <p class="anton-regular text-4xl">You lost the game!</p>
+                    </div>
+                    <div>
+                        <a href="@("/")" class="playAgainLink">Play new one!</a>
+                    </div>
+                </div>
             }
-            <button>PLay new one!</button>
+            else if (ChessGame.GameState == ChessState.Draw)
+            {
+                <span @onclick="() => { GameOver = false; }" class="material-symbols-outlined fixed absolute select-none ">cancel</span>
+                <div class="w-96 h-2/6 flex flex-col justify-evenly items-center rounded-lg gameOverDesign">
+                    <div>
+                        <p class="anton-regular text-4xl">Draw!</p>
+                    </div>
+                    <div>
+                        <a href="@("/")" class="playAgainLink">Play new one!</a>
+                    </div>
+                </div>
+            }
         </div>
-    } *@
+    }
 }
 
-
 @code {
-    bool NotNewGame = false;
+    bool ChoicePeace = true;
+    bool GameOver = true;
+    string GameWon = "white";
+    bool NotNewGame = true;
     public bool isDragging = true;
     public bool PlayOnline = false;
     public bool Reload = true;
     int SelectedButton = 0;
-    public Chess ChessGame = new Chess();
+    public Chess? ChessGame = null;
     public ChessMatchConstructor constructor = new();
+    public ILogger logger = LoggingHandler.GetLogger<Chessboard>();
+
+    List<Tuple<ChessPiece, ChessPiece, bool>> MoveHistory { get; set; } = new();
 
     public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
     {
-        { ChessPieceType.Pawn, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"powns chessPiece\" src=\"images/w_pawn.png\" />\r\n</div>" },
-        { ChessPieceType.Knight, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"knight chessPiece\" src=\"images/w_knight.png\" />\r\n</div>"},
-        { ChessPieceType.Bishop, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece chessPiece\" src=\"images/w_bishop.png\" />\r\n</div>"},
-        { ChessPieceType.Rook, "<div class=\"@((isDragging) ? \"selected\" : \"\")\">\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"rook chessPiece\" src=\"images/w_rook.png\" />\r\n</div>" },
-        { ChessPieceType.Queen, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece\" src=\"images/w_queen.png\" />\r\n </div>"},
-        { ChessPieceType.King, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"true\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece chessPiece\" src=\"images/w_king.png\" />\r\n\r\n</div>" },
+        { ChessPieceType.Pawn, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"powns chessPiece\" src=\"images/w_pawn.png\" />\r\n</div>" },
+        { ChessPieceType.Knight, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"knight chessPiece\" src=\"images/w_knight.png\" />\r\n</div>"},
+        { ChessPieceType.Bishop, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece chessPiece\" src=\"images/w_bishop.png\" />\r\n</div>"},
+        { ChessPieceType.Rook, "<div class=\"@((isDragging) ? \"selected\" : \"\")\">\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"rook chessPiece\" src=\"images/w_rook.png\" />\r\n</div>" },
+        { ChessPieceType.Queen, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece\" src=\"images/w_queen.png\" />\r\n </div>"},
+        { ChessPieceType.King, "<div class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  class=\"normalefiguren chessPiece chessPiece\" src=\"images/w_king.png\" />\r\n\r\n</div>" },
         { ChessPieceType.None, ""},
     };
 
@@ -204,23 +568,49 @@ else
     {
         if (firstRender)
         {
+            ChessGame = new Chess(this);
             ChessGame.StartGame();
             ChessGame.UpdateGameState();
             ChessGame.ResetBoard();
             ChessGame.StartGame();
+
             // See warning about memory above in the article
             dotNetReference = DotNetObjectReference.Create(this);
             await JsRuntime.InvokeVoidAsync("setDotNetReference", dotNetReference);
         }
+        MoveHistory = ChessGame.ChessPieceMoveHistory;
         if (Reload)
         {
             Reload = false;
+
+            string moveHistoryString = "";
+            foreach (var a in MoveHistory)
+            {
+                moveHistoryString += (a.Item1.Team + " " + a.Item1.Field + " " + a.Item1.PieceType + " -> " + a.Item2.Team + " " + a.Item2.Field + " " + a.Item2.PieceType + "\n      ");
+            }
+
+            Console.ResetColor();
+
+            Task logTask = new Task(() => logger.LogDebug(moveHistoryString));
+            logTask.Start();
+            logTask.Wait();
+
+            Console.ResetColor();
+
+            LoggingHandler.DrawSeperatorLine(ConsoleColor.Magenta);
             StateHasChanged();
+        }
+
+
+        if (!ChessGame.IsPlaying)
+        {
+            await JsRuntime.InvokeVoidAsync("Over", !ChessGame.IsPlaying);
         }
     }
 
     public ChessMatch CreateChessMatch(GameMode mode)
     {
+
         ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode);
         social.CurrentPlayer.PlayersMatch = newMatch.MatchID;
         MatchSearching.GetInstance().AddMatch(newMatch);
@@ -245,6 +635,7 @@ else
         {
             SelectedButton = 0;
         }
+
     }
 
     public void ReloadGame()
@@ -261,7 +652,7 @@ else
         else if (Event == "mouseup")
         {
             ToID = id;
-            Console.WriteLine(ChessGame.GetGameState());
+            ChessPiece FromPiece = ChessGame.Board.GetPiece(FromID);
             if (ChessGame.MovePiece(FromID, ToID))
             {
                 ChessGame.EndTurn();
@@ -277,4 +668,21 @@ else
             }
         }
     }
+
+    // public Task Wait()
+    // {
+    //     if (1 != 1)
+    //     {
+    //         Wait();
+    //     }
+
+    //     return Task.CompletedTask;
+    // }
+
+    // public ChessPiece TransformPawn(Team team, ChessPiece To)
+    // {
+    //     Wait().Wait();
+
+    //     return new EmptyPiece(team, To.Field);
+    // }
 }

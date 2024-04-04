@@ -2,33 +2,44 @@
 var droppedFieldId = "";
 var elementUnderMouse = "";
 var dotNet = "";
+var gameOver = false;
 
 window.setDotNetReference = function (dotNetReference) {
     dotNet = dotNetReference;
 }
 
+window.Over = function (_gameOver) {
+    console.log("GameOver: ", _gameOver);
+    gameOver = _gameOver;
+}
+
 window.getMouseDownID = function (e) {
     console.log("mousedown");
     console.log(e);
-    var draggedElement = document.getElementById(e.id);
-    selectedElementID = draggedElement.id;
-    dotNet.invokeMethodAsync('IdHandler', selectedElementID, "mousedown");
-    return selectedElementID.id;
+    if (!gameOver) {
+        var draggedElement = document.getElementById(e.id);
+        selectedElementID = draggedElement.id;
+        dotNet.invokeMethodAsync('IdHandler', selectedElementID, "mousedown");
+        return selectedElementID.id;
+    }
+    return null;
 }
 window.getMouseUpElementID = function (e) {
     console.log("mouseup");
     console.log(e);
+    if (!gameOver) {
+        var position = document.elementsFromPoint(e.pageX, e.pageY);
+        position.forEach((elt) => {
+            if (elt.hasAttribute('id')) {
+                droppedFieldId = elt.id;
+                console.log(elt);
 
-    var position = document.elementsFromPoint(e.pageX, e.pageY);
-    position.forEach((elt) => {
-        if (elt.hasAttribute('id')) {
-            droppedFieldId = elt.id;
-            console.log(elt);
-            
-        }
-    });
-    dotNet.invokeMethodAsync('IdHandler', droppedFieldId, "mouseup");
-    return droppedFieldId;
+            }
+        });
+        dotNet.invokeMethodAsync('IdHandler', droppedFieldId, "mouseup");
+        return droppedFieldId;
+    }
+    return null;
 }
 window.getSelected = function () {
     return selectedElementID;
@@ -66,7 +77,7 @@ window.addEventListener('dragstart', function (event) {
     event.target.offsetY = event.clientY - event.target.getBoundingClientRect().top;
     event.target.style.position = 'absolute';
 });
-window.SelectedPeace = function (event) {
-    var element = document.getElementById(event.id);
-    element.style.zIndex = '1';
-}
+window.setInterval(function () {
+    var objDiv = document.getElementById("move-history");
+    objDiv.scrollTop = objDiv.scrollHeight;
+}, 1000);

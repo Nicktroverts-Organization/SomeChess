@@ -1,7 +1,7 @@
 ﻿using SomeChess.Code.GameEngine.ChessImplementation;
 using SomeChess.Code.MatchMaking.ChessMatchImplementation;
 using SomeChess.Code.Social;
-
+using SomeChess.Components;
 
 
 namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
@@ -35,7 +35,6 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
         public ChessMatch CreateMatch(Player player, GameMode mode)
         {
-
             ChessMatch match = new(player, mode, MatchSearching.GetInstance().GetUniqueID());
             return match;
         }
