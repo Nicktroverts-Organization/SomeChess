@@ -1,9 +1,68 @@
 ﻿using SomeChess.Code.GameEngine.ChessImplementation;
+using Microsoft.AspNetCore.SignalR;
 using SomeChess.Code.GameEngine;
 using SomeChess.Code.Social;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 {
+    public sealed class ChessStorage
+    {
+        List<Chess> _chessPlays = new();
+
+        private static ChessStorage _instance;
+
+        public static ChessStorage GetInstance()
+        {
+            if(_instance == null)
+            {
+                _instance = new ChessStorage();
+            }
+
+            return _instance;
+        }
+
+        public void RemoveChessGameByID(Guid id)
+        {
+            try
+            {
+                Chess? chess = _chessPlays.Where(c => c.Test == id).FirstOrDefault();
+                if(chess != null)
+                {
+                    _chessPlays.Remove(chess);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Cannot remove a player by ID: " + e);
+            }
+        }
+
+        public Chess? FindChessGameById(Guid id)
+        {
+            Chess? chess = _chessPlays.Where(c => c.Test == id).FirstOrDefault();
+
+            if( chess != null )
+            {
+                return chess;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public Chess CreateChessGame()
+        {
+            Chess chess = new Chess();
+            _chessPlays.Add(chess);
+            return chess;
+        }
+    }
+
+
+
+
     public class ChessPlayer
     {
         public Player Player { get; set; }
@@ -20,9 +79,11 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
     public class ChessMatch : IMatch
     {
-        public Chess Chess { get; }
+        public Chess Chess { get; set; }
 
-        private int MatchID { get; }
+        public int MatchID { get; }
+
+        private Guid GameID { get; set; }
 
         private bool isStarted;
 
@@ -43,8 +104,10 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
         public ChessPlayer White { get; set; }
 
+        public Page MatchPage { get; set; }
 
-        public ChessMatch(IGame<Chess> game, Player aPlayer, GameMode mode, int uniqueId)
+
+        public ChessMatch(Player aPlayer, GameMode mode, int uniqueId)
         {
             isStarted = false;
 
@@ -52,7 +115,14 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             ExtraTime = ModePropertiesChecker.GetExtraTime(mode);
             Duration = ModePropertiesChecker.GetDuration(mode);
 
-            Chess = game.GetGame();
+            Chess = new();
+            Chess.ResetBoard();
+            Chess.UpdateGameState();
+
+            GameID = Chess.Test;
+
+            MatchID = MatchSearching.GetInstance().GetUniqueID();
+
 
             Random rndm = new();
 
@@ -68,6 +138,12 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             }
             
             
+        }
+
+
+        public Guid GetGameID()
+        {
+            return GameID;
         }
 
 

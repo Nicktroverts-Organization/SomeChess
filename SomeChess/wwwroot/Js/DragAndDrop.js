@@ -27,6 +27,7 @@ window.getMouseDownID = function (e) {
 window.getMouseUpElementID = function (e) {
     console.log("mouseup");
     console.log(e);
+
     if (!gameOver) {
         var position = document.elementsFromPoint(e.pageX, e.pageY);
         position.forEach((elt) => {
@@ -77,7 +78,14 @@ window.addEventListener('dragstart', function (event) {
     event.target.offsetY = event.clientY - event.target.getBoundingClientRect().top;
     event.target.style.position = 'absolute';
 });
-window.setInterval(function () {
+
+window.setInterval(() => {
+    console.log(" ");
+}, 10)
+
+function SetMoveHistoryScroll() {
     var objDiv = document.getElementById("move-history");
-    objDiv.scrollTop = objDiv.scrollHeight;
-}, 1000);
+    if (objDiv != null) {
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+}

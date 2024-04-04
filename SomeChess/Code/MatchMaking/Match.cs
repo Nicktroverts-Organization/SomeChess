@@ -10,6 +10,8 @@ namespace SomeChess.Code.MatchMaking
     public interface IMatch
     {
         public int GetMatchID();
+
+        public Guid GetGameID();
         public MatchSettings GetSettings();
 
         public void Join(Player player);

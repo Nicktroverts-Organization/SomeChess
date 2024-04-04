@@ -13,7 +13,7 @@ namespace SomeChess.Code.MatchMaking
     {
         private List<IMatch> matches = new();
 
-        private List<IMatch> offlineMatches ;
+        private List<IMatch> offlineMatches = new();
 
 
         private MatchSearching()
@@ -42,6 +42,13 @@ namespace SomeChess.Code.MatchMaking
                 }
             }
             return null;
+        }
+
+        public IMatch GetMatchByID(int id)
+        {
+            var match = matches.Where(m => m.GetMatchID() == id).FirstOrDefault();
+
+            return match;
         }
 
         public void AddMatch(IMatch match)
