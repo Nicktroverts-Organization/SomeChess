@@ -550,6 +550,33 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             Board.SetPiece(To, ChessPieceUtils.NewChessPieceByType(team, field, CPT ?? ChessPieceType.None));
         }
 
+        private void CheckEnPassant()
+        {
+            if (ChessPieceMoveHistory.Count > 0)
+            {
+                if (Board.GetPiece(from).Team == Team.White)
+                {
+                    if (char.GetNumericValue(ChessPieceMoveHistory[^1].Item1.Field[1]) == 7 &&
+                        char.GetNumericValue(ChessPieceMoveHistory[^1].Item2.Field[1]) == 5 &&
+                        ChessPieceMoveHistory[^1].Item2.Field[0] == to[0] && char.GetNumericValue(to[1]) == 6)
+                    {
+                        Board.SetPiece(ChessPieceMoveHistory[^1].Item2.Field, new EmptyPiece(Team.White, ChessPieceMoveHistory[^1].Item2.Field));
+                        return true;
+                    }
+                }
+                else if (Board.GetPiece(from).Team == Team.Black)
+                {
+                    if (char.GetNumericValue(ChessPieceMoveHistory[^1].Item1.Field[1]) == 2 &&
+                        char.GetNumericValue(ChessPieceMoveHistory[^1].Item2.Field[1]) == 4 &&
+                        ChessPieceMoveHistory[^1].Item2.Field[0] == to[0] && char.GetNumericValue(to[1]) == 3)
+                    {
+                        Board.SetPiece(ChessPieceMoveHistory[^1].Item2.Field, new EmptyPiece(Team.White, ChessPieceMoveHistory[^1].Item2.Field));
+                        return true;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// <para>Moves the piece from field <paramref name="From"/> to the field <paramref name="To"/>.</para>
         /// </summary>
