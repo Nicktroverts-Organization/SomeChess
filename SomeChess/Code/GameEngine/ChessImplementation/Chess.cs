@@ -102,7 +102,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <summary>
         /// <para>Defines whether one of both teams gave up.</para>
         /// </summary>
-        public Team? Surrender = null;
+        private Team? Surrender = null;
+
+        /// <summary>
+        /// <para>Defines whether or not a draw is being forced.</para>
+        /// </summary>
+        private bool forcedDraw = false;
 
         /// <summary>
         /// <para>Gets <see cref="Chess"/>.</para>
@@ -128,10 +133,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <para>Make the Team given in the argument <paramref name="team"/> give up and lose.</para>
         /// </summary>
         /// <param name="team"></param>
-        public void GiveUp(Team team)
-        {
-            Surrender = team;
-        }
+        public void GiveUp(Team team) => Surrender = team;
+
+        /// <summary>
+        /// <para>Force a draw.</para>
+        /// </summary>
+        public void ForceDraw() => forcedDraw = true;
 
         /// <summary>
         /// <para>Returns <see cref="Chess"/> class for current chess game</para>
@@ -344,10 +351,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(WhiteKing.Field) && WhitePieces.Count == 1)
                 GameState = ChessState.Draw;
 
+            if (forcedDraw)
+                GameState = ChessState.Draw;
+
             if (Surrender != null)
-            {
                 GameState = Surrender == Team.White ? ChessState.BlackWin : ChessState.WhiteWin;
-            }
 
             if (OriginalChess.Clones.Count == 0)
             {
