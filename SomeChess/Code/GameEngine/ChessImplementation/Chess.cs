@@ -540,41 +540,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             return false;
         }
 
-        private void TransformPawnPiece(string To, Team team, string field)
-        {
-            ChessPieceType? CPT = FrontendPageChessBoard.GetPawnTransform().Result;
-            
-            if (CPT == null)
-                throw new NullReferenceException("Chess Piece Type is Null.");
+        public void TransformPawn(Team team, string field, ChessPieceType CePiTy) => Board.SetPiece(field, ChessPieceUtils.NewChessPieceByType(team, field, CePiTy));
 
-            Board.SetPiece(To, ChessPieceUtils.NewChessPieceByType(team, field, CPT ?? ChessPieceType.None));
-        }
-
-        private void CheckEnPassant()
+        private bool CheckEnPassant(ChessPiece _FromPiece, string To, int direction)
         {
-            if (ChessPieceMoveHistory.Count > 0)
-            {
-                if (Board.GetPiece(from).Team == Team.White)
-                {
-                    if (char.GetNumericValue(ChessPieceMoveHistory[^1].Item1.Field[1]) == 7 &&
-                        char.GetNumericValue(ChessPieceMoveHistory[^1].Item2.Field[1]) == 5 &&
-                        ChessPieceMoveHistory[^1].Item2.Field[0] == to[0] && char.GetNumericValue(to[1]) == 6)
-                    {
-                        Board.SetPiece(ChessPieceMoveHistory[^1].Item2.Field, new EmptyPiece(Team.White, ChessPieceMoveHistory[^1].Item2.Field));
-                        return true;
-                    }
-                }
-                else if (Board.GetPiece(from).Team == Team.Black)
-                {
-                    if (char.GetNumericValue(ChessPieceMoveHistory[^1].Item1.Field[1]) == 2 &&
-                        char.GetNumericValue(ChessPieceMoveHistory[^1].Item2.Field[1]) == 4 &&
-                        ChessPieceMoveHistory[^1].Item2.Field[0] == to[0] && char.GetNumericValue(to[1]) == 3)
-                    {
-                        Board.SetPiece(ChessPieceMoveHistory[^1].Item2.Field, new EmptyPiece(Team.White, ChessPieceMoveHistory[^1].Item2.Field));
-                        return true;
-                    }
-                }
-            }
+            //My brains i incompetent and i hope to die.
+            return false;
         }
 
         /// <summary>
@@ -662,6 +633,24 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             Board.ValidateFields(new[] { From, To });
 
 
+            if (FromPiece.PieceType == ChessPieceType.Pawn)
+            {
+                if (FromPiece.Team == Team.White)
+                {
+                    if (CheckEnPassant(FromPiece, To, 1))
+                    {
+
+                    }
+                }
+                else
+                {
+                    if (CheckEnPassant(FromPiece, To, -1))
+                    {
+
+                    }
+                }
+            }
+
             if (FromPiece.PieceType == ChessPieceType.King)
             {
                 if (FromPiece.Team == Team.White)
@@ -748,14 +737,14 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {
                 if (FromPiece.PieceType == ChessPieceType.Pawn && Char.GetNumericValue(To[1]) == 8)
                 {
-                    TransformPawnPiece(To, FromPiece.Team, FromPiece.Field);
+                    FrontendPageChessBoard.DoPawnTransformStart(FromPiece);
                 }
             }
             else
             {
                 if (FromPiece.PieceType == ChessPieceType.Pawn && To[1] == '1')
                 {
-                    TransformPawnPiece(To, FromPiece.Team, FromPiece.Field);
+                    FrontendPageChessBoard.DoPawnTransformStart(FromPiece);
                 }
             }
 

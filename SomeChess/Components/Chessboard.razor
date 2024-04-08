@@ -71,10 +71,10 @@
                                 <p class="text-3xl from-orange-800">Which peace do you want?</p>
                             </div>
                             <div class="flex text-center justify-around">
-                                <div><img src="images/w_queen.png" class="normalefiguren chessPiece mt-2 selector" @onclick="() => { SelectedChessPieceType = ChessPieceType.Queen; }" /></div>
-                                <div><img src="images/w_rook.png" class="rook chessPiece mt-1.5 selector" @onclick="() => { SelectedChessPieceType = ChessPieceType.Rook; }" /></div>
-                                <div><img src="images/w_knight.png" class="knight chessPiece selector" @onclick="() => { SelectedChessPieceType = ChessPieceType.Knight; }" /></div>
-                                <div><img src="images/w_bishop.png" @onclick="() => { SelectedChessPieceType = ChessPieceType.Bishop; }" class="normalefiguren chessPiece chessPiece selector" /></div>
+                                <div><img src="images/w_queen.png" class="normalefiguren chessPiece mt-2 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }" /></div>
+                                <div><img src="images/w_rook.png" class="rook chessPiece mt-1.5 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }" /></div>
+                                <div><img src="images/w_knight.png" class="knight chessPiece selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }" /></div>
+                                <div><img src="images/w_bishop.png" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" class="normalefiguren chessPiece chessPiece selector" /></div>
                             </div>
                         </div>
                     </div>
@@ -746,13 +746,17 @@
     public void DoPawnTransformEnd(ChessPieceType CePiTy)
     {
         ChoicePeace = false;
-        ChessGame.TransformPawn(PawnToTransform.Field, CePiTy);
+        ChessGame.TransformPawn(PawnToTransform.Team, PawnToTransform.Field, CePiTy);
         PawnToTransform = null;
+        Reload = true;
+        StateHasChanged();
     }
 
     public void DoPawnTransformStart(ChessPiece _PawnToTransform)
     {
         PawnToTransform = _PawnToTransform;
         ChoicePeace = true;
+        Reload = true;
+        StateHasChanged();
     }
 }
