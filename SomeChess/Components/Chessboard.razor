@@ -225,8 +225,12 @@
                             }
                         </div>
                         <div class="flex justify-around text-center bottom-72 right-80">
-                            <button class="giveUpButton ml-8">Give Up</button>
-                            <button class="drawButton">Draw</button>
+                            <button @onclick="() => {  }" class="giveUpButton ml-8">Give Up</button>
+                            <button @onclick="() => { DrawOffer = true; }" class="drawButton">Draw</button>
+                            @if (DrawOffer == true)
+                            {
+
+                            }
                         </div>
                     </div>
                 }
@@ -258,11 +262,11 @@
                                     else // LoopU ist gerade
                                         color = "whiteCell";
                                 }
+
                                 string pieceColor;
                                 @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
                                     pieceColor = "w";
                                 else pieceColor = "b";
-
                                 @if (!NavMan.Uri.ToLower().Contains("/chess/"))
                                 {
                                     <div class="item @color" draggable="false">
@@ -440,7 +444,7 @@
                             }
                         </div>
                         <div class="flex justify-around text-center bottom-72 right-80">
-                            <button class="giveUpButton ml-8">Give Up</button>
+                            <button @onclick="() => {  }" class="giveUpButton ml-8">Give Up</button>
                             <button class="drawButton">Draw</button>
                         </div>
                     </div>
@@ -533,6 +537,7 @@
 }
 
 @code {
+    bool DrawOffer = false;
     bool ChoicePeace = false;
     bool GameOver = true;
     string GameWon = "white";
