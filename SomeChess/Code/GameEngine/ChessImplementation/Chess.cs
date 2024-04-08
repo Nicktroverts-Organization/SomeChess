@@ -9,9 +9,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
     {
         //public string ChessID;
 
-        public ChessBoard Board = new();
-
-
         public static List<char> AlphConversionChars = new()
             { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
@@ -51,7 +48,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public List<Chess>? Clones;
 
 
-        public Guid ChessID = Guid.NewGuid();
+        public Guid Test = Guid.NewGuid();
 
 
         public int MadeMoves = 0;

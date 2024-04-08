@@ -33,9 +33,9 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
         //}
 
 
-        public ChessMatch CreateMatch(Player player, GameMode mode)
+        public ChessMatch CreateMatch(Player XÆA12, GameMode wadabadabubub, Chessboard bebebe)
         {
-            ChessMatch match = new(player, mode, MatchSearching.GetInstance().GetUniqueID());
+            ChessMatch match = new(XÆA12, wadabadabubub, MatchSearching.GetInstance().GetUniqueID(), bebebe);
             return match;
         }
 
