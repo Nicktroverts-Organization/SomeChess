@@ -541,6 +541,7 @@
     public bool Reload = true;
     int SelectedButton = 0;
     public Chess? ChessGame = null;
+    public ChessMatch? Match;
     public ChessMatchConstructor constructor = new();
     public ILogger logger = LoggingHandler.GetLogger<Chessboard>();
 
@@ -565,13 +566,35 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+
         if (firstRender)
         {
-            ChessGame = new Chess(this);
-            ChessGame.StartGame();
-            ChessGame.UpdateGameState();
-            ChessGame.ResetBoard();
-            ChessGame.StartGame();
+
+            if (social.CurrentPlayer == null)
+            {
+                await social.FetchPlayerAsync();
+            }
+            
+            Match = (ChessMatch)MatchSearching.GetInstance().GetMatchByID(social.CurrentPlayer.PlayersMatch);
+            if(Match == null)
+            {
+                ChessGame = new Chess(this);
+                ChessGame.StartGame();
+                ChessGame.UpdateGameState();
+                ChessGame.ResetBoard();
+            }
+            else
+            {
+                ChessGame = Match.Chess;
+            
+                if(!ChessGame.IsRunning)
+                {
+                    ChessGame.StartGame();
+                    ChessGame.ResetBoard();
+                }
+            
+                ChessGame.UpdateGameState();
+            }
 
             // See warning about memory above in the article
             dotNetReference = DotNetObjectReference.Create(this);
@@ -608,21 +631,27 @@
         }
     }
 
-    public ChessMatch CreateChessMatch(GameMode mode)
+    public ChessMatch? CreateChessMatch(GameMode mode)
     {
+        try
+        {
+            ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode, this);
+            social.CurrentPlayer.PlayersMatch = newMatch.MatchID;
+            MatchSearching.GetInstance().AddMatch(newMatch);
 
-        ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode, this);
-        social.CurrentPlayer.PlayersMatch = newMatch.MatchID;
-        MatchSearching.GetInstance().AddMatch(newMatch);
+
+            social.PersistPlayerAsync(social.CurrentPlayer);
 
 
-        social.PersistPlayerAsync(social.CurrentPlayer);
-        
+            NavigationManager.NavigateTo("/chess/" + newMatch.MatchID.ToString(), false);
 
-        NavigationManager.NavigateTo("/chess/" + newMatch.MatchID.ToString(), false);
-
-        return newMatch;
-
+            return newMatch;
+        }
+        catch
+        {
+            Console.WriteLine("CreateChessMatch(GameMode mode): Probably CurrentUser was null");
+            return null;
+        }
     }
 
     void SetButtonState(int buttonNumber)
