@@ -223,9 +223,21 @@
                                 </div>
                             }
                         </div>
-                        <div class="flex justify-around text-center bottom-72 right-80">
-                            <button class="giveUpButton ml-8">Give Up</button>
-                            <button class="drawButton">Draw</button>
+                        @if (DrawOffer == true)
+                        {
+                            <div class="flex text-center justify-center minusmargintop">
+                                <div class="bg-emerald-900 w-6/12 rounded h-14">
+                                    <p class="text-white">Your opponent offered a draw</p>
+                                    <div>
+                                        <button @onclick="() => { ChessGame.ForceDraw(); }"><span class="material-symbols-outlined text-lime-500">done</span></button>
+                                        <button @onclick="() => { DrawOffer = false; }"><span class="material-symbols-outlined text-red-700 mt-1.5">close</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="flex justify-around text-center bottom-72 right-80 mt-3">
+                            <button @onclick="() => { ChessGame.GiveUp(Team.White); ChessGame.UpdateGameState(); }" class="giveUpButton ml-8">Give Up</button>
+                            <button @onclick="() => { DrawOffer = true; }" class="drawButton">Draw</button>
                         </div>
                     </div>
                 }
@@ -257,11 +269,11 @@
                                     else // LoopU ist gerade
                                         color = "whiteCell";
                                 }
+
                                 string pieceColor;
                                 @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
                                     pieceColor = "w";
                                 else pieceColor = "b";
-
                                 @if (!NavMan.Uri.ToLower().Contains("/chess/"))
                                 {
                                     <div class="item @color" draggable="false">
@@ -286,10 +298,10 @@
                                 <p class="text-3xl from-orange-800">Which peace do you want?</p>
                             </div>
                             <div class="flex text-center justify-around">
-                                <div><img src="images/w_queen.png" class="normalefiguren chessPiece mt-2 selector" @onclick="() => { SelectedChessPieceType = ChessPieceType.Queen; }" /></div>
-                                <div><img src="images/w_rook.png" class="rook chessPiece mt-1.5 selector" @onclick="() => { SelectedChessPieceType = ChessPieceType.Rook; }" /></div>
-                                <div><img src="images/w_knight.png" class="knight chessPiece selector" @onclick="() => { SelectedChessPieceType = ChessPieceType.Knight; }" /></div>
-                                <div><img src="images/w_bishop.png" @onclick="() => { SelectedChessPieceType = ChessPieceType.Bishop; }" class="normalefiguren chessPiece chessPiece selector" /></div>
+                                <div><img src="images/w_queen.png" class="normalefiguren chessPiece mt-2 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }" /></div>
+                                <div><img src="images/w_rook.png" class="rook chessPiece mt-1.5 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }" /></div>
+                                <div><img src="images/w_knight.png" class="knight chessPiece selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }" /></div>
+                                <div><img src="images/w_bishop.png" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" class="normalefiguren chessPiece chessPiece selector" /></div>
                             </div>
                         </div>
                     </div>
@@ -438,9 +450,21 @@
                                 </div>
                             }
                         </div>
-                        <div class="flex justify-around text-center bottom-72 right-80">
-                            <button class="giveUpButton ml-8">Give Up</button>
-                            <button class="drawButton">Draw</button>
+                        @if (DrawOffer == true)
+                        {
+                            <div class="flex text-center justify-center minusmargintop">
+                                <div class="bg-emerald-900 w-6/12 rounded h-14">
+                                    <p class="text-white">Your opponent offered a draw</p>
+                                    <div>
+                                        <button @onclick="() => { ChessGame.ForceDraw(); }"><span class="material-symbols-outlined text-lime-500">done</span></button>
+                                        <button @onclick="() => { DrawOffer = false; }"><span class="material-symbols-outlined text-red-700 mt-1.5">close</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="flex justify-around text-center bottom-72 right-80 mt-3">
+                            <button @onclick="() => { ChessGame.GiveUp(Team.White); ChessGame.UpdateGameState(); }" class="giveUpButton ml-8">Give Up</button>
+                            <button @onclick="() => { DrawOffer = true; }" class="drawButton">Draw</button>
                         </div>
                     </div>
                 }
@@ -532,6 +556,7 @@
 }
 
 @code {
+    bool DrawOffer = false;
     bool ChoicePeace = false;
     bool GameOver = true;
     string GameWon = "white";
@@ -716,20 +741,17 @@
     //     return new EmptyPiece(team, To.Field);
     // }
 
-    public ChessPieceType? SelectedChessPieceType = null;
+    public ChessPiece? PawnToTransform = null;
 
-    public Task<ChessPieceType?> WaitTask()
+    public void DoPawnTransformEnd(ChessPieceType CePiTy)
     {
-        while (SelectedChessPieceType == null)
-        {
-            //do nothing
-        }
-        return Task.FromResult(SelectedChessPieceType);
+        ChessGame.TransformPawn(PawnToTransform.Field, CePiTy);
+        PawnToTransform = null;
     }
 
-    public async Task<ChessPieceType?> GetPawnTransform()
+    public void DoPawnTransformStart(ChessPiece _PawnToTransform)
     {
-        Task<ChessPieceType?> getTransformTask = WaitTask();
-        return await getTransformTask;
+        PawnToTransform = _PawnToTransform;
+        ChoicePeace = true;
     }
 }
