@@ -125,7 +125,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         }
 
         /// <summary>
-        /// <para>Make the Team given in the argument give up.</para>
+        /// <para>Make the Team given in the argument <paramref name="team"/> give up and lose.</para>
         /// </summary>
         /// <param name="team"></param>
         public void GiveUp(Team team)
