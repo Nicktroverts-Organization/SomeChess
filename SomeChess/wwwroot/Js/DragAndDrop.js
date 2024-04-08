@@ -61,8 +61,8 @@ window.addEventListener("dragover", function (event) {
 
 window.addEventListener('mousemove', function (event) {
     if (window.draggingElement) {
-        var offsetX = event.clientX - window.draggingElement.offsetX;
-        var offsetY = event.clientY - window.draggingElement.offsetY;
+        var offsetX = event.clientX;
+        var offsetY = event.clientY;
         window.draggingElement.style.left = offsetX + 'px';
         window.draggingElement.style.top = offsetY + 'px';
     }
@@ -74,14 +74,11 @@ window.addEventListener('mouseup', function (event) {
 
 window.addEventListener('dragstart', function (event) {
     window.draggingElement = event.target;
-    event.target.offsetX = event.clientX - event.target.getBoundingClientRect().left;
-    event.target.offsetY = event.clientY - event.target.getBoundingClientRect().top;
+    event.target.offsetX = event.clientX;
+    event.target.offsetY = event.clientY;
     event.target.style.position = 'absolute';
 });
 
-window.setInterval(() => {
-    console.log(" ");
-}, 10)
 
 function SetMoveHistoryScroll() {
     var objDiv = document.getElementById("move-history");

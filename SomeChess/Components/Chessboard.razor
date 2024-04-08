@@ -745,6 +745,7 @@
 
     public void DoPawnTransformEnd(ChessPieceType CePiTy)
     {
+        ChoicePeace = false;
         ChessGame.TransformPawn(PawnToTransform.Field, CePiTy);
         PawnToTransform = null;
     }
