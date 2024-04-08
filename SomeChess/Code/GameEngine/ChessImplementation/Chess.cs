@@ -1,7 +1,10 @@
 ﻿//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
 //ispolzovat KakietoSchachmaty.Kod.IgrovoiDvighok;
 
+using System.Text;
+using Newtonsoft.Json;
 using SomeChess.Components;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
@@ -223,6 +226,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             //witness the power of Quadruple loop!
             bool LastWasTrue = true;
+            string _IDString = "";
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -237,6 +241,14 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         else
                             BlackPieces.Add(FromPiece);
                     }
+                    _IDString +=
+                        $"{(FromPiece.PieceType != ChessPieceType.None ? (FromPiece.PieceType == ChessPieceType.Knight ? FromPiece.PieceType.ToString().ToUpper()[1] : FromPiece.PieceType.ToString().ToUpper()[0]).ToString() + FromPiece.Team.ToString()[0].ToString() : "")}{FromPiece.Field}";
+
+                    if (i != 7)
+                        _IDString += "-";
+                    else if (j != 7)
+                        _IDString += "-";
+
                     for (int x = 0; x < 8; x++)
                     {
                         LastWasTrue = false;
@@ -283,6 +295,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     }
                 }
             }
+
+            if (ChessBoardHistory.Count > 0)
+                ChessBoardHistory[^1].IDString = _IDString;
 
             if (OriginalChess.Clones.Count == 0)
                 Console.Write("\n");
@@ -350,6 +365,19 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = ChessState.Draw;
             if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(WhiteKing.Field) && WhitePieces.Count == 1)
                 GameState = ChessState.Draw;
+
+            //-------
+
+            var g = ChessBoardHistory.GroupBy(i => i.IDString.ToString());
+
+            foreach (var grp in g)
+            {
+                if (grp.Count() >= 3)
+                    GameState = ChessState.Draw;
+                Console.WriteLine(grp.Key + " - " + grp.Count().ToString());
+            }
+
+            //--------
 
             if (forcedDraw)
                 GameState = ChessState.Draw;
@@ -520,6 +548,33 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 throw new NullReferenceException("Chess Piece Type is Null.");
 
             Board.SetPiece(To, ChessPieceUtils.NewChessPieceByType(team, field, CPT ?? ChessPieceType.None));
+        }
+
+        private void CheckEnPassant()
+        {
+            if (ChessPieceMoveHistory.Count > 0)
+            {
+                if (Board.GetPiece(from).Team == Team.White)
+                {
+                    if (char.GetNumericValue(ChessPieceMoveHistory[^1].Item1.Field[1]) == 7 &&
+                        char.GetNumericValue(ChessPieceMoveHistory[^1].Item2.Field[1]) == 5 &&
+                        ChessPieceMoveHistory[^1].Item2.Field[0] == to[0] && char.GetNumericValue(to[1]) == 6)
+                    {
+                        Board.SetPiece(ChessPieceMoveHistory[^1].Item2.Field, new EmptyPiece(Team.White, ChessPieceMoveHistory[^1].Item2.Field));
+                        return true;
+                    }
+                }
+                else if (Board.GetPiece(from).Team == Team.Black)
+                {
+                    if (char.GetNumericValue(ChessPieceMoveHistory[^1].Item1.Field[1]) == 2 &&
+                        char.GetNumericValue(ChessPieceMoveHistory[^1].Item2.Field[1]) == 4 &&
+                        ChessPieceMoveHistory[^1].Item2.Field[0] == to[0] && char.GetNumericValue(to[1]) == 3)
+                    {
+                        Board.SetPiece(ChessPieceMoveHistory[^1].Item2.Field, new EmptyPiece(Team.White, ChessPieceMoveHistory[^1].Item2.Field));
+                        return true;
+                    }
+                }
+            }
         }
 
         /// <summary>

@@ -13,6 +13,8 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public Guid Test = Guid.NewGuid();
 
+        public string IDString = "";
+
         public ChessBoard(ChessBoard origin)
         {
             Board = origin.Board;
@@ -97,6 +99,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
             }
             board.Board = boardClone;
+            board.IDString = (string)IDString.Clone();
             boardClone = null;
             return board;
         }
