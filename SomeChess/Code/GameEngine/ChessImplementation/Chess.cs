@@ -540,16 +540,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             return false;
         }
 
-        private void TransformPawnPiece(string To, Team team, string field)
-        {
-            ChessPieceType? CPT = FrontendPageChessBoard.GetPawnTransform().Result;
-            
-            if (CPT == null)
-                throw new NullReferenceException("Chess Piece Type is Null.");
-
-            Board.SetPiece(To, ChessPieceUtils.NewChessPieceByType(team, field, CPT ?? ChessPieceType.None));
-        }
-
         public void TransformPawn(Team team, string field, ChessPieceType CePiTy) => Board.SetPiece(field, ChessPieceUtils.NewChessPieceByType(team, field, CePiTy));
 
         private bool CheckEnPassant(ChessPiece _FromPiece, string To, int direction)
@@ -747,14 +737,14 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {
                 if (FromPiece.PieceType == ChessPieceType.Pawn && Char.GetNumericValue(To[1]) == 8)
                 {
-                    TransformPawnPiece(To, FromPiece.Team, FromPiece.Field);
+                    FrontendPageChessBoard.DoPawnTransformStart(FromPiece);
                 }
             }
             else
             {
                 if (FromPiece.PieceType == ChessPieceType.Pawn && To[1] == '1')
                 {
-                    TransformPawnPiece(To, FromPiece.Team, FromPiece.Field);
+                    FrontendPageChessBoard.DoPawnTransformStart(FromPiece);
                 }
             }
 
