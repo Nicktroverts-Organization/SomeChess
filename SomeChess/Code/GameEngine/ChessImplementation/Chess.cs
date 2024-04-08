@@ -48,7 +48,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public List<Chess>? Clones;
 
 
-        public Guid ChessID = Guid.NewGuid();
+        public Guid Test = Guid.NewGuid();
 
 
         public int MadeMoves = 0;
@@ -452,7 +452,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
         }
 
-        private bool CheckCastling(string To, List<string> fieldsEnemyCanMoveTo, int row)
+        private bool CheckCastling(string To, List<string> fieldsEnemyCanMoveTo, int row) // no idea how to explain this ;-;
         {
             if (To == $"g{row}")
             {

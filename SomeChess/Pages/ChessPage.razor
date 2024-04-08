@@ -17,7 +17,7 @@
     <h1 class="font-bold text-5xl" style="color: var(--TextColor)">@(Name)</h1>
 </div>
 
-<ChessField></ChessField>
+<Chessboard></Chessboard>
 
 
 @code
@@ -25,27 +25,32 @@
     [Parameter]
     public int MatchID { get; set; }
 
-    public string Name;
+    public string Name = "";
 
 
-    protected override async Task OnInitializedAsync()
-    {
-        await social.FetchPlayerAsync();
-        Name = social.CurrentPlayer.Name;
-        
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    await social.FetchPlayerAsync();
+    //    Name = social.CurrentPlayer.Name;
+    //    
+    //}
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+
         if(firstRender)
         {
-            
-            if (social.CurrentPlayer == null)
+            await social.FetchPlayerAsync();
+            Name = social.CurrentPlayer.Name;
+
+            if (social.CurrentPlayer == null || social.CurrentPlayer.PlayersMatch == 0)
             {
                 Console.WriteLine("Cannot fetch: user is null");
                 NavigationManager.NavigateTo("/", forceLoad: true);
             }
+
+            StateHasChanged();
         }
     }
 }
