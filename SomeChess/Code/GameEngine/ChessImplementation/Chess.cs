@@ -18,7 +18,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public ILogger logger = LoggingHandler.GetLogger<Chess>();
 
         
-        public ChessState GameState = ChessState.None;
+        public ChessState GameState { get; private set; } = ChessState.None;
 
 
         public Chessboard FrontendPageChessBoard;
@@ -100,6 +100,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         }
 
         /// <summary>
+        /// <para>Defines whether one of both teams gave up.</para>
+        /// </summary>
+        public Team? Surrender = null;
+
+        /// <summary>
         /// <para>Gets <see cref="Chess"/>.</para>
         /// </summary>
         public Chess Game
@@ -117,6 +122,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (Clones == null)
                 Clones = new();
             ResetBoard();
+        }
+
+        /// <summary>
+        /// <para>Make the Team given in the argument give up.</para>
+        /// </summary>
+        /// <param name="team"></param>
+        public void GiveUp(Team team)
+        {
+            Surrender = team;
         }
 
         /// <summary>
@@ -329,6 +343,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = ChessState.Draw;
             if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(WhiteKing.Field) && WhitePieces.Count == 1)
                 GameState = ChessState.Draw;
+
+            if (Surrender != null)
+            {
+                GameState = Surrender == Team.White ? ChessState.BlackWin : ChessState.WhiteWin;
+            }
 
             if (OriginalChess.Clones.Count == 0)
             {
@@ -664,7 +683,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             if (TeamTurn == Team.White)
             {
-                if (FromPiece.PieceType == ChessPieceType.Pawn && To[1] == '8')
+                if (FromPiece.PieceType == ChessPieceType.Pawn && Char.GetNumericValue(To[1]) == 8)
                 {
                     TransformPawnPiece(To, FromPiece.Team, FromPiece.Field);
                 }
