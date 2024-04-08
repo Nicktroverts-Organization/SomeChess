@@ -9,9 +9,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
     {
         //public string ChessID;
 
-        public ChessBoard Board = new();
-
-
         public static List<char> AlphConversionChars = new()
             { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
@@ -487,6 +484,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             return false;
         }
 
+        private void TransformPawnPiece(string To, string From)
+        {
+            //Future me, write this code, my brain is out of energy right now.
+        }
+
         /// <summary>
         /// <para>Moves the piece from field <paramref name="From"/> to the field <paramref name="To"/>.</para>
         /// </summary>
@@ -646,6 +648,21 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             //Moves the piece to the new position
             Board.SetPiece(To, FromPiece);
             Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
+
+            if (TeamTurn == Team.White)
+            {
+                if (FromPiece.PieceType == ChessPieceType.Pawn && To[1] == '8')
+                {
+                    TransformPawnPiece(To, From);
+                }
+            }
+            else
+            {
+                if (FromPiece.PieceType == ChessPieceType.Pawn && To[1] == '1')
+                {
+                    TransformPawnPiece(To, From);
+                }
+            }
 
             //Successfully moved piece from field "From" to field "To"
             return true;
