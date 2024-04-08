@@ -9,9 +9,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
     {
         //public string ChessID;
 
-        public ChessBoard Board = new();
-
-
         public static List<char> AlphConversionChars = new()
             { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
