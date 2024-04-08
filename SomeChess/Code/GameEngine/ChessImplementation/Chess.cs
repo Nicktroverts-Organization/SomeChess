@@ -53,6 +53,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public int MadeMoves = 0;
         public List<Tuple<ChessPiece, ChessPiece, bool>> ChessPieceMoveHistory = new();
+        public List<ChessBoard> ChessBoardHistory = new();
 
         /// <summary>
         /// <para>Whether or not the game is currently running</para>
@@ -484,9 +485,14 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             return false;
         }
 
-        private void TransformPawnPiece(string To, string From)
+        private void TransformPawnPiece(string To, Team team, string field)
         {
-            //Future me, write this code, my brain is out of energy right now.
+            ChessPieceType? CPT = FrontendPageChessBoard.GetPawnTransform().Result;
+            
+            if (CPT == null)
+                throw new NullReferenceException("Chess Piece Type is Null.");
+
+            Board.SetPiece(To, ChessPieceUtils.NewChessPieceByType(team, field, CPT ?? ChessPieceType.None));
         }
 
         /// <summary>
@@ -583,7 +589,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         if (CheckCastling(To, FieldsBlackCanMoveTo, 1))
                         {
                             if (OriginalChess.Clones.Count == 0)
+                            {
                                 ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
+                                ChessBoardHistory.Add((ChessBoard)Board.Clone());
+                            }
 
                             FromPiece.Field = To;
 
@@ -602,7 +611,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         if (CheckCastling(To, FieldsWhiteCanMoveTo, 8))
                         {
                             if (OriginalChess.Clones.Count == 0)
+                            {
                                 ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
+                                ChessBoardHistory.Add((ChessBoard)Board.Clone());
+                            }
 
                             FromPiece.Field = To;
 
@@ -641,6 +653,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
 
                 ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), false));
+                ChessBoardHistory.Add((ChessBoard)Board.Clone());
             }
 
             FromPiece.Field = To;
@@ -653,14 +666,14 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             {
                 if (FromPiece.PieceType == ChessPieceType.Pawn && To[1] == '8')
                 {
-                    TransformPawnPiece(To, From);
+                    TransformPawnPiece(To, FromPiece.Team, FromPiece.Field);
                 }
             }
             else
             {
                 if (FromPiece.PieceType == ChessPieceType.Pawn && To[1] == '1')
                 {
-                    TransformPawnPiece(To, From);
+                    TransformPawnPiece(To, FromPiece.Team, FromPiece.Field);
                 }
             }
 
