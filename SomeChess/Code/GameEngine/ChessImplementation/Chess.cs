@@ -733,18 +733,21 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             Board.SetPiece(To, FromPiece);
             Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
 
-            if (TeamTurn == Team.White)
+            if (OriginalChess.Clones.Count == 0)
             {
-                if (FromPiece.PieceType == ChessPieceType.Pawn && Char.GetNumericValue(To[1]) == 8)
+                if (TeamTurn == Team.White)
                 {
-                    FrontendPageChessBoard.DoPawnTransformStart(FromPiece);
+                    if (FromPiece.PieceType == ChessPieceType.Pawn && Char.GetNumericValue(To[1]) == 8)
+                    {
+                        FrontendPageChessBoard.DoPawnTransformStart(FromPiece);
+                    }
                 }
-            }
-            else
-            {
-                if (FromPiece.PieceType == ChessPieceType.Pawn && To[1] == '1')
+                else
                 {
-                    FrontendPageChessBoard.DoPawnTransformStart(FromPiece);
+                    if (FromPiece.PieceType == ChessPieceType.Pawn && To[1] == '1')
+                    {
+                        FrontendPageChessBoard.DoPawnTransformStart(FromPiece);
+                    }
                 }
             }
 
