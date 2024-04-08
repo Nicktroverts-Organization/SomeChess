@@ -61,8 +61,8 @@ window.addEventListener("dragover", function (event) {
 
 window.addEventListener('mousemove', function (event) {
     if (window.draggingElement) {
-        var offsetX = event.clientX;
-        var offsetY = event.clientY;
+        var offsetX = event.clientX - 27;
+        var offsetY = event.clientY - 27;
         window.draggingElement.style.left = offsetX + 'px';
         window.draggingElement.style.top = offsetY + 'px';
     }
@@ -74,8 +74,8 @@ window.addEventListener('mouseup', function (event) {
 
 window.addEventListener('dragstart', function (event) {
     window.draggingElement = event.target;
-    event.target.offsetX = event.clientX;
-    event.target.offsetY = event.clientY;
+    event.target.offsetX = event.clientX - 27;
+    event.target.offsetY = event.clientY - 27;
     event.target.style.position = 'absolute';
 });
 
