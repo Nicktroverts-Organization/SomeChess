@@ -293,3 +293,6 @@
         color: white;
         background-color: rgb(113, 180, 132);
     }
+    .minusmargintop {
+        margin-top: -6vh;
+    }
