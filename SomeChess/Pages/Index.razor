@@ -31,20 +31,11 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        Console.Clear();
-        try
-        {
-            Console.WriteLine(String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 5)) + "Chess" + String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 5)));
-        }
-        catch
-        {
-            Console.WriteLine("      Chess      ");
-        }
-        LoggingHandler.DrawSeperatorLine(ConsoleColor.Gray);
 
         if(firstRender)
         {
             await social.FetchPlayerAsync();
+            
             if(social.CurrentPlayer == null)
             {
                 Console.WriteLine("Index.razor: Current user is null");
@@ -56,6 +47,17 @@
                 StateHasChanged();
             }
         }
+
+        Console.Clear();
+        try
+        {
+            Console.WriteLine(String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 5)) + "Chess" + String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 5)));
+        }
+        catch
+        {
+            Console.WriteLine("      Chess      ");
+        }
+        LoggingHandler.DrawSeperatorLine(ConsoleColor.Gray);
     }
 
 

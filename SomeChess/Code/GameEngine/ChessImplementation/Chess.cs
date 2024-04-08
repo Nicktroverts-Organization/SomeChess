@@ -48,7 +48,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public List<Chess>? Clones;
 
 
-        public Guid ChessID = Guid.NewGuid();
+        public Guid Test = Guid.NewGuid();
 
 
         public int MadeMoves = 0;

@@ -611,7 +611,7 @@
     public ChessMatch CreateChessMatch(GameMode mode)
     {
 
-        ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode);
+        ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode, this);
         social.CurrentPlayer.PlayersMatch = newMatch.MatchID;
         MatchSearching.GetInstance().AddMatch(newMatch);
 
