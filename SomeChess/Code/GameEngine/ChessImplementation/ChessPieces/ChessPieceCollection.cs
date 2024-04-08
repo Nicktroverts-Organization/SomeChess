@@ -13,6 +13,32 @@ using SomeChess.Code.MatchMaking;
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
+
+    public static class ChessPieceUtils
+    {
+        public static ChessPiece NewChessPieceByType(Team team, string field, ChessPieceType type)
+        {
+            switch (type)
+            {
+                case ChessPieceType.Pawn:
+                    return new PawnPiece(team, field);
+                case ChessPieceType.Knight:
+                    return new KnightPiece(team, field);
+                case ChessPieceType.Rook:
+                    return new RookPiece(team, field);
+                case ChessPieceType.Queen:
+                    return new QueenPiece(team, field);
+                case ChessPieceType.King:
+                    return new KingPiece(team, field);
+                case ChessPieceType.Bishop:
+                    return new BishopPiece(team, field);
+                case ChessPieceType.None:
+                    return new EmptyPiece(team, field);
+            }
+
+            throw new ArgumentNullException();
+        }
+    }
     public class KnightPiece : ChessPiece
     {
         public KnightPiece(Team team, string field) : base(team, field)

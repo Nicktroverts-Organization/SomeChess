@@ -18,7 +18,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public ILogger logger = LoggingHandler.GetLogger<Chess>();
 
         
-        public ChessState GameState = ChessState.None;
+        public ChessState GameState { get; private set; } = ChessState.None;
 
 
         public Chessboard FrontendPageChessBoard;
@@ -53,6 +53,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public int MadeMoves = 0;
         public List<Tuple<ChessPiece, ChessPiece, bool>> ChessPieceMoveHistory = new();
+        public List<ChessBoard> ChessBoardHistory = new();
 
         /// <summary>
         /// <para>Whether or not the game is currently running</para>
@@ -99,6 +100,16 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         }
 
         /// <summary>
+        /// <para>Defines whether one of both teams gave up.</para>
+        /// </summary>
+        private Team? Surrender = null;
+
+        /// <summary>
+        /// <para>Defines whether or not a draw is being forced.</para>
+        /// </summary>
+        private bool forcedDraw = false;
+
+        /// <summary>
         /// <para>Gets <see cref="Chess"/>.</para>
         /// </summary>
         public Chess Game
@@ -117,6 +128,17 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 Clones = new();
             ResetBoard();
         }
+
+        /// <summary>
+        /// <para>Make the Team given in the argument <paramref name="team"/> give up and lose.</para>
+        /// </summary>
+        /// <param name="team"></param>
+        public void GiveUp(Team team) => Surrender = team;
+
+        /// <summary>
+        /// <para>Force a draw.</para>
+        /// </summary>
+        public void ForceDraw() => forcedDraw = true;
 
         /// <summary>
         /// <para>Returns <see cref="Chess"/> class for current chess game</para>
@@ -268,6 +290,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             //set default state to playing
             GameState = ChessState.Playing;
 
+
+            //Beispiel//
+
+
             if (OriginalChess.Clones.Count == 0)
             {
                 Task CleanUpWhite = new Task(CleanUpFieldsWhiteCanMoveTo);
@@ -325,6 +351,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (WhiteKingCanMove == false && !FieldsBlackCanMoveTo.Contains(WhiteKing.Field) && WhitePieces.Count == 1)
                 GameState = ChessState.Draw;
 
+            if (forcedDraw)
+                GameState = ChessState.Draw;
+
+            if (Surrender != null)
+                GameState = Surrender == Team.White ? ChessState.BlackWin : ChessState.WhiteWin;
+
             if (OriginalChess.Clones.Count == 0)
             {
                 if (GameState == ChessState.Playing)
@@ -353,6 +385,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
             }
         }
+
+
+        //Beispiel//
+
 
         private void CleanUpFieldsWhiteCanMoveTo()
         {
@@ -444,7 +480,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
         }
 
-        private bool CheckCastling(string To, List<string> fieldsEnemyCanMoveTo, int row)
+        private bool CheckCastling(string To, List<string> fieldsEnemyCanMoveTo, int row) // no idea how to explain this ;-;
         {
             if (To == $"g{row}")
             {
@@ -474,6 +510,16 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
 
             return false;
+        }
+
+        private void TransformPawnPiece(string To, Team team, string field)
+        {
+            ChessPieceType? CPT = FrontendPageChessBoard.GetPawnTransform().Result;
+            
+            if (CPT == null)
+                throw new NullReferenceException("Chess Piece Type is Null.");
+
+            Board.SetPiece(To, ChessPieceUtils.NewChessPieceByType(team, field, CPT ?? ChessPieceType.None));
         }
 
         /// <summary>
@@ -570,7 +616,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         if (CheckCastling(To, FieldsBlackCanMoveTo, 1))
                         {
                             if (OriginalChess.Clones.Count == 0)
+                            {
                                 ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
+                                ChessBoardHistory.Add((ChessBoard)Board.Clone());
+                            }
 
                             FromPiece.Field = To;
 
@@ -589,7 +638,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         if (CheckCastling(To, FieldsWhiteCanMoveTo, 8))
                         {
                             if (OriginalChess.Clones.Count == 0)
+                            {
                                 ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
+                                ChessBoardHistory.Add((ChessBoard)Board.Clone());
+                            }
 
                             FromPiece.Field = To;
 
@@ -628,6 +680,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
 
                 ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), false));
+                ChessBoardHistory.Add((ChessBoard)Board.Clone());
             }
 
             FromPiece.Field = To;
@@ -635,6 +688,21 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             //Moves the piece to the new position
             Board.SetPiece(To, FromPiece);
             Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
+
+            if (TeamTurn == Team.White)
+            {
+                if (FromPiece.PieceType == ChessPieceType.Pawn && Char.GetNumericValue(To[1]) == 8)
+                {
+                    TransformPawnPiece(To, FromPiece.Team, FromPiece.Field);
+                }
+            }
+            else
+            {
+                if (FromPiece.PieceType == ChessPieceType.Pawn && To[1] == '1')
+                {
+                    TransformPawnPiece(To, FromPiece.Team, FromPiece.Field);
+                }
+            }
 
             //Successfully moved piece from field "From" to field "To"
             return true;
