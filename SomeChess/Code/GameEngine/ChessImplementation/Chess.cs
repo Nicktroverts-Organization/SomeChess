@@ -546,20 +546,21 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             if (ChessPieceMoveHistory.Count == 0) return false;
 
+            if (ChessPieceMoveHistory[^1].Item1.PieceType != ChessPieceType.Pawn) return false;
+
+            //Big chungus check
             if (AlphConversionChars.IndexOf(ChessPieceMoveHistory[^1].Item1.Field[0]) ==
                 AlphConversionChars.IndexOf(FromPiece.Field[0]) - 1 ||
                 AlphConversionChars.IndexOf(ChessPieceMoveHistory[^1].Item1.Field[0]) ==
                 AlphConversionChars.IndexOf(FromPiece.Field[0]) + 1)
-            {
                 if (char.GetNumericValue(ChessPieceMoveHistory[^1].Item1.Field[1]) ==
                     char.GetNumericValue(FromPiece.Field[1]) + (direction * 2) &&
                     char.GetNumericValue(ChessPieceMoveHistory[^1].Item2.Field[1]) ==
                     char.GetNumericValue(FromPiece.Field[1]))
-                {
-                    Console.WriteLine("\n\nShould be able to do En Passant right now!!!");
-                    return true;
-                }
-            }
+                    if (AlphConversionChars.IndexOf(To[0]) == AlphConversionChars.IndexOf(FromPiece.Field[0]) + 1 || AlphConversionChars.IndexOf(To[0]) == AlphConversionChars.IndexOf(FromPiece.Field[0]) - 1)
+                        return true;
+
+
 
             return false;
         }
@@ -655,14 +656,42 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 {
                     if (CheckEnPassant(FromPiece, To, 1))
                     {
+                        Board.SetPiece($"{To[0]}{(char.GetNumericValue(To[1]) - 1)}", new EmptyPiece(FromPiece.Team, $"{To[0]}{(char.GetNumericValue(To[1]) - 1)}"));
 
+                        if (OriginalChess.Clones.Count == 0)
+                        {
+                            ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), new PawnPiece(Team.White, $"{To[0]}{(char.GetNumericValue(To[1]) - 1)}"), true));
+                            ChessBoardHistory.Add((ChessBoard)Board.Clone());
+                        }
+
+                        FromPiece.Field = To;
+
+                        //Moves the piece to the new position
+                        Board.SetPiece(To, FromPiece);
+                        Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
+
+                        return true;
                     }
                 }
                 else
                 {
                     if (CheckEnPassant(FromPiece, To, -1))
                     {
+                        Board.SetPiece($"{To[0]}{(char.GetNumericValue(To[1]) + 1)}", new EmptyPiece(FromPiece.Team, $"{To[0]}{(char.GetNumericValue(To[1]) + 1)}"));
 
+                        if (OriginalChess.Clones.Count == 0)
+                        {
+                            ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), new PawnPiece(Team.Black, $"{To[0]}{(char.GetNumericValue(To[1]) + 1)}"), true));
+                            ChessBoardHistory.Add((ChessBoard)Board.Clone());
+                        }
+
+                        FromPiece.Field = To;
+
+                        //Moves the piece to the new position
+                        Board.SetPiece(To, FromPiece);
+                        Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
+
+                        return true;
                     }
                 }
             }
