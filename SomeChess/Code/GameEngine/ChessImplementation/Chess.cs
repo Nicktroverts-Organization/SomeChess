@@ -133,17 +133,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         }
 
         /// <summary>
-        /// <para>Make the Team given in the argument <paramref name="team"/> give up and lose.</para>
-        /// </summary>
-        /// <param name="team"></param>
-        public void GiveUp(Team team) => Surrender = team;
-
-        /// <summary>
-        /// <para>Force a draw.</para>
-        /// </summary>
-        public void ForceDraw() => forcedDraw = true;
-
-        /// <summary>
         /// <para>Returns <see cref="Chess"/> class for current chess game</para>
         /// </summary>
         /// <returns><see cref="Chess"/> class for current chess game</returns>
@@ -414,9 +403,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
         }
 
-
-        //Beispiel//
-
+        //--------UpdateGameState private Methods-----------
 
         private void CleanUpFieldsWhiteCanMoveTo()
         {
@@ -508,6 +495,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
         }
 
+
+        //--------MovePiece private Methods-----------
+
         private bool CheckCastling(string To, List<string> fieldsEnemyCanMoveTo, int row) // no idea how to explain this ;-;
         {
             if (To == $"g{row}")
@@ -539,8 +529,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             return false;
         }
-
-        public void TransformPawn(Team team, string field, ChessPieceType CePiTy) => Board.SetPiece(field, ChessPieceUtils.NewChessPieceByType(team, field, CePiTy));
 
         private bool CheckEnPassant(ChessPiece FromPiece, string To, int direction)
         {
@@ -799,6 +787,25 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             //Successfully moved piece from field "From" to field "To"
             return true;
         }
+
+
+        //-----------Smol methods------------
+
+        public void TransformPawn(Team team, string field, ChessPieceType CePiTy) => Board.SetPiece(field, ChessPieceUtils.NewChessPieceByType(team, field, CePiTy));
+
+        /// <summary>
+        /// <para>Make the Team given in the argument <paramref name="team"/> give up and lose.</para>
+        /// </summary>
+        /// <param name="team"></param>
+        public void GiveUp(Team team) => Surrender = team;
+
+        /// <summary>
+        /// <para>Force a draw.</para>
+        /// </summary>
+        public void ForceDraw() => forcedDraw = true;
+
+
+        //-----Implementation Methods---------
 
         public object Clone()
         {
