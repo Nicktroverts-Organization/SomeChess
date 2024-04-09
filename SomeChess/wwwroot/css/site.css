@@ -205,9 +205,6 @@
 .chessPiece[draggable] {
     cursor: pointer;
 }
-chessPiece {
-    padding: 8px 8px;
-}
 
 .gameOverScreen {
     right: 50%;
