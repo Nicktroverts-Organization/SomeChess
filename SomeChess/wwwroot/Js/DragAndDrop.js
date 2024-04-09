@@ -74,7 +74,7 @@ window.addEventListener('mouseup', function (event) {
 
 window.addEventListener('dragstart', function (event) {
     window.draggingElement = event.target;
-    event.target.offsetX = event.clientX - 27;
+    event.target.offsetX = event.clientX -27;
     event.target.offsetY = event.clientY - 27;
     event.target.style.position = 'absolute';
 });

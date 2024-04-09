@@ -127,7 +127,6 @@
 }
 /*buttons*/
 
-
 .greengradient {
     font-size: 400%;
     background-image: linear-gradient(to right, rgb(182, 244, 146), rgb(51, 139, 147));
@@ -205,6 +204,9 @@
 
 .chessPiece[draggable] {
     cursor: pointer;
+}
+chessPiece {
+    padding: 8px 8px;
 }
 
 .gameOverScreen {
@@ -295,4 +297,8 @@
     }
     .minusmargintop {
         margin-top: -6vh;
+    }
+    img {
+        height: 80px;
+        width: 80px;
     }
