@@ -542,9 +542,25 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public void TransformPawn(Team team, string field, ChessPieceType CePiTy) => Board.SetPiece(field, ChessPieceUtils.NewChessPieceByType(team, field, CePiTy));
 
-        private bool CheckEnPassant(ChessPiece _FromPiece, string To, int direction)
+        private bool CheckEnPassant(ChessPiece FromPiece, string To, int direction)
         {
-            //My brains i incompetent and i hope to die.
+            if (ChessPieceMoveHistory.Count == 0) return false;
+
+            if (AlphConversionChars.IndexOf(ChessPieceMoveHistory[^1].Item1.Field[0]) ==
+                AlphConversionChars.IndexOf(FromPiece.Field[0]) - 1 ||
+                AlphConversionChars.IndexOf(ChessPieceMoveHistory[^1].Item1.Field[0]) ==
+                AlphConversionChars.IndexOf(FromPiece.Field[0]) + 1)
+            {
+                if (char.GetNumericValue(ChessPieceMoveHistory[^1].Item1.Field[1]) ==
+                    char.GetNumericValue(FromPiece.Field[1]) + (direction * 2) &&
+                    char.GetNumericValue(ChessPieceMoveHistory[^1].Item2.Field[1]) ==
+                    char.GetNumericValue(FromPiece.Field[1]))
+                {
+                    Console.WriteLine("\n\nShould be able to do En Passant right now!!!");
+                    return true;
+                }
+            }
+
             return false;
         }
 
