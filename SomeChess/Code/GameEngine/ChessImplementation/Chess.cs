@@ -17,6 +17,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
 
         public ChessBoard Board = new();
+        public ChessBoard? LatestBoard = null;
 
         public ILogger logger = LoggingHandler.GetLogger<Chess>();
 
@@ -83,6 +84,15 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             get => GameState == ChessState.Draw;
             set => throw new InvalidOperationException(nameof(IsDraw) + "can't be set!");
+        }
+
+        /// <summary>
+        /// <para>Whether or not the Current viewed board is the latest one.</para>
+        /// </summary>
+        public bool IsLatestPosition
+        {
+            get => Board.IDString == LatestBoard.IDString;
+            set => throw new InvalidOperationException(nameof(IsLatestPosition) + "can't be set!");
         }
 
         /// <summary>
@@ -181,6 +191,33 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             TeamTurn = TeamTurn == Team.White ? Team.Black : Team.White;
             MadeMoves++;
+            UpdateGameState();
+        }
+
+        /// <summary>
+        /// <para>Sets the <see cref="Board"/> variable to the Specified index of the <see cref="ChessBoardHistory"/>.</para>
+        /// </summary>
+        /// <param name="index"></param>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        public void ViewPosition(int index)
+        {
+            LatestBoard = (ChessBoard)Board.Clone();
+            if (index < ChessBoardHistory.Count)
+                Board = (ChessBoard)ChessBoardHistory[index].Clone();
+            else
+                throw new IndexOutOfRangeException($"The given index was larger than the size of {nameof(ChessBoardHistory)}");
+            
+            UpdateGameState();
+        }
+
+        /// <summary>
+        /// <para>Sets the <see cref="Board"/> variable to the Latest Position that existed.</para>
+        /// </summary>
+        public void ViewLatestPosition()
+        {
+            if (LatestBoard is not null)
+                Board = (ChessBoard)LatestBoard.Clone();
+
             UpdateGameState();
         }
 
@@ -352,6 +389,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = ChessState.Draw;
             if (Surrender != null)
                 GameState = Surrender == Team.White ? ChessState.BlackWin : ChessState.WhiteWin;
+
+
+            LatestBoard = (ChessBoard)Board.Clone();
+
 
             // Some logging and Console output
             WinStateConsoleLogging();
@@ -595,7 +636,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <param name="To">The field to move the piece to.</param>
         /// <returns>Returns whether or not it was successfully moved</returns>
         public bool MovePiece(string From, string To)
-         {
+        {
+            if (!IsLatestPosition)
+                return false;
+
             //Check that game is running
             if (GameState != ChessState.Playing)
             {
@@ -687,8 +731,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         {
                             if (OriginalChess.Clones.Count == 0)
                             {
-                                ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
-                                ChessBoardHistory.Add((ChessBoard)Board.Clone());
+                                AddHistory(From, To, true);
                             }
 
                             FromPiece.Field = To;
@@ -709,8 +752,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         {
                             if (OriginalChess.Clones.Count == 0)
                             {
-                                ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), true));
-                                ChessBoardHistory.Add((ChessBoard)Board.Clone());
+                                AddHistory(From, To, true);
                             }
 
                             FromPiece.Field = To;
@@ -737,21 +779,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
 
             if (OriginalChess.Clones.Count == 0)
-            {
-                if (FromPiece.PieceType == ChessPieceType.Pawn)
-                {
-                    if (To[1] == '8' || To[1] == '1')
-                    {
-                        //ChessPiece PawnToChessPiece = FrontendPageChessBoard.TransformPawn(FromPiece.Team, Board.GetPiece(To));
-                        //Board.SetPiece(To, PawnToChessPiece);
-                        //Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From);
-                        //return true;
-                    }
-                }
-
-                ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)FromPiece.Clone(), (ChessPiece)Board.GetPiece(To).Clone(), false));
-                ChessBoardHistory.Add((ChessBoard)Board.Clone());
-            }
+                AddHistory(From, To, false);
 
             FromPiece.Field = To;
 
@@ -779,6 +807,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             //Successfully moved piece from field "From" to field "To"
             return true;
+        }
+
+        private void AddHistory(string from, string to, bool Castled)
+        {
+            ChessPieceMoveHistory.Add(new Tuple<ChessPiece, ChessPiece, bool>((ChessPiece)Board.GetPiece(from).Clone(), (ChessPiece)Board.GetPiece(to).Clone(), Castled));
+            ChessBoardHistory.Add((ChessBoard)Board.Clone());
         }
 
 
