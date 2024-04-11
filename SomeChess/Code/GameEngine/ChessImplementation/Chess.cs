@@ -1,10 +1,7 @@
 ﻿//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
 //ispolzovat KakietoSchachmaty.Kod.IgrovoiDvighok;
 
-using System.Text;
-using Newtonsoft.Json;
 using SomeChess.Components;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
@@ -21,13 +18,13 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public ILogger logger = LoggingHandler.GetLogger<Chess>();
 
-        
+
         public ChessState GameState { get; private set; } = ChessState.None;
 
 
         public Chessboard FrontendPageChessBoard;
 
-        
+
         public Team TeamTurn = Team.White;
 
 
@@ -91,8 +88,26 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// </summary>
         public bool IsLatestPosition
         {
-            get => Board.Test == LatestBoard.Test;
+            get {
+                if (LatestBoard == null) return true;
+                return Board.Test == LatestBoard.Test;
+            }
             set => throw new InvalidOperationException(nameof(IsLatestPosition) + "can't be set!");
+        }
+
+        /// <summary>
+        /// <para>Gives the index of which position of the move history is currently selected.</para>
+        /// </summary>
+        public int MatchingPositionFromHistory
+        {
+            get
+            {
+                for (int i = 0; i < ChessBoardHistory.Count; i++)
+                    if (Board.Test == ChessBoardHistory[i].Test)
+                        return i;
+                return ChessBoardHistory.Count;
+            }
+            set => throw new InvalidOperationException(nameof(MatchingPositionFromHistory) + "can't be set!");
         }
 
         /// <summary>
@@ -135,10 +150,8 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public Chess(Chessboard cb)
         {
             FrontendPageChessBoard = cb;
-
             OriginalChess = this;
-            if (Clones == null)
-                Clones = new();
+            Clones ??= new();
             ResetBoard();
         }
 
@@ -217,8 +230,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
             else
                 throw new IndexOutOfRangeException($"The given index was larger than the size of {nameof(ChessBoardHistory)}");
-            
-            //UpdateGameState();
         }
 
         /// <summary>
@@ -232,8 +243,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 Board = (ChessBoard)LatestBoard.Clone();
                 Board.Test = _guid;
             }
-
-            //UpdateGameState();
         }
 
         /// <summary>
@@ -338,7 +347,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void UpdateGameState()
         {
             ClearVariables();
-            if (OriginalChess.Clones.Count == 0)
+            if (OriginalChess.Clones.Count == 0 && IsLatestPosition)
             {
                 LoggingHandler.DrawSeperatorLine(ConsoleColor.Gray);
                 Console.WriteLine(String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 8)) + $"Move-{MadeMoves}" + String.Concat(Enumerable.Repeat(" ", (Console.WindowWidth / 2) - 8)));
@@ -360,7 +369,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
 
             //Clean up the Lists of Fields each team can move to potentially.
-            if (OriginalChess.Clones.Count == 0)
+            if (OriginalChess.Clones.Count == 0 && IsLatestPosition)
             {
                 Task CleanUpWhite = new Task(CleanUpFieldsWhiteCanMoveTo);
                 Task CleanUpBlack = new Task(() => CleanUpFieldsBlackCanMoveTo(CleanUpWhite));
@@ -391,13 +400,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             //Group the Board histoy
             var g = ChessBoardHistory.GroupBy(i => i.IDString.ToString());
-
             foreach (var grp in g)
-            {
-                //If any board ID exists 3 times or more it's a draw.
-                if (grp.Count() >= 3)
+                if (grp.Count() >= 3) //If any board ID exists 3 times or more it's a draw.
                     GameState = ChessState.Draw;
-            }
 
 
             if (forcedDraw)
@@ -406,14 +411,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = Surrender == Team.White ? ChessState.BlackWin : ChessState.WhiteWin;
 
 
-            if (OriginalChess.Clones.Count == 0)
+            if (OriginalChess.Clones.Count == 0 && IsLatestPosition)
             {
-                if (LatestBoard is null || IsLatestPosition)
-                {
-                    Guid _guid = Board.Test;
-                    LatestBoard = (ChessBoard)Board.Clone();
-                    LatestBoard.Test = _guid;
-                }
+                Guid _guid = Board.Test;
+                LatestBoard = (ChessBoard)Board.Clone();
+                LatestBoard.Test = _guid;
             }
 
 
@@ -455,7 +457,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         private void WinStateConsoleLogging()
         {
-            if (OriginalChess.Clones.Count == 0)
+            if (OriginalChess.Clones.Count == 0 && IsLatestPosition)
             {
                 if (GameState == ChessState.Playing)
                 {
@@ -629,7 +631,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     if (AlphConversionChars.IndexOf(To[0]) == AlphConversionChars.IndexOf(FromPiece.Field[0]) + 1 ||
                         AlphConversionChars.IndexOf(To[0]) == AlphConversionChars.IndexOf(FromPiece.Field[0]) - 1)
                     {
-                        Board.SetPiece($"{To[0]}{(char.GetNumericValue(To[1]) + (direction*-1))}", new EmptyPiece(FromPiece.Team, $"{To[0]}{(char.GetNumericValue(To[1]) + (direction * -1))}"));
+                        Board.SetPiece($"{To[0]}{(char.GetNumericValue(To[1]) + (direction * -1))}", new EmptyPiece(FromPiece.Team, $"{To[0]}{(char.GetNumericValue(To[1]) + (direction * -1))}"));
 
                         if (OriginalChess.Clones.Count == 0)
                         {
@@ -831,7 +833,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             if (OriginalChess.Clones.Count == 0)
             {
-                if (LatestBoard is null || IsLatestPosition)
+                if (IsLatestPosition)
                 {
                     Guid _guid = Board.Test;
                     LatestBoard = (ChessBoard)Board.Clone();
