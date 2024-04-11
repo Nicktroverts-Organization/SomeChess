@@ -110,7 +110,7 @@
                                 int thisi = i;
                                 <div class="flex movesNotationHolder">
                                     <div class="w-1/6">
-                                        <p @onclick="() => { ChessGame.ViewPosition(thisi); }" class="h-8 cursor-pointer">
+                                        <p @onclick="() => { ChessGame.ViewPosition(thisi); }" class="h-8 cursor-pointer select-none">
                                             @(moveNumber.ToString() + ". ")
                                             @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
                                             {
@@ -167,7 +167,7 @@
                                     <div class="w-1/2">
                                         @if (i + 1 < MoveHistory.Count)
                                         {
-                                            <p @onclick="() => { ChessGame.ViewPosition(thisi + 1); }" class="h-8 cursor-pointer">
+                                            <p @onclick="() => { ChessGame.ViewPosition(thisi + 1); }" class="h-8 cursor-pointer select-none">
                                                 @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
                                                 {
                                                     @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
