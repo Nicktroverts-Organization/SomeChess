@@ -201,8 +201,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <exception cref="IndexOutOfRangeException"></exception>
         public void ViewPosition(int index)
         {
+            index++;
             LatestBoard = (ChessBoard)Board.Clone();
-            if (index == ChessBoardHistory.Count - 1)
+            if (index == ChessBoardHistory.Count)
             {
                 ViewLatestPosition();
             }
