@@ -1,4 +1,5 @@
-﻿using SomeChess.Code.GameEngine.ChessImplementation;
+﻿using System.Reflection.Metadata.Ecma335;
+using SomeChess.Code.GameEngine.ChessImplementation;
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
@@ -6,19 +7,13 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
     {
         public ChessPiece[,]? Board = Boards.Default;
 
-        public ChessBoard()
-        {
-            return;
-        }
-
         public Guid Test = Guid.NewGuid();
 
         public string IDString = "";
 
-        public ChessBoard(ChessBoard origin)
-        {
-            Board = origin.Board;
-        }
+        public ChessBoard() { return; }
+
+        public ChessBoard(ChessBoard origin) => Board = origin.Board;
 
         public ChessBoard GetCopy()
         {
