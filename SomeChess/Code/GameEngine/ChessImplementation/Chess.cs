@@ -399,9 +399,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = Surrender == Team.White ? ChessState.BlackWin : ChessState.WhiteWin;
 
 
-            Guid _guid = Board.Test;
-            LatestBoard = (ChessBoard)Board.Clone();
-            LatestBoard.Test = _guid;
+            if (OriginalChess.Clones.Count == 0)
+            {
+                Guid _guid = Board.Test;
+                LatestBoard = (ChessBoard)Board.Clone();
+                LatestBoard.Test = _guid;
+            }
 
 
             // Some logging and Console output
@@ -647,8 +650,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <returns>Returns whether or not it was successfully moved</returns>
         public bool MovePiece(string From, string To)
         {
-            if (!IsLatestPosition)
-                return false;
+            if (LatestBoard != null)
+                if (!IsLatestPosition)
+                    return false;
 
             //Check that game is running
             if (GameState != ChessState.Playing)
