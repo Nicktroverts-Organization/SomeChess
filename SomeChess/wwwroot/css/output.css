@@ -544,6 +544,10 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
 .visible {
   visibility: visible;
 }
@@ -1248,4 +1252,9 @@ video {
 
 .minusmargintop {
   margin-top: -6vh;
+}
+
+img {
+  height: 80px;
+  width: 80px;
 }

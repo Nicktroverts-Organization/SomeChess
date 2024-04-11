@@ -71,10 +71,10 @@
                                 <p class="text-3xl from-orange-800">Which peace do you want?</p>
                             </div>
                             <div class="flex text-center justify-around">
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="normalefiguren chessPiece mt-2 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }" /></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="rook chessPiece mt-1.5 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }" /></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_knight.png" class="knight chessPiece selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }" /></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_bishop.png" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" class="normalefiguren chessPiece chessPiece selector" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="normalefiguren chessPiece mt-2 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }"/></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="rook chessPiece mt-1.5 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }"/></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_knight.png" class="knight chessPiece selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }"/></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_bishop.png" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" class="normalefiguren chessPiece chessPiece selector"/></div>
                             </div>
                         </div>
                     </div>
@@ -83,18 +83,18 @@
                 {
                     <div class="backholder ml-24 flex flex-col text-center">
                         <h1 class="greengradient anton-regular">
-                            Play Chess<br />
-                            Online<br />
+                            Play Chess<br/>
+                            Online<br/>
                             on the #1 Site!
                         </h1>
                         <div class="flex text-center flex-col ml-24 mt-5">
                             <div class="flex justify-between playOnline">
-                                <img @onclick="() => { PlayOnline = true; }" width="90" height="2" src="images/online-icon.png" class="selector cursor-pointer" />
-                                <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
+                                <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer"/>
+                                <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br/><span>Play with a real person online!</span></button>
                             </div>
                             <div class="flex justify-between playComputer mt-5">
-                                <img width="85" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1" />
-                                <button class="textInButton">Computer<br /><span class="smalltextPlayComputer">Play vs training bots offline!</span></button>
+                                <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1"/>
+                                <button class="textInButton">Computer<br/><span class="smalltextPlayComputer">Play vs training bots offline!</span></button>
                             </div>
                         </div>
                     </div>
@@ -109,8 +109,12 @@
                                 int moveNumber = i / 2 + 1;
                                 <div class="flex movesNotationHolder">
                                     <div class="w-1/6">
-                                        <p class="h-8">
+                                        <p @onclick="ChessGame.ViewPosition(i)" class="h-8">
                                             @(moveNumber.ToString() + ". ")
+                                            @if (IsLatestPosition == true)
+                                            {
+                                                return false;
+                                            }
                                             @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
                                             {
                                                 @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
@@ -229,8 +233,8 @@
                                 <div class="bg-emerald-900 w-6/12 rounded h-14">
                                     <p class="text-white">Your opponent offered a draw</p>
                                     <div>
-                                        <button @onclick="() => { ChessGame.ForceDraw(); }"><span class="material-symbols-outlined text-lime-500">done</span></button>
-                                        <button @onclick="() => { DrawOffer = false; }"><span class="material-symbols-outlined text-red-700 mt-1.5">close</span></button>
+                                        <button @onclick="() => { ChessGame.ForceDraw(); ChessGame.UpdateGameState(); }"><span class="material-symbols-outlined text-lime-500 cursor-pointer">done</span></button>
+                                        <button @onclick="() => { DrawOffer = false; }"><span class="material-symbols-outlined text-red-700 mt-1.5 cursor-pointer">close</span></button>
                                     </div>
                                 </div>
                             </div>
@@ -315,11 +319,11 @@
                         </h1>
                         <div class="flex text-center flex-col ml-24 mt-5">
                             <div class="flex justify-between playOnline">
-                                <img @onclick="() => { PlayOnline = true; }" width="90" height="2" src="images/online-icon.png" class="selector cursor-pointer" />
+                                <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer" />
                                 <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
                             </div>
                             <div class="flex justify-between playComputer mt-5">
-                                <img width="85" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1" />
+                                <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1" />
                                 <button class="textInButton">Computer<br /><span class="smalltextPlayComputer">Play vs training bots offline!</span></button>
                             </div>
                         </div>
@@ -455,8 +459,8 @@
                                 <div class="bg-emerald-900 w-6/12 rounded h-14">
                                     <p class="text-white">Your opponent offered a draw</p>
                                     <div>
-                                        <button @onclick="() => { ChessGame.ForceDraw(); }"><span class="material-symbols-outlined text-lime-500">done</span></button>
-                                        <button @onclick="() => { DrawOffer = false; }"><span class="material-symbols-outlined text-red-700 mt-1.5">close</span></button>
+                                        <button @onclick="() => { ChessGame.ForceDraw(); ChessGame.UpdateGameState(); }"><span class="material-symbols-outlined text-lime-500 cursor-pointer">done</span></button>
+                                        <button @onclick="() => { DrawOffer = false; }"><span class="material-symbols-outlined text-red-700 mt-1.5 cursor-pointer">close</span></button>
                                     </div>
                                 </div>
                             </div>
@@ -495,7 +499,6 @@
                         <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
                     </div>
                 </div>
-
                 <div>
                     <h2 class="anton-regular mt-7">Rapid</h2>
                     <div class="flex justify-evenly">
