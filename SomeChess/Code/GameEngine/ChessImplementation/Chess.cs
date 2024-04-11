@@ -827,6 +827,16 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
             }
 
+            if (OriginalChess.Clones.Count == 0)
+            {
+                if (LatestBoard is null || IsLatestPosition)
+                {
+                    Guid _guid = Board.Test;
+                    LatestBoard = (ChessBoard)Board.Clone();
+                    LatestBoard.Test = _guid;
+                }
+            }
+
             //Successfully moved piece from field "From" to field "To"
             return true;
         }
