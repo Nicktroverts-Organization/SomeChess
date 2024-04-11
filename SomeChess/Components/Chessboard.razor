@@ -107,14 +107,11 @@
                             @for (int i = 0; i < MoveHistory.Count; i += 2)
                             {
                                 int moveNumber = i / 2 + 1;
+                                int thisi = i;
                                 <div class="flex movesNotationHolder">
                                     <div class="w-1/6">
-                                        <p @onclick="ChessGame.ViewPosition(i)" class="h-8">
+                                        <p @onclick="() => { ChessGame.ViewPosition(thisi); }" class="h-8">
                                             @(moveNumber.ToString() + ". ")
-                                            @if (IsLatestPosition == true)
-                                            {
-                                                return false;
-                                            }
                                             @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
                                             {
                                                 @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
@@ -170,7 +167,7 @@
                                     <div class="w-1/2">
                                         @if (i + 1 < MoveHistory.Count)
                                         {
-                                            <p class="h-8">
+                                            <p @onclick="() => { ChessGame.ViewPosition(thisi + 1); }" class="h-8">
                                                 @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
                                                 {
                                                     @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
@@ -710,18 +707,21 @@
         {
             ToID = id;
             ChessPiece FromPiece = ChessGame.Board.GetPiece(FromID);
-            if (ChessGame.MovePiece(FromID, ToID))
+            if (ChessGame.IsLatestPosition == true)
             {
-                ChessGame.EndTurn();
-                Reload = true;
-                StateHasChanged();
-            }
-            else
-            {
-                ToID = FromID;
-                Reload = true;
-                StateHasChanged();
-                //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                if (ChessGame.MovePiece(FromID, ToID))
+                {
+                    ChessGame.EndTurn();
+                    Reload = true;
+                    StateHasChanged();
+                }
+                else
+                {
+                    ToID = FromID;
+                    Reload = true;
+                    StateHasChanged();
+                    //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                }
             }
         }
     }
