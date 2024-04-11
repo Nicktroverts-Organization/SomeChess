@@ -202,11 +202,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void ViewPosition(int index)
         {
             index++;
-            LatestBoard = (ChessBoard)Board.Clone();
+            if (IsLatestPosition)
+                LatestBoard = (ChessBoard)Board.Clone();
+
             if (index == ChessBoardHistory.Count)
-            {
                 ViewLatestPosition();
-            }
+
             else if (index < ChessBoardHistory.Count)
             {
                 Guid _guid = ChessBoardHistory[index].Test;
