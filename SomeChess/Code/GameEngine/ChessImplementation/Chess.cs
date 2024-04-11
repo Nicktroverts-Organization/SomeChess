@@ -91,7 +91,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// </summary>
         public bool IsLatestPosition
         {
-            get => Board.IDString == LatestBoard.IDString;
+            get => Board.Test == LatestBoard.Test;
             set => throw new InvalidOperationException(nameof(IsLatestPosition) + "can't be set!");
         }
 
@@ -203,7 +203,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             LatestBoard = (ChessBoard)Board.Clone();
             if (index < ChessBoardHistory.Count)
+            {
+                Guid _guid = ChessBoardHistory[index].Test;
                 Board = (ChessBoard)ChessBoardHistory[index].Clone();
+                Board.Test = _guid;
+            }
             else
                 throw new IndexOutOfRangeException($"The given index was larger than the size of {nameof(ChessBoardHistory)}");
             
@@ -216,7 +220,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void ViewLatestPosition()
         {
             if (LatestBoard is not null)
+            {
+                Guid _guid = LatestBoard.Test;
                 Board = (ChessBoard)LatestBoard.Clone();
+                Board.Test = _guid;
+            }
 
             UpdateGameState();
         }
@@ -391,7 +399,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 GameState = Surrender == Team.White ? ChessState.BlackWin : ChessState.WhiteWin;
 
 
+            Guid _guid = Board.Test;
             LatestBoard = (ChessBoard)Board.Clone();
+            LatestBoard.Test = _guid;
 
 
             // Some logging and Console output
