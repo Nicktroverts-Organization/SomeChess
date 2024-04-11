@@ -202,6 +202,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void ViewPosition(int index)
         {
             index++;
+
             if (IsLatestPosition)
                 LatestBoard = (ChessBoard)Board.Clone();
 
@@ -217,7 +218,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             else
                 throw new IndexOutOfRangeException($"The given index was larger than the size of {nameof(ChessBoardHistory)}");
             
-            UpdateGameState();
+            //UpdateGameState();
         }
 
         /// <summary>
@@ -232,7 +233,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 Board.Test = _guid;
             }
 
-            UpdateGameState();
+            //UpdateGameState();
         }
 
         /// <summary>
