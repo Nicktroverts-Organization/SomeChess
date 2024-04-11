@@ -628,6 +628,10 @@ video {
   margin-top: 0px;
 }
 
+.mt-0\.5 {
+  margin-top: 0.125rem;
+}
+
 .mt-1 {
   margin-top: 0.25rem;
 }
@@ -1257,4 +1261,9 @@ video {
 img {
   height: 80px;
   width: 80px;
+}
+
+.selectedMove {
+  background-color: aquamarine;
+  border-radius: 4px;
 }

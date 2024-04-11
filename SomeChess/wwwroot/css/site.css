@@ -299,3 +299,7 @@
         height: 80px;
         width: 80px;
     }
+.selectedMove {
+    background-color: aquamarine;
+    border-radius: 4px;
+}
