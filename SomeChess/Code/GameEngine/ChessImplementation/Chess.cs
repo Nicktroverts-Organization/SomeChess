@@ -102,7 +102,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         {
             get
             {
-                for (int i = 0; i < ChessBoardHistory.Count; i++)
+                for (var i = 0; i < ChessBoardHistory.Count; i++)
                     if (Board.Test == ChessBoardHistory[i].Test)
                         return i;
                 return ChessBoardHistory.Count;
