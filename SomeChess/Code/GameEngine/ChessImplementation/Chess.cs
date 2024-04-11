@@ -202,7 +202,11 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public void ViewPosition(int index)
         {
             LatestBoard = (ChessBoard)Board.Clone();
-            if (index < ChessBoardHistory.Count)
+            if (index == ChessBoardHistory.Count - 1)
+            {
+                ViewLatestPosition();
+            }
+            else if (index < ChessBoardHistory.Count)
             {
                 Guid _guid = ChessBoardHistory[index].Test;
                 Board = (ChessBoard)ChessBoardHistory[index].Clone();
@@ -401,9 +405,12 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             if (OriginalChess.Clones.Count == 0)
             {
-                Guid _guid = Board.Test;
-                LatestBoard = (ChessBoard)Board.Clone();
-                LatestBoard.Test = _guid;
+                if (LatestBoard is null || IsLatestPosition)
+                {
+                    Guid _guid = Board.Test;
+                    LatestBoard = (ChessBoard)Board.Clone();
+                    LatestBoard.Test = _guid;
+                }
             }
 
 
