@@ -81,7 +81,7 @@
                 }
                 @if (!NavMan.Uri.ToLower().Contains("/chess/"))
                 {
-                    <div class="backholder ml-24 flex flex-col text-center">
+                    <div class="backholder border-color ml-24 flex flex-col text-center">
                         <h1 class="greengradient anton-regular">
                             Play Chess<br/>
                             Online<br/>
@@ -89,12 +89,12 @@
                         </h1>
                         <div class="flex text-center flex-col ml-24 mt-5">
                             <div class="flex justify-between playOnline">
-                                <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer"/>
+                                <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer mt-2" />
                                 <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br/><span>Play with a real person online!</span></button>
                             </div>
                             <div class="flex justify-between playComputer mt-5">
-                                <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1"/>
-                                <button class="textInButton">Computer<br/><span class="smalltextPlayComputer">Play vs training bots offline!</span></button>
+                                <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1"/>
+                                <button class="textInButton">Computer<br/><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
                             </div>
                         </div>
                     </div>
@@ -103,14 +103,15 @@
                 {
                     <div class="backholder ml-24 flex flex-col text-center">
                         <h1 class="greengradient anton-regular">Moves Notation</h1>
-                        <div id="move-history" class="move-history flex-col justify-start">
+                        <div id="move-history" class="move-history flex-col justify-center">
                             @for (int i = 0; i < MoveHistory.Count; i += 2)
                             {
                                 int moveNumber = i / 2 + 1;
                                 int thisi = i;
-                                <div class="flex movesNotationHolder">
+                                <div class="flex text-start justify-evenly movesNotationHolder">
                                     <div class="w-1/6">
-                                        <p @onclick="() => { ChessGame.ViewPosition(thisi); }" class="h-8 cursor-pointer select-none">
+                                        <p @onclick="() => { ChessGame.ViewPosition(thisi); }" class="h-8 cursor-pointer text-center select-none @(ChessGame.MatchingPositionFromHistory == thisi + 1 ? "selectedMove" : "")">
+
                                             @(moveNumber.ToString() + ". ")
                                             @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
                                             {
@@ -164,10 +165,10 @@
                                             }
                                         </p>
                                     </div>
-                                    <div class="w-1/2">
+                                    <div class="w-1/6">
                                         @if (i + 1 < MoveHistory.Count)
                                         {
-                                            <p @onclick="() => { ChessGame.ViewPosition(thisi + 1); }" class="h-8 cursor-pointer select-none">
+                                            <p @onclick="() => { ChessGame.ViewPosition(thisi+1); }" class="h-8 text-center cursor-pointer select-none @(ChessGame.MatchingPositionFromHistory == thisi + 2 ? "selectedMove" : "")">
                                                 @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
                                                 {
                                                     @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
@@ -237,8 +238,8 @@
                             </div>
                         }
                         <div class="flex justify-around text-center bottom-72 right-80 mt-3">
-                            <button @onclick="() => { ChessGame.GiveUp(Team.White); ChessGame.UpdateGameState(); }" class="giveUpButton ml-8">Give Up</button>
-                            <button @onclick="() => { DrawOffer = true; }" class="drawButton">Draw</button>
+                            <button @onclick="() => { ChessGame.GiveUp(Team.White); ChessGame.UpdateGameState(); }" class="giveUpButton ml-8 mb-2">Give Up</button>
+                            <button @onclick="() => { DrawOffer = true; }" class="drawButton mb-2">Draw</button>
                         </div>
                     </div>
                 }
@@ -316,11 +317,11 @@
                         </h1>
                         <div class="flex text-center flex-col ml-24 mt-5">
                             <div class="flex justify-between playOnline">
-                                <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer" />
+                                <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer mt-2" />
                                 <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
                             </div>
                             <div class="flex justify-between playComputer mt-5">
-                                <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1" />
+                                <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
                                 <button class="textInButton">Computer<br /><span class="smalltextPlayComputer">Play vs training bots offline!</span></button>
                             </div>
                         </div>
@@ -334,9 +335,11 @@
                             @for (int i = 0; i < MoveHistory.Count; i += 2)
                             {
                                 int moveNumber = i / 2 + 1;
-                                <div class="flex movesNotationHolder">
-                                    <div class="w-1/6">
-                                        <p class="h-8">
+                                int thisi = i;
+
+                                <div class="flex text-start justify-evenly movesNotationHolder">
+                                    <div class="w-1/6" >
+                                        <p @onclick="() => { ChessGame.ViewPosition(thisi); }" class="h-8 cursor-pointer text-center select-none @(ChessGame.MatchingPositionFromHistory == thisi ? "selectedMove" : "")">
                                             @(moveNumber.ToString() + ". ")
                                             @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
                                             {
@@ -390,10 +393,10 @@
                                             }
                                         </p>
                                     </div>
-                                    <div class="w-1/2">
+                                    <div class="w-1/6">
                                         @if (i + 1 < MoveHistory.Count)
                                         {
-                                            <p class="h-8">
+                                            <p @onclick="() => { ChessGame.ViewPosition(thisi+1); }" class="h-8 cursor-pointer text-center select-none @(ChessGame.MatchingPositionFromHistory == thisi+1 ? "selectedMove" : "")">
                                                 @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
                                                 {
                                                     @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
@@ -463,8 +466,8 @@
                             </div>
                         }
                         <div class="flex justify-around text-center bottom-72 right-80 mt-3">
-                            <button @onclick="() => { ChessGame.GiveUp(Team.White); ChessGame.UpdateGameState(); }" class="giveUpButton ml-8">Give Up</button>
-                            <button @onclick="() => { DrawOffer = true; }" class="drawButton">Draw</button>
+                            <button @onclick="() => { ChessGame.GiveUp(Team.White); ChessGame.UpdateGameState(); }" class="giveUpButton ml-8 mb-2">Give Up</button>
+                            <button @onclick="() => { DrawOffer = true; }" class="drawButton mb-2">Draw</button>
                         </div>
                     </div>
                 }
@@ -504,8 +507,8 @@
                         <button @onclick="() => {SetButtonState(9); CreateChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
                     </div>
                 </div>
-                <div class="playButton flex justify-center mt-14 select-none">
-                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center justify-center">Play</a>
+                <div class="playButton flex text-center justify-center mt-14 select-none">
+                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center justify-center"><div class="flex text-center justify-center">Play</div></a>
                 </div>
             </div>
 
