@@ -71,10 +71,10 @@
                                 <p class="text-3xl from-orange-800">Which peace do you want?</p>
                             </div>
                             <div class="flex text-center justify-around">
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="normalefiguren chessPiece mt-2 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }"/></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="rook chessPiece mt-1.5 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }"/></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_knight.png" class="knight chessPiece selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }"/></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_bishop.png" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" class="normalefiguren chessPiece chessPiece selector"/></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="chessPiece mt-2 selector" style="padding: 9px 7px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="chessPiece mt-2 selector" style="padding: 8px 12px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_knight.png" class="chessPiece selector mt-1.5" style="padding: 8px 10px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_bishop.png" class="mt-1.5 chessPiece selector" style="padding: 9px 7px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" /></div>
                             </div>
                         </div>
                     </div>
@@ -299,10 +299,10 @@
                                 <p class="text-3xl from-orange-800">Which peace do you want?</p>
                             </div>
                             <div class="flex text-center justify-around">
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="normalefiguren chessPiece mt-2 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }" /></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="rook chessPiece mt-1.5 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }" /></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_knight.png" class="knight chessPiece selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }" /></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_bishop.png" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" class="normalefiguren chessPiece chessPiece selector" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="chessPiece mt-2 selector" style="padding: 9px 7px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="chessPiece mt-2 selector" style="padding: 8px 12px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_knight.png" class="chessPiece selector mt-1.5" style="padding: 8px 10px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_bishop.png" class="mt-1.5 chessPiece selector" style="padding: 9px 7px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" /></div>
                             </div>
                         </div>
                     </div>
@@ -508,7 +508,7 @@
                     </div>
                 </div>
                 <div class="playButton flex text-center justify-center mt-14 select-none">
-                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center justify-center"><div class="flex text-center justify-center">Play</div></a>
+                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center items-center justify-center"><div class="flex text-center items-center justify-center">Play</div></a>
                 </div>
             </div>
 
@@ -576,12 +576,12 @@
 
     public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
     {
-        { ChessPieceType.Pawn, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  style=\"padding: 10px 15px; height: 80px; width: 80px;\" class=\"powns chessPiece\" src=\"images/w_pawn.png\" />\r\n</div>" },
-        { ChessPieceType.Knight, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\" style=\"padding: 8px 10px; height: 80px; width: 80px;\" class=\"knight chessPiece\" src=\"images/w_knight.png\" />\r\n</div>"},
-        { ChessPieceType.Bishop, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\" style=\"padding: 9px 7px; height: 80px; width: 80px;\" class=\"normalefiguren chessPiece \" src=\"images/w_bishop.png\" />\r\n</div>"},
+        { ChessPieceType.Pawn, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  style=\"padding: 10px 15px; height: 80px; width: 80px;\" class=\"chessPiece\" src=\"images/w_pawn.png\" />\r\n</div>" },
+        { ChessPieceType.Knight, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\" style=\"padding: 8px 10px; height: 80px; width: 80px;\" class=\"chessPiece\" src=\"images/w_knight.png\" />\r\n</div>"},
+        { ChessPieceType.Bishop, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\" style=\"padding: 9px 7px; height: 80px; width: 80px;\" class=\"chessPiece\" src=\"images/w_bishop.png\" />\r\n</div>"},
         { ChessPieceType.Rook, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\">\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\" style=\"padding: 8px 12px; height: 80px; width: 80px;\" class=\"rook chessPiece\" src=\"images/w_rook.png\" />\r\n</div>" },
-        { ChessPieceType.Queen, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\" style=\"padding: 9px 7px; height: 80px; width: 80px;\"  class=\"normalefiguren chessPiece\" src=\"images/w_queen.png\" />\r\n </div>"},
-        { ChessPieceType.King, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\" style=\"padding: 9px 7px; height: 80px; width: 80px;\" class=\"normalefiguren chessPiece \" src=\"images/w_king.png\" />\r\n\r\n</div>" },
+        { ChessPieceType.Queen, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\" style=\"padding: 9px 7px; height: 80px; width: 80px;\"  class=\"chessPiece\" src=\"images/w_queen.png\" />\r\n </div>"},
+        { ChessPieceType.King, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\" style=\"padding: 9px 7px; height: 80px; width: 80px;\" class=\"chessPiece\" src=\"images/w_king.png\" />\r\n\r\n</div>" },
         { ChessPieceType.None, ""},
     };
 

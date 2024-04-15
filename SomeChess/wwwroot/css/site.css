@@ -44,25 +44,13 @@
     --SecondBackgroundColor: #21201e;
     --HoverColor: #3c3b39;
     --TextColor: #d3d3d3;
+    --Green: #80b54c;
 }
 .chessboard {
     display: grid;
     grid-template-columns: repeat(8, 80px);
     grid-template-rows: repeat(8, 80px);
 }
-.normalefiguren {
-    width: 70px;
-}
-.powns {
-    width: 50px;
-}
-.rook {
-    width: 60px;
-}
-.knight {
-    width: 65px;
-}
-
 .item {
     width: 80px;
     height: 80px;
@@ -217,7 +205,7 @@
     transform: translate(72.5%, 80.2%);
 }
 .gameOverDesign {
-    background-color: #2c5d63;
+    background-color: var(--BackgroundColor);
     color: white;
 }
 .gameOverScreen span {
@@ -228,17 +216,26 @@
     color: #ff1f1f;
 }
 .gameOverDesign a {
+    transition: all 0.4s;
     font-size: 200%;
     user-select: none;
     cursor: pointer;
     border-radius: 5px;
     padding: 15px 15px;
-    background-color: #008080;
+    background-color: var(--Green);
 }
+    .gameOverDesign a:hover {
+        transition: all 0.4s;
+        background-color: #98c66c;
+        border-color: #98c66c;
+        border-radius: 4px;
+        box-shadow: 1px 1px 2px 4px #98c66c;
+    }
+
 .move-history {
-    overflow: scroll;
-    height: 53vh;
-}
+        overflow: scroll;
+        height: 53vh;
+    }
 .d-block {
     display: block;
 }
@@ -248,7 +245,7 @@
     transform: translate(77.5%, 5%);
 }
 .peaceChoiceHolder {
-    background-color: #32581f;
+    background-color: var(--BackgroundColor);
 }
 .peaceChoiceHolder img {
     cursor: pointer;
@@ -310,15 +307,16 @@
     border-radius: 4px;
 }
 .playButton a {
-    box-shadow: none;
     transition: all 0.4s;
     background-color: #80b54c;
     border-radius: 4px;
     color: white;
 }
 
-.playButton a:hover {
+    .playButton a:hover {
         transition: all 0.4s;
         background-color: #98c66c;
-        box-shadow: 1px 1px 2px #98c66c;
+        border-color: #98c66c;
+        border-radius: 4px;
+        box-shadow: 1px 1px 2px 4px #98c66c;
     }
