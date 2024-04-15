@@ -15,11 +15,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public ChessBoard(ChessBoard origin) => Board = origin.Board;
 
-        public ChessBoard GetCopy()
-        {
-            return new ChessBoard((ChessBoard)this.MemberwiseClone());
-        }
-
         /// <summary>
         /// <para>Sets the <see cref="Board"/> to <see cref="Boards.Default"/></para>
         /// </summary>
@@ -33,13 +28,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// </summary>
         /// <param name="Field">The field to get the <see cref="ChessPiece"/> from.</param>
         /// <returns>The <see cref="ChessPiece"/> from the <paramref name="Field"/></returns>
-        public ChessPiece GetPiece(string Field)
-        {
-            if (ValidateField(Field))
-                return Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), (int)Char.GetNumericValue(Field.ToLower()[1]) - 1];
-
-            return new EmptyPiece(Team.White, Field);
-        }
+        public ChessPiece GetPiece(string Field) => ValidateField(Field) ? Board[Chess.AlphConversionChars.IndexOf(Field.ToLower()[0]), (int)Char.GetNumericValue(Field.ToLower()[1]) - 1] : new EmptyPiece(Team.White, Field);
 
         /// <summary>
         /// <para>Sets the <see cref="ChessPiece"/> on <paramref name="Field"/> to <paramref name="piece"/>.</para>

@@ -222,6 +222,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (index == ChessBoardHistory.Count)
                 ViewLatestPosition();
 
+            //Set Board to Specific Board in the history with correspondingly correct Guid.
             else if (index < ChessBoardHistory.Count)
             {
                 Guid _guid = ChessBoardHistory[index].Test;
@@ -237,6 +238,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// </summary>
         public void ViewLatestPosition()
         {
+            //Set Board to LatestBoard with correspondingly correct Guid.
             if (LatestBoard is not null)
             {
                 Guid _guid = LatestBoard.Test;
