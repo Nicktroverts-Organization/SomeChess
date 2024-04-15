@@ -458,18 +458,18 @@
             <div>
                 <h2 class="anton-regular mt-5">Bullet</h2>
                 <div class="flex justify-evenly">
-                    <button @onclick="() => {SetButtonState(1); CreateChessMatch(GameMode.OnlineOneMinute);}" class="@((SelectedButton == 1) ? "selectedTimeShadow" : "")">1 Minutes</button>
-                    <button @onclick="() => {SetButtonState(2); CreateChessMatch(GameMode.OnlineOneMinutePlusOne);}" class="@((SelectedButton == 2) ? "selectedTimeShadow" : "")">1 | 1</button>
-                    <button @onclick="() => {SetButtonState(3); CreateChessMatch(GameMode.OnlineTwoMinutesPlusOne);}" class="@((SelectedButton == 3) ? "selectedTimeShadow" : "")">2 | 1</button>
+                    <button @onclick="() => {SetButtonState(1); CreateOrFindChessMatch(GameMode.OnlineOneMinute);}" class="@((SelectedButton == 1) ? "selectedTimeShadow" : "")">1 Minutes</button>
+                    <button @onclick="() => {SetButtonState(2); CreateOrFindChessMatch(GameMode.OnlineOneMinutePlusOne);}" class="@((SelectedButton == 2) ? "selectedTimeShadow" : "")">1 | 1</button>
+                    <button @onclick="() => {SetButtonState(3); CreateOrFindChessMatch(GameMode.OnlineTwoMinutesPlusOne);}" class="@((SelectedButton == 3) ? "selectedTimeShadow" : "")">2 | 1</button>
                 </div>
 
                 </div>
                 <div>
                     <h2 class="anton-regular  mt-7">Blitz</h2>
                     <div class="flex justify-evenly">
-                        <button @onclick="() => {SetButtonState(4); CreateChessMatch(GameMode.OnlineThreeMinutes);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
-                        <button @onclick="() => {SetButtonState(5); CreateChessMatch(GameMode.OnlineThreeMinutesPlusTwo);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
-                        <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
+                        <button @onclick="() => {SetButtonState(4); CreateOrFindChessMatch(GameMode.OnlineThreeMinutes);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
+                        <button @onclick="() => {SetButtonState(5); CreateOrFindChessMatch(GameMode.OnlineThreeMinutesPlusTwo);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
+                        <button @onclick="() => {SetButtonState(6); CreateOrFindChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
                     </div>
 
                 </div>
@@ -477,9 +477,9 @@
                 <div>
                     <h2 class="anton-regular mt-7">Rapid</h2>
                     <div class="flex justify-evenly">
-                        <button @onclick="() => {SetButtonState(7); CreateChessMatch(GameMode.OnlineTenMinutes);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
-                        <button @onclick="() => {SetButtonState(8); CreateChessMatch(GameMode.OnlineFifteenMinutesPlusTen);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
-                        <button @onclick="() => {SetButtonState(9); CreateChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
+                        <button @onclick="() => {SetButtonState(7); CreateOrFindChessMatch(GameMode.OnlineTenMinutes);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
+                        <button @onclick="() => {SetButtonState(8); CreateOrFindChessMatch(GameMode.OnlineFifteenMinutesPlusTen);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
+                        <button @onclick="() => {SetButtonState(9); CreateOrFindChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
                     </div>
                 </div>
                 <div class="playButton flex justify-center mt-14 select-none">
@@ -570,30 +570,29 @@
 
         if (firstRender)
         {
-
-            if (social.CurrentPlayer == null)
-            {
-                await social.FetchPlayerAsync();
-            }
+            await social.FetchPlayerAsync();
             
-            Match = (ChessMatch)MatchSearching.GetInstance().GetMatchByID(social.CurrentPlayer.PlayersMatch);
+            if(social.CurrentPlayer != null)
+                Match = (ChessMatch)MatchSearching.GetInstance().GetChessMatchByID(social.CurrentPlayer.PlayersMatch);
+
             if(Match == null)
             {
                 ChessGame = new Chess(this);
                 ChessGame.StartGame();
                 ChessGame.UpdateGameState();
                 ChessGame.ResetBoard();
+
             }
             else
             {
                 ChessGame = Match.Chess;
-            
+
                 if(!ChessGame.IsRunning)
                 {
                     ChessGame.StartGame();
                     ChessGame.ResetBoard();
                 }
-            
+
                 ChessGame.UpdateGameState();
             }
 
@@ -631,7 +630,53 @@
         }
     }
 
-    public ChessMatch? CreateChessMatch(GameMode mode)
+
+
+
+    public bool CreateOrFindChessMatch(GameMode mode)
+    {
+        ChessMatch? searchingResult = TryToFindChessMatch(mode);
+
+        if (searchingResult != null)
+            return true;
+
+        ChessMatch? creatingOfMatch = TryToCreateChessMatch(mode);
+        if(creatingOfMatch != null)
+            return true;
+
+        return false;
+    }
+
+
+    public ChessMatch? TryToFindChessMatch(GameMode mode)
+    {
+        try
+        {
+            ChessMatchSettings settings = new(typeof(ChessMatch), mode);
+
+            int matchId = MatchSearching.GetInstance().SearchMatchID(settings);
+            ChessMatch foundMatch = MatchSearching.GetInstance().GetChessMatchByID(matchId);
+
+            if (foundMatch != null)
+            {
+                social.CurrentPlayer.PlayersMatch = foundMatch.MatchID;
+                foundMatch.Join(social.CurrentPlayer);
+                NavigationManager.NavigateTo("/chess/" + foundMatch.MatchID, true);
+                return foundMatch;
+            }
+
+            return null;
+        }
+        catch
+        {
+            Console.WriteLine("TryToFindChessMatch(GameMode mode): cannot find the match");
+            return null;
+        }
+
+    }
+
+
+    public ChessMatch? TryToCreateChessMatch(GameMode mode)
     {
         try
         {
@@ -652,7 +697,9 @@
             Console.WriteLine("CreateChessMatch(GameMode mode): Probably CurrentUser was null");
             return null;
         }
+
     }
+
 
     void SetButtonState(int buttonNumber)
     {
@@ -682,36 +729,53 @@
         {
             ToID = id;
             ChessPiece FromPiece = ChessGame.Board.GetPiece(FromID);
-            if (ChessGame.MovePiece(FromID, ToID))
-            {
-                ChessGame.EndTurn();
-                Reload = true;
-                StateHasChanged();
-            }
-            else
-            {
-                ToID = FromID;
-                Reload = true;
-                StateHasChanged();
-                //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
-            }
+
+            //if(Match != null && Match.Black != null && Match.White != null)
+            //{
+            //    if (ChessGame.TeamTurn == Team.Black && social.CurrentPlayer.Name == Match.Black.Player.Name)
+            //    {
+            //        if (ChessGame.MovePiece(FromID, ToID))
+            //        {
+            //            ChessGame.EndTurn();
+            //            Reload = true;
+            //            StateHasChanged();
+            //        }
+            //        else
+            //        {
+            //            ToID = FromID;
+            //            Reload = true;
+            //            StateHasChanged();
+            //            //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+            //        }
+            //    }
+            //    else if (ChessGame.TeamTurn == Team.White && social.CurrentPlayer.Name == Match.White.Player.Name)
+            //    {
+            //        if (ChessGame.MovePiece(FromID, ToID))
+            //        {
+            //            ChessGame.EndTurn();
+            //            Reload = true;
+            //            StateHasChanged();
+            //        }
+            //        else
+            //        {
+            //            ToID = FromID;
+            //            Reload = true;
+            //            StateHasChanged();
+            //            //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        ToID = FromID;
+            //        Reload = true;
+            //        StateHasChanged();
+            //        //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+            //    }
+            //}
+
+            return;
         }
     }
 
-    // public Task Wait()
-    // {
-    //     if (1 != 1)
-    //     {
-    //         Wait();
-    //     }
 
-    //     return Task.CompletedTask;
-    // }
-
-    // public ChessPiece TransformPawn(Team team, ChessPiece To)
-    // {
-    //     Wait().Wait();
-
-    //     return new EmptyPiece(team, To.Field);
-    // }
 }
