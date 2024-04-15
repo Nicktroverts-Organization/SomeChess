@@ -56,6 +56,18 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public List<Tuple<ChessPiece, ChessPiece, bool>> ChessPieceMoveHistory = new();
         public List<ChessBoard> ChessBoardHistory = new();
 
+        public bool WhiteIsChecked
+        {
+            get => FieldsBlackCanMoveTo.Contains(WhiteKing.Field);
+            set => throw new InvalidOperationException(nameof(WhiteIsChecked) + "can't be set!");
+        }
+
+        public bool BlackIsChecked
+        {
+            get => FieldsWhiteCanMoveTo.Contains(BlackKing.Field);
+            set => throw new InvalidOperationException(nameof(BlackIsChecked) + "can't be set!");
+        }
+
         /// <summary>
         /// <para>Whether or not the game is currently running</para>
         /// </summary>
@@ -222,6 +234,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             if (index == ChessBoardHistory.Count)
                 ViewLatestPosition();
 
+            //Set Board to Specific Board in the history with correspondingly correct Guid.
             else if (index < ChessBoardHistory.Count)
             {
                 Guid _guid = ChessBoardHistory[index].Test;
@@ -237,6 +250,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// </summary>
         public void ViewLatestPosition()
         {
+            //Set Board to LatestBoard with correspondingly correct Guid.
             if (LatestBoard is not null)
             {
                 Guid _guid = LatestBoard.Test;
