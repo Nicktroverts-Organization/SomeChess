@@ -73,6 +73,7 @@
     border-style: solid;
     height: 10vh;
     width: 400px;
+    min-height: 80px;
     border-radius: 15px;
     font-size: 250%;
     color: white;
@@ -92,6 +93,7 @@
     transition: all 0.4s;
     border-style: solid;
     height: 10vh;
+    min-height: 80px;
     width: 400px;
     border-radius: 15px;
     font-size: 250%;
@@ -137,6 +139,8 @@
     width: 30vw;
     height: 68vh;
     border: solid;
+    min-width: 450px;
+    min-height: 550px;
 }
 .chooseTime {
     background-color: var(--SecondBackgroundColor);
@@ -320,3 +324,6 @@
         border-radius: 4px;
         box-shadow: 1px 1px 2px 4px #98c66c;
     }
+.highlighted {
+    box-shadow: 1px 1px 2px 4px #ff0000;
+}

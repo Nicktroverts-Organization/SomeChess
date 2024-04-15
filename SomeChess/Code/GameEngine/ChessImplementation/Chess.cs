@@ -700,7 +700,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 OriginalChess.Clones.Add(ChessCopy);
                 ChessCopy.UpdateGameState();
 
-
                 if (TeamTurn == Team.White)
                 {
                     ChessCopy.MovePiece(From, To);
