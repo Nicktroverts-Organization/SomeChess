@@ -14,7 +14,7 @@
 
 </body>
 <div class="flex h-24 justify-center content-center items-center">
-    <h1 class="font-bold text-5xl" style="color: var(--TextColor)">@(Name)</h1>
+    <h1 class="font-bold text-5xl" style="color: var(--TextColor)"><font color="Black">@(blackName)</font> <font color="Red">VS</font> <font color="White">@(whiteName)</font></h1>
 </div>
 
 <Chessboard></Chessboard>
@@ -25,7 +25,10 @@
     [Parameter]
     public int MatchID { get; set; }
 
-    public string Name = "";
+    string blackName = "";
+    string whiteName = "";
+
+    public string Title = "";
 
 
     //protected override async Task OnInitializedAsync()
@@ -42,15 +45,35 @@
         if(firstRender)
         {
             await social.FetchPlayerAsync();
-            Name = social.CurrentPlayer.Name;
+
+            social.CurrentPlayer.PlayersMatch = MatchID;
 
             if (social.CurrentPlayer == null || social.CurrentPlayer.PlayersMatch == 0)
             {
                 Console.WriteLine("Cannot fetch: user is null");
                 NavigationManager.NavigateTo("/", forceLoad: true);
             }
+            else
+            {
+                ChessMatch? Match = (ChessMatch)MatchSearching.GetInstance().GetChessMatchByID(MatchID);
+
+                if(Match != null)
+                {
+                    if (Match.Black != null)
+                        blackName = Match.Black.Player.Name;
+                    else
+                        blackName = "";
+
+                    if(Match.White != null)
+                        whiteName = Match.White.Player.Name;
+                    else
+                        whiteName = "";
+                }
+            }
 
             StateHasChanged();
         }
     }
+
+
 }
