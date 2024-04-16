@@ -11,12 +11,17 @@
         public GameMode Mode { get; set; }
 
 
-        public ChessMatchSettings(GameMode mode)//, bool hasTimer, int duration, int extraTime)
-        { 
+        public ChessMatchSettings(Type type, GameMode mode) : base(type)//, bool hasTimer, int duration, int extraTime)
+        {
             Mode = mode;
             //HasTimer = hasTimer;
             //Duration = duration;
             //ExtraTime = extraTime;
+        }
+
+        public override object GetSettings()
+        {
+            return this;
         }
     }
 }

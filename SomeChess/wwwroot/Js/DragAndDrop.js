@@ -27,7 +27,6 @@ window.getMouseDownID = function (e) {
 window.getMouseUpElementID = function (e) {
     console.log("mouseup");
     console.log(e);
-
     if (!gameOver) {
         var position = document.elementsFromPoint(e.pageX, e.pageY);
         position.forEach((elt) => {
@@ -82,7 +81,5 @@ window.addEventListener('dragstart', function (event) {
 
 function SetMoveHistoryScroll() {
     var objDiv = document.getElementById("move-history");
-    if (objDiv != null) {
-        objDiv.scrollTop = objDiv.scrollHeight;
-    }
-}
+    objDiv.scrollTop = objDiv.scrollHeight;
+}, 1000);

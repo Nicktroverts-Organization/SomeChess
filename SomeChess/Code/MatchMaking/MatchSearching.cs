@@ -3,15 +3,16 @@ using SomeChess.Code.Social;
 using SomeChess.Code.GameEngine.ChessImplementation;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using SomeChess.Code.MatchMaking.ChessMatchImplementation;
 
 
 namespace SomeChess.Code.MatchMaking
 {
 
-        //todo damn, using sealed, such professionalism. bababoye
-    public sealed class MatchSearching  
+    //todo damn, using sealed, such professionalism. bababoye
+    public sealed class MatchSearching
     {
-        private List<IMatch> matches = new();
+        private List<ChessMatch> chessMatches = new();
 
         private List<IMatch> offlineMatches = new();
 
@@ -32,52 +33,53 @@ namespace SomeChess.Code.MatchMaking
             return instance;
         }
 
-        public IMatch SearchMatch(MatchSettings settings)
+        public int SearchMatchID(ChessMatchSettings settings)
         {
-            foreach(IMatch match in matches)
+            foreach (ChessMatch match in chessMatches)
             {
-                if(match.GetType() == settings.MatchType && match.GetSettings() == settings)
+                if(match.gameMode == settings.Mode)
                 {
-                    return match;
+                    return match.MatchID;
                 }
+                //ChessMatchSettings test = (ChessMatchSettings)settings.GetSettings();
             }
-            return null;
+            return 0;
         }
 
-        public IMatch GetMatchByID(int id)
+        public ChessMatch? GetChessMatchByID(int id)
         {
-            var match = matches.Where(m => m.GetMatchID() == id).FirstOrDefault();
+            var match = chessMatches.Where(m => m.GetMatchID() == id).FirstOrDefault();
 
             return match;
         }
 
-        public void AddMatch(IMatch match)
+        public void AddMatch(ChessMatch match)
         {
-            matches.Add(match);
+            chessMatches.Add(match);
         }
 
-        public void RemoveMatch(IMatch match)
+        public void RemoveMatch(ChessMatch match)
         {
-            matches.Remove(match);
+            chessMatches.Remove(match);
         }
 
         public int GetUniqueID()
         {
             Random rng = new();
 
-            if (matches.Count >= 999999)
+            if (chessMatches.Count >= 999999)
                 throw new Exception("Too many games already exist, impossible to create an unique ID");
 
             int id = rng.Next(999999);
             bool alreadyExists = false;
 
-            foreach(IMatch match in matches)
+            foreach (ChessMatch match in chessMatches)
             {
-                if(match.GetMatchID() == id) 
+                if (match.GetMatchID() == id)
                     alreadyExists = true;
             }
 
-            if( alreadyExists )
+            if (alreadyExists)
             {
                 id = GetUniqueID();
                 return id;

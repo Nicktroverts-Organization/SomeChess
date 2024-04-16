@@ -260,7 +260,7 @@
 .movesNotationHolder {
     font-size: 120%;
     color: white;
-} 
+}
     .movesNotationHolder:nth-child(even) {
         background-color: var(--BackgroundColor);
     }

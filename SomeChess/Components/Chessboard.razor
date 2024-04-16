@@ -1,12 +1,11 @@
 ﻿@inject IJSRuntime JsRuntime;
 @inject NavigationManager NavMan;
 @using Microsoft.AspNetCore.Components.Web
+@using SomeChess.Code
 @using SomeChess.Code.GameEngine.ChessImplementation
 @using SomeChess.Code.MatchMaking.ChessMatchImplementation
 @using SomeChess.Code.Social
 @using System.Diagnostics.Eventing.Reader
-@using System.Security.Cryptography.X509Certificates
-@using System.Threading.Tasks.Dataflow
 @using Microsoft.AspNetCore.Mvc.ModelBinding
 @using SomeChess.Code.MatchMaking
 @using SomeChess.Code
@@ -43,6 +42,7 @@
                                         color = "whiteCell";
                                 }
 
+
                                 string pieceColor;
                                 @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
                                     pieceColor = "w";
@@ -59,17 +59,18 @@
                                         @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
                                     </div>
                                 }
-                            }
+          
+                        }
+                    </div>
+                }
+            </div>
+            @if (ChoicePeace)
+            {
+                <div class="flex absolute pawnTransformationChoice">
+                    <div class="peaceChoiceHolder rounded-md">
+                        <div class="bg-white rounded-sm">
+                            <p class="text-3xl from-orange-800">Which peace do you want?</p>
                         </div>
-                    }
-                </div>
-                @if (ChoicePeace)
-                {
-                    <div class="flex absolute pawnTransformationChoice">
-                        <div class="peaceChoiceHolder rounded-md">
-                            <div class="bg-white rounded-sm">
-                                <p class="text-3xl from-orange-800">Which peace do you want?</p>
-                            </div>
                             <div class="flex text-center justify-around">
                                 <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="chessPiece mt-2 selector" style="padding: 9px 7px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }" /></div>
                                 <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="chessPiece mt-2 selector" style="padding: 8px 12px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }" /></div>
@@ -335,6 +336,16 @@
                                     </div>
                                 }
                             }
+                        }
+                    </div>
+                }
+            </div>
+            @if (ChoicePeace)
+            {
+                <div class="flex absolute pawnTransformationChoice">
+                    <div class="peaceChoiceHolder rounded-md">
+                        <div class="bg-white rounded-sm">
+                            <p class="text-3xl from-orange-800">Which peace do you want?</p>
                         </div>
                     }
                 </div>
@@ -438,17 +449,50 @@
                                             {
                                                 @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
                                                 {
-                                                    @(MoveHistory[i].Item1.Field[0] + "x" + @MoveHistory[i].Item2.Field)
+                                                    @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i].Item2.Field)
                                                 }
                                                 else
                                                 {
-                                                    @MoveHistory[i].Item2.Field
+                                                    @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i].Item2.Field)
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @(MoveHistory[i].Item1.PieceType.ToString()[0] + @MoveHistory[i].Item2.Field)
+                                                }
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                                <div class="w-1/2">
+                                    @if (i + 1 < MoveHistory.Count)
+                                    {
+                                        <p class="h-8">
+                                            @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
+                                            {
+                                                @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i + 1].Item1.Field[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @MoveHistory[i + 1].Item2.Field
                                                     ;
                                                 }
                                             }
-                                            else if (MoveHistory[i].Item3 == true)
-                                            {
-                                                if (MoveHistory[i].Item2.Field.ToString()[0] == 'c')
+                                        </p>
+                                    </div>
+                                    <div class="w-1/6">
+                                        @if (i + 1 < MoveHistory.Count)
+                                        {
+                                            <p @onclick="() => { ChessGame.ViewPosition(thisi+1); }" class="h-8 cursor-pointer text-center select-none @(ChessGame.MatchingPositionFromHistory == thisi+1 ? "selectedMove" : "")">
+                                                @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
                                                 {
                                                     @("0-0-0")
                                                     ;
@@ -461,88 +505,31 @@
                                             }
                                             else
                                             {
-                                                if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
+                                                if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Knight)
                                                 {
-                                                    @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
                                                     {
-                                                        @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i].Item2.Field)
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i + 1].Item2.Field)
                                                     }
                                                     else
                                                     {
-                                                        @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i].Item2.Field)
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i + 1].Item2.Field)
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
                                                     {
-                                                        @(MoveHistory[i].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i].Item2.Field)
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i + 1].Item2.Field)
                                                     }
                                                     else
                                                     {
-                                                        @(MoveHistory[i].Item1.PieceType.ToString()[0] + @MoveHistory[i].Item2.Field)
+                                                        @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + @MoveHistory[i + 1].Item2.Field)
                                                     }
                                                 }
                                             }
                                         </p>
-                                    </div>
-                                    <div class="w-1/6">
-                                        @if (i + 1 < MoveHistory.Count)
-                                        {
-                                            <p @onclick="() => { ChessGame.ViewPosition(thisi+1); }" class="h-8 cursor-pointer text-center select-none @(ChessGame.MatchingPositionFromHistory == thisi+1 ? "selectedMove" : "")">
-                                                @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
-                                                {
-                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
-                                                    {
-                                                        @(MoveHistory[i + 1].Item1.Field[0] + "x" + @MoveHistory[i + 1].Item2.Field)
-                                                    }
-                                                    else
-                                                    {
-                                                        @MoveHistory[i + 1].Item2.Field
-                                                        ;
-                                                    }
-                                                }
-                                                else if (MoveHistory[i + 1].Item3 == true)
-                                                {
-                                                    if (MoveHistory[i + 1].Item2.Field.ToString()[0] == 'c')
-                                                    {
-                                                        @("0-0-0")
-                                                        ;
-                                                    }
-                                                    else
-                                                    {
-                                                        @("0-0")
-                                                        ;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Knight)
-                                                    {
-                                                        @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
-                                                        {
-                                                            @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i + 1].Item2.Field)
-                                                        }
-                                                        else
-                                                        {
-                                                            @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i + 1].Item2.Field)
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
-                                                        {
-                                                            @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i + 1].Item2.Field)
-                                                        }
-                                                        else
-                                                        {
-                                                            @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + @MoveHistory[i + 1].Item2.Field)
-                                                        }
-                                                    }
-                                                }
-                                            </p>
-                                        }
-                                    </div>
+                                    }
                                 </div>
                             }
                         </div>
@@ -649,6 +636,10 @@
 
         if (firstRender)
         {
+            await social.FetchPlayerAsync();
+
+            if(social.CurrentPlayer != null)
+                Match = (ChessMatch)MatchSearching.GetInstance().GetChessMatchByID(social.CurrentPlayer.PlayersMatch);
 
             if (social.CurrentPlayer == null)
             {
@@ -663,12 +654,13 @@
                 ChessGame.StartGame();
                 ChessGame.UpdateGameState();
                 ChessGame.ResetBoard();
+
             }
             else
             {
                 ChessGame = Match.Chess;
 
-                if (!ChessGame.IsRunning)
+                if(!ChessGame.IsRunning)
                 {
                     ChessGame.StartGame();
                     ChessGame.ResetBoard();
@@ -702,7 +694,6 @@
 
             LoggingHandler.DrawSeperatorLine(ConsoleColor.Magenta);
             StateHasChanged();
-            await JsRuntime.InvokeVoidAsync("SetMoveHistoryScroll");
         }
 
 
@@ -710,9 +701,58 @@
         {
             await JsRuntime.InvokeVoidAsync("Over", !ChessGame.IsPlaying);
         }
+
+        StateHasChanged();
     }
 
-    public ChessMatch? CreateChessMatch(GameMode mode)
+
+
+
+    public bool CreateOrFindChessMatch(GameMode mode)
+    {
+        ChessMatch? searchingResult = TryToFindChessMatch(mode);
+
+        if (searchingResult != null)
+            return true;
+
+        ChessMatch? creatingOfMatch = TryToCreateChessMatch(mode);
+        if(creatingOfMatch != null)
+            return true;
+
+        return false;
+    }
+
+
+    public ChessMatch? TryToFindChessMatch(GameMode mode)
+    {
+        try
+        {
+            ChessMatchSettings settings = new(typeof(ChessMatch), mode);
+
+            int matchId = MatchSearching.GetInstance().SearchMatchID(settings);
+            ChessMatch foundMatch = MatchSearching.GetInstance().GetChessMatchByID(matchId);
+
+            if (foundMatch != null)
+            {
+                social.CurrentPlayer.PlayersMatch = foundMatch.MatchID;
+                foundMatch.Join(social.CurrentPlayer);
+                social.PersistPlayerAsync(social.CurrentPlayer);
+                NavigationManager.NavigateTo("/chess/" + social.CurrentPlayer.PlayersMatch.ToString(), false);
+                return foundMatch;
+            }
+
+            return null;
+        }
+        catch
+        {
+            Console.WriteLine("TryToFindChessMatch(GameMode mode): cannot find the match");
+            return null;
+        }
+
+    }
+
+
+    public ChessMatch? TryToCreateChessMatch(GameMode mode)
     {
         try
         {
@@ -733,7 +773,9 @@
             Console.WriteLine("CreateChessMatch(GameMode mode): Probably CurrentUser was null");
             return null;
         }
+
     }
+
 
     void SetButtonState(int buttonNumber)
     {
@@ -789,23 +831,68 @@
         }
     }
 
-    // public async Task Wait()
-    // {
-    //     if (1 != 1)
-    //     {
-    //         Wait();
-    //     }
-    // }
+            // if (ChessGame.MovePiece(FromID, ToID))
+            // {
+            //     ChessGame.EndTurn();
+            //     Reload = true;
+            //     StateHasChanged();
+            // }
+            // else
+            // {
+            //     ToID = FromID;
+            //     Reload = true;
+            //     StateHasChanged();
+            //     await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+            // }
 
+            if(Match != null)
+            {
+                //ChessGame = Match.Chess;
 
-    // public ChessPiece TransformPawn(Team team, ChessPiece To)
-    // {
-    //     Task task1 = new Task(() => Wait());
-    //     task1.Start();
-    //     task1.Wait();
+                if (Match.Black != null && Match.White != null)
+                {
 
-    //     return new EmptyPiece(team, To.Field);
-    // }
+                    if (ChessGame.TeamTurn == Team.Black && social.CurrentPlayer.Name == Match.Black.Player.Name)
+                    {
+                        if (ChessGame.MovePiece(FromID, ToID))
+                        {
+                            ChessGame.EndTurn();
+                            Reload = true;
+                            StateHasChanged();
+                        }
+                        else
+                        {
+                            ToID = FromID;
+                            Reload = true;
+                            StateHasChanged();
+                            //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                        }
+                    }
+                    else if (ChessGame.TeamTurn == Team.White && social.CurrentPlayer.Name == Match.White.Player.Name)
+                    {
+                        if (ChessGame.MovePiece(FromID, ToID))
+                        {
+                            ChessGame.EndTurn();
+                            Reload = true;
+                            StateHasChanged();
+                        }
+                        else
+                        {
+                            ToID = FromID;
+                            Reload = true;
+                            StateHasChanged();
+                            //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                        }
+                    }
+                    else
+                    {
+                        ToID = FromID;
+                        Reload = true;
+                        StateHasChanged();
+                        //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                    }
+
+                }
 
     public ChessPiece? PawnToTransform = null;
 

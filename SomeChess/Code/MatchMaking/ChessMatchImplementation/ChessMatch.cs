@@ -4,6 +4,7 @@ using SomeChess.Code.GameEngine;
 using SomeChess.Code.Social;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SomeChess.Components;
+using Microsoft.AspNetCore.Components;
 
 namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 {
@@ -93,7 +94,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
         /// <para>Ilkin it's personal for you</para>
         /// </summary>
         
-        private GameMode gameMode {  get; set; }
+        public GameMode gameMode {  get; set; }
 
         public bool HasTimer { get; set; }
 
@@ -116,13 +117,15 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             ExtraTime = ModePropertiesChecker.GetExtraTime(mode);
             Duration = ModePropertiesChecker.GetDuration(mode);
 
+            gameMode = mode;
+
             Chess = new(kz);
             Chess.ResetBoard();
             Chess.UpdateGameState();
 
             GameID = Chess.Test;
 
-            MatchID = MatchSearching.GetInstance().GetUniqueID();
+            MatchID = uniqueId;
 
 
             Random rndm = new();
@@ -130,11 +133,13 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
             if(rndm.Next(2) == 0)
             {
                 White = new ChessPlayer(aPlayer, Team.White);
+                Chess.TeamTurn = Team.White;
                 Black = null;
             }
             else
             {
                 Black = new ChessPlayer(aPlayer, Team.Black);
+                Chess.TeamTurn = Team.Black;
                 White = null;
             }
             
@@ -151,13 +156,9 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
         public void Join(Player player)
         {
             if (Black == null)
-            {
                 Black = new ChessPlayer(player, Team.Black);
-            }
             else if (White == null)
-            {
                 White = new ChessPlayer(player, Team.White);
-            }
             else
             {
                 //this is temporary don't add this to master branch pls. i beg you. [Nick]
@@ -165,7 +166,9 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
                 // you mispelled hear! L  [Nick]
                 throw new Exception("Match is full. Your mother wanted to make an abortion, but she was too late!");
             }
-            //todo throw new NotImplementedException();
+
+
+
         }
 
 
@@ -177,7 +180,7 @@ namespace SomeChess.Code.MatchMaking.ChessMatchImplementation
 
         public MatchSettings GetSettings()
         {
-            return new ChessMatchSettings(gameMode);
+            return new ChessMatchSettings(GetType(), gameMode);
         }
 
 
