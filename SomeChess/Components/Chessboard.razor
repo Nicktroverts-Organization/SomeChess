@@ -1,5 +1,4 @@
 ﻿@inject IJSRuntime JsRuntime;
-@inject NavigationManager NavMan;
 @using Microsoft.AspNetCore.Components.Web
 @using SomeChess.Code
 @using SomeChess.Code.GameEngine.ChessImplementation
@@ -8,8 +7,7 @@
 @using System.Diagnostics.Eventing.Reader
 @using Microsoft.AspNetCore.Mvc.ModelBinding
 @using SomeChess.Code.MatchMaking
-@using SomeChess.Code
-@inject NavigationManager NavigationManager
+@inject NavigationManager NavMan
 @inject UserAuthentication social
 
 @if (ChessGame != null)
@@ -548,24 +546,27 @@
     }
 }
 
+
+
 @code {
     bool DrawOffer = false;
     bool ChoicePeace = false;
     bool GameOver = true;
     string GameWon = "white";
+
     bool NotNewGame = true;
     public bool isDragging = true;
     public bool PlayOnline = false;
     public bool Reload = true;
     int SelectedButton = 0;
-    public Chess? ChessGame = null;
+    public Chess? ChessGame = null; 
     public ChessMatch? Match;
     public ChessMatchConstructor constructor = new();
     public ILogger logger = LoggingHandler.GetLogger<Chessboard>();
 
-    List<Tuple<ChessPiece, ChessPiece, bool>> MoveHistory { get; set; } = new();
+                List<Tuple<ChessPiece, ChessPiece, bool>> MoveHistory { get; set; } = new();
 
-    public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
+                public Dictionary<ChessPieceType, string> PieceToHTML = new Dictionary<ChessPieceType, string>()
     {
         { ChessPieceType.Pawn, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\"  style=\"padding: 10px 15px; height: 80px; width: 80px;\" class=\"chessPiece\" src=\"images/w_pawn.png\" />\r\n</div>" },
         { ChessPieceType.Knight, "<div style=\"height: 80px; width: 80px; display: flex; align-items: center; justify-content: center;\" class=\"@((isDragging) ? \"selected\" : \"\")\" >\r\n <img draggable=\"@(ChessGame.GameState == ChessState.BlackWin || ChessGame.GameState == ChessState.WhiteWin ? \"false\" : \"true\")\" ondragstart=\"return false;\" style=\"padding: 8px 10px; height: 80px; width: 80px;\" class=\"chessPiece\" src=\"images/w_knight.png\" />\r\n</div>"},
@@ -576,273 +577,232 @@
         { ChessPieceType.None, ""},
     };
 
-    public static string FromID = "";
-    public static string ToID = "";
-    public bool isFirstClick = true;
+                public static string FromID = "";
+                public static string ToID = "";
+                public bool isFirstClick = true;
 
-    private DotNetObjectReference<Chessboard> dotNetReference;
-    
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
+                private DotNetObjectReference<Chessboard> dotNetReference;
 
-        if (firstRender)
-        {
-            await social.FetchPlayerAsync();
-
-            if(social.CurrentPlayer != null)
-                Match = (ChessMatch)MatchSearching.GetInstance().GetChessMatchByID(social.CurrentPlayer.PlayersMatch);
-
-            if (social.CurrentPlayer == null)
-            {
-                await social.FetchPlayerAsync();
-            }
-
-            //Match = (ChessMatch?)MatchSearching.GetInstance().GetMatchByID(social.CurrentPlayer.PlayersMatch) ? null;
-            Match = null;
-            if (Match == null)
-            {
-                ChessGame = new Chess(this);
-                ChessGame.StartGame();
-                ChessGame.UpdateGameState();
-                ChessGame.ResetBoard();
-
-            }
-            else
-            {
-                ChessGame = Match.Chess;
-
-                if(!ChessGame.IsRunning)
-                {
-                    ChessGame.StartGame();
-                    ChessGame.ResetBoard();
-                }
-
-                ChessGame.UpdateGameState();
-            }
-
-            // See warning about memory above in the article
-            dotNetReference = DotNetObjectReference.Create(this);
-            await JsRuntime.InvokeVoidAsync("setDotNetReference", dotNetReference);
-        }
-        MoveHistory = ChessGame.ChessPieceMoveHistory;
-        if (Reload)
-        {
-            Reload = false;
-
-            string moveHistoryString = "";
-            foreach (var a in MoveHistory)
-            {
-                moveHistoryString += (a.Item1.Team + " " + a.Item1.Field + " " + a.Item1.PieceType + " -> " + a.Item2.Team + " " + a.Item2.Field + " " + a.Item2.PieceType + "\n      ");
-            }
-
-            Console.ResetColor();
-
-            Task logTask = new Task(() => logger.LogDebug(moveHistoryString));
-            logTask.Start();
-            logTask.Wait();
-
-            Console.ResetColor();
-
-            LoggingHandler.DrawSeperatorLine(ConsoleColor.Magenta);
-            StateHasChanged();
-        }
-
-
-        if (!ChessGame.IsPlaying)
-        {
-            await JsRuntime.InvokeVoidAsync("Over", !ChessGame.IsPlaying);
-        }
-
-        StateHasChanged();
-    }
-
-
-
-
-    public bool CreateOrFindChessMatch(GameMode mode)
-    {
-        ChessMatch? searchingResult = TryToFindChessMatch(mode);
-
-        if (searchingResult != null)
-            return true;
-
-        ChessMatch? creatingOfMatch = TryToCreateChessMatch(mode);
-        if(creatingOfMatch != null)
-            return true;
-
-        return false;
-    }
-
-
-    public ChessMatch? TryToFindChessMatch(GameMode mode)
-    {
-        try
-        {
-            ChessMatchSettings settings = new(typeof(ChessMatch), mode);
-
-            int matchId = MatchSearching.GetInstance().SearchMatchID(settings);
-            ChessMatch foundMatch = MatchSearching.GetInstance().GetChessMatchByID(matchId);
-
-            if (foundMatch != null)
-            {
-                social.CurrentPlayer.PlayersMatch = foundMatch.MatchID;
-                foundMatch.Join(social.CurrentPlayer);
-                social.PersistPlayerAsync(social.CurrentPlayer);
-                NavigationManager.NavigateTo("/chess/" + social.CurrentPlayer.PlayersMatch.ToString(), false);
-                return foundMatch;
-            }
-
-            return null;
-        }
-        catch
-        {
-            Console.WriteLine("TryToFindChessMatch(GameMode mode): cannot find the match");
-            return null;
-        }
-
-    }
-
-
-    public ChessMatch? TryToCreateChessMatch(GameMode mode)
-    {
-        try
-        {
-            ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode, this);
-            social.CurrentPlayer.PlayersMatch = newMatch.MatchID;
-            MatchSearching.GetInstance().AddMatch(newMatch);
-
-
-            social.PersistPlayerAsync(social.CurrentPlayer);
-
-
-            NavigationManager.NavigateTo("/chess/" + newMatch.MatchID.ToString(), false);
-
-            return newMatch;
-        }
-        catch
-        {
-            Console.WriteLine("CreateChessMatch(GameMode mode): Probably CurrentUser was null");
-            return null;
-        }
-
-    }
-
-
-    void SetButtonState(int buttonNumber)
-    {
-        if (SelectedButton != buttonNumber)
-        {
-            SelectedButton = buttonNumber;
-        }
-        else
-        {
-            SelectedButton = 0;
-        }
-
-    }
-
-    public void ReloadGame()
-    {
-        Reload = true;
-        StateHasChanged();
-    }
-
-    [JSInvokable("IdHandler")]
-    public async Task IdHandler(string id, string Event)
-    {
-        if (Event == "mousedown")
-            FromID = id;
-        else if (Event == "mouseup")
-        {
-            ToID = id;
-            ChessPiece FromPiece = ChessGame.Board.GetPiece(FromID);
-            if (ChessGame.IsLatestPosition == true)
-            {
-                if (ChessGame.MovePiece(FromID, ToID))
-                {
-                    ChessGame.EndTurn();
-                    Reload = true;
-                    StateHasChanged();
-                }
-                else
-                {
-                    ToID = FromID;
-                    Reload = true;
-                    StateHasChanged();
-                    //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
-                }
-            }
-            else
-            {
-                ToID = FromID;
-                Reload = true;
-                StateHasChanged();
-                //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
-            }
-        }
-    }
-
-            // if (ChessGame.MovePiece(FromID, ToID))
-            // {
-            //     ChessGame.EndTurn();
-            //     Reload = true;
-            //     StateHasChanged();
-            // }
-            // else
-            // {
-            //     ToID = FromID;
-            //     Reload = true;
-            //     StateHasChanged();
-            //     await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
-            // }
-
-            if(Match != null)
-            {
-                //ChessGame = Match.Chess;
-
-                if (Match.Black != null && Match.White != null)
+                protected override async Task OnAfterRenderAsync(bool firstRender)
                 {
 
-                    if (ChessGame.TeamTurn == Team.Black && social.CurrentPlayer.Name == Match.Black.Player.Name)
+                    if (firstRender)
                     {
-                        if (ChessGame.MovePiece(FromID, ToID))
+                        await social.FetchPlayerAsync();
+
+
+                        Match = (ChessMatch)MatchSearching.GetInstance().GetChessMatchByID(social.CurrentPlayer.PlayersMatch);
+
+
+                        if (Match == null)
                         {
-                            ChessGame.EndTurn();
-                            Reload = true;
-                            StateHasChanged();
+                            ChessGame = new Chess(this);
+                            ChessGame.StartGame();
+                            ChessGame.UpdateGameState();
+                            ChessGame.ResetBoard();
+
                         }
                         else
                         {
-                            ToID = FromID;
-                            Reload = true;
-                            StateHasChanged();
-                            //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                            ChessGame = Match.Chess;
+
+                            if(!ChessGame.IsRunning)
+                            {
+                                ChessGame.StartGame();
+                                ChessGame.ResetBoard();
+                            }
+
+                            ChessGame.UpdateGameState();
                         }
+
+                        // See warning about memory above in the article
+                        dotNetReference = DotNetObjectReference.Create(this);
+                        await JsRuntime.InvokeVoidAsync("setDotNetReference", dotNetReference);
                     }
-                    else if (ChessGame.TeamTurn == Team.White && social.CurrentPlayer.Name == Match.White.Player.Name)
+                    MoveHistory = ChessGame.ChessPieceMoveHistory;
+                    if (Reload)
                     {
-                        if (ChessGame.MovePiece(FromID, ToID))
+                        Reload = false;
+
+                        string moveHistoryString = "";
+                        foreach (var a in MoveHistory)
                         {
-                            ChessGame.EndTurn();
-                            Reload = true;
-                            StateHasChanged();
+                            moveHistoryString += (a.Item1.Team + " " + a.Item1.Field + " " + a.Item1.PieceType + " -> " + a.Item2.Team + " " + a.Item2.Field + " " + a.Item2.PieceType + "\n      ");
                         }
-                        else
+
+                        Console.ResetColor();
+
+                        Task logTask = new Task(() => logger.LogDebug(moveHistoryString));
+                        logTask.Start();
+                        logTask.Wait();
+
+                        Console.ResetColor();
+
+                        LoggingHandler.DrawSeperatorLine(ConsoleColor.Magenta);
+                        StateHasChanged();
+                    }
+
+
+                    if (!ChessGame.IsPlaying)
+                    {
+                        await JsRuntime.InvokeVoidAsync("Over", !ChessGame.IsPlaying);
+                    }
+
+                    StateHasChanged();
+                }
+
+
+
+
+                public bool CreateOrFindChessMatch(GameMode mode)
+                {
+                    ChessMatch? searchingResult = TryToFindChessMatch(mode);
+
+                    if (searchingResult != null)
+                        return true;
+
+                    ChessMatch? creatingOfMatch = TryToCreateChessMatch(mode);
+                    if(creatingOfMatch != null)
+                        return true;
+
+                    return false;
+                }
+
+
+                public ChessMatch? TryToFindChessMatch(GameMode mode)
+                {
+                    try
+                    {
+                        ChessMatchSettings settings = new(typeof(ChessMatch), mode);
+
+                        int matchId = MatchSearching.GetInstance().SearchMatchID(settings);
+                        ChessMatch foundMatch = MatchSearching.GetInstance().GetChessMatchByID(matchId);
+
+                        if (foundMatch != null)
                         {
-                            ToID = FromID;
-                            Reload = true;
-                            StateHasChanged();
-                            //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                            social.CurrentPlayer.PlayersMatch = foundMatch.MatchID;
+                            foundMatch.Join(social.CurrentPlayer);
+                            social.PersistPlayerAsync(social.CurrentPlayer);
+                            NavMan.NavigateTo("/chess/" + social.CurrentPlayer.PlayersMatch.ToString(), false);
+                            return foundMatch;
                         }
+
+                        return null;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("TryToFindChessMatch(GameMode mode): cannot find the match");
+                        return null;
+                    }
+
+                }
+
+
+                public ChessMatch? TryToCreateChessMatch(GameMode mode)
+                {
+                    try
+                    {
+                        ChessMatch newMatch = constructor.CreateMatch(social.CurrentPlayer, mode, this);
+                        social.CurrentPlayer.PlayersMatch = newMatch.MatchID;
+                        MatchSearching.GetInstance().AddMatch(newMatch);
+
+
+                        social.PersistPlayerAsync(social.CurrentPlayer);
+
+
+                        NavMan.NavigateTo("/chess/" + newMatch.MatchID.ToString(), false);
+
+                        return newMatch;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("CreateChessMatch(GameMode mode): Probably CurrentUser was null");
+                        return null;
+                    }
+
+                }
+
+
+                void SetButtonState(int buttonNumber)
+                {
+                    if (SelectedButton != buttonNumber)
+                    {
+                        SelectedButton = buttonNumber;
                     }
                     else
                     {
-                        ToID = FromID;
-                        Reload = true;
-                        StateHasChanged();
-                        //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                        SelectedButton = 0;
                     }
 
+                }
+
+                public void ReloadGame()
+                {
+                    Reload = true;
+                    StateHasChanged();
+                }
+
+
+                [JSInvokable("IdHandler")]
+                public async Task IdHandler(string id, string Event)
+                {
+                    if (Event == "mousedown")
+                        FromID = id;
+                    else if (Event == "mouseup")
+                        ToID = id;
+
+                    ChessPiece FromPiece = ChessGame.Board.GetPiece(FromID);
+
+
+                    if (Match != null && ChessGame.IsLatestPosition == true)
+                    {
+                        //ChessGame = Match.Chess;
+
+                        if (Match.Black != null && Match.White != null)
+                        {
+
+                            if (ChessGame.TeamTurn == Team.Black && social.CurrentPlayer.Name == Match.Black.Player.Name)
+                            {
+                                if (ChessGame.MovePiece(FromID, ToID))
+                                {
+                                    ChessGame.EndTurn();
+                                    Reload = true;
+                                    StateHasChanged();
+                                }
+                                else
+                                {
+                                    ToID = FromID;
+                                    Reload = true;
+                                    StateHasChanged();
+                                    //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                                }
+                            }
+                            else if (ChessGame.TeamTurn == Team.White && social.CurrentPlayer.Name == Match.White.Player.Name)
+                            {
+                                if (ChessGame.MovePiece(FromID, ToID))
+                                {
+                                    ChessGame.EndTurn();
+                                    Reload = true;
+                                    StateHasChanged();
+                                }
+                                else
+                                {
+                                    ToID = FromID;
+                                    Reload = true;
+                                    StateHasChanged();
+                                    //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                                }
+                            }
+                            else
+                            {
+                                ToID = FromID;
+                                Reload = true;
+                                StateHasChanged();
+                                //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                            }
+
+                        }
+                    }
                 }
 
     public ChessPiece? PawnToTransform = null;
@@ -863,4 +823,4 @@
         Reload = true;
         StateHasChanged();
     }
-}
+} 

@@ -21,7 +21,7 @@
 
         public void StopGame();
 
-        public T GetGame();
+        public T    GetGame();
     }
 
 }
