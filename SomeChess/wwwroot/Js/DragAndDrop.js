@@ -60,8 +60,8 @@ window.addEventListener("dragover", function (event) {
 
 window.addEventListener('mousemove', function (event) {
     if (window.draggingElement) {
-        var offsetX = event.clientX - window.draggingElement.offsetX;
-        var offsetY = event.clientY - window.draggingElement.offsetY;
+        var offsetX = event.clientX - 37;
+        var offsetY = event.clientY - 37;
         window.draggingElement.style.left = offsetX + 'px';
         window.draggingElement.style.top = offsetY + 'px';
     }
@@ -73,11 +73,13 @@ window.addEventListener('mouseup', function (event) {
 
 window.addEventListener('dragstart', function (event) {
     window.draggingElement = event.target;
-    event.target.offsetX = event.clientX - event.target.getBoundingClientRect().left;
-    event.target.offsetY = event.clientY - event.target.getBoundingClientRect().top;
+    event.target.offsetX = event.clientX - 37;
+    event.target.offsetY = event.clientY - 37;
     event.target.style.position = 'absolute';
 });
-window.setInterval(function () {
+
+
+function SetMoveHistoryScroll() {
     var objDiv = document.getElementById("move-history");
     objDiv.scrollTop = objDiv.scrollHeight;
 }, 1000);

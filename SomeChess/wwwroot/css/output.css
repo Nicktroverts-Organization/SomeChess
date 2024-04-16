@@ -544,6 +544,10 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
 .visible {
   visibility: visible;
 }
@@ -600,6 +604,10 @@ video {
   margin-bottom: 0.25rem;
 }
 
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
 .ml-0 {
   margin-left: 0px;
 }
@@ -634,6 +642,10 @@ video {
 
 .mt-2 {
   margin-top: 0.5rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
 }
 
 .mt-32 {
@@ -676,6 +688,14 @@ video {
   height: 2.5rem;
 }
 
+.h-12 {
+  height: 3rem;
+}
+
+.h-14 {
+  height: 3.5rem;
+}
+
 .h-2 {
   height: 0.5rem;
 }
@@ -708,10 +728,6 @@ video {
   width: 0.25rem;
 }
 
-.w-1\/2 {
-  width: 50%;
-}
-
 .w-1\/6 {
   width: 16.666667%;
 }
@@ -722,6 +738,14 @@ video {
 
 .w-4 {
   width: 1rem;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.w-6\/12 {
+  width: 50%;
 }
 
 .w-96 {
@@ -798,6 +822,14 @@ video {
   justify-content: space-evenly;
 }
 
+.justify-self-start {
+  justify-self: start;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
 .rounded-lg {
   border-radius: 0.5rem;
 }
@@ -814,6 +846,11 @@ video {
   border-width: 1px;
 }
 
+.bg-emerald-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(6 78 59 / var(--tw-bg-opacity));
+}
+
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -827,6 +864,10 @@ video {
 
 .text-center {
   text-align: center;
+}
+
+.text-start {
+  text-align: start;
 }
 
 .text-3xl {
@@ -851,6 +892,21 @@ video {
 .text-gray-100 {
   --tw-text-opacity: 1;
   color: rgb(243 244 246 / var(--tw-text-opacity));
+}
+
+.text-lime-500 {
+  --tw-text-opacity: 1;
+  color: rgb(132 204 22 / var(--tw-text-opacity));
+}
+
+.text-red-700 {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .underline {
@@ -899,32 +955,17 @@ video {
 }
 
 :root {
-  --BackgroundColor: #283739;
-  --SecondBackgroundColor: #2c5d63;
-  --HoverColor: #a2c11c;
+  --BackgroundColor: #302e2b;
+  --SecondBackgroundColor: #21201e;
+  --HoverColor: #3c3b39;
   --TextColor: #d3d3d3;
+  --Green: #80b54c;
 }
 
 .chessboard {
   display: grid;
   grid-template-columns: repeat(8, 80px);
   grid-template-rows: repeat(8, 80px);
-}
-
-.normalefiguren {
-  width: 70px;
-}
-
-.powns {
-  width: 50px;
-}
-
-.rook {
-  width: 60px;
-}
-
-.knight {
-  width: 65px;
 }
 
 .item {
@@ -946,17 +987,21 @@ video {
 /*buttons*/
 
 .playOnline {
+  transition: all 0.4s;
   border-style: solid;
   height: 10vh;
   width: 400px;
+  min-height: 80px;
   border-radius: 15px;
   font-size: 250%;
   color: white;
-  background-color: #93c75e;
+  background-color: #80b54c;
 }
 
 .playOnline:hover {
-  background-color: #72c21f;
+  transition: all 0.4s;
+  background-color: #98c66c;
+  box-shadow: 1px 1px 2px #98c66c;
 }
 
 .playOnline span {
@@ -966,13 +1011,15 @@ video {
 }
 
 .playComputer {
+  transition: all 0.4s;
   border-style: solid;
   height: 10vh;
+  min-height: 80px;
   width: 400px;
   border-radius: 15px;
   font-size: 250%;
   color: white;
-  background-color: #696969;
+  background-color: #403e3c;
 }
 
 .playComputer span {
@@ -981,7 +1028,9 @@ video {
 }
 
 .playComputer:hover {
-  background-color: #636363;
+  transition: all 0.4s;
+  background-color: #767373;
+  box-shadow: 1px 1px 2px #767373;
 }
 
 .textInButton {
@@ -1000,7 +1049,7 @@ video {
 
 .greengradient {
   font-size: 400%;
-  background-image: linear-gradient(to right, rgb(182, 244, 146), rgb(51, 139, 147));
+  background-color: var(--TextColor);
   -webkit-background-clip: text;
   color: transparent;
 }
@@ -1016,14 +1065,17 @@ video {
   border-radius: 10px;
   width: 30vw;
   height: 68vh;
+  border: solid;
+  min-width: 450px;
+  min-height: 550px;
 }
 
 .chooseTime {
   background-color: var(--SecondBackgroundColor);
   display: flex;
   position: absolute;
-  margin-left: 54.2vw;
-  width: 30vw;
+  margin-left: 54.5vw;
+  width: 28vw;
   border-radius: 10px;
   height: 60vh;
   margin-top: -67vh;
@@ -1031,7 +1083,7 @@ video {
 
 .chooseTime span {
   color: rgb(242, 84, 84);
-  margin-left: 28.5vw;
+  margin-left: 28vw;
   cursor: pointer;
 }
 
@@ -1040,16 +1092,15 @@ video {
 }
 
 .chooseTime button {
+  transition: all 0.15s;
   background-color: var(--HoverColor);
   width: 6vw;
   border-radius: 5px;
 }
 
 .chooseTime button:hover {
-  transition-duration: 0.15s;
-  transition-property: all;
-  transition-timing-function: ease-in-out;
-  box-shadow: 0 0 15px #72c21f;
+  transition: all 0.15s;
+  box-shadow: 0 0 15px #767373;
 }
 
 .selectedTimeShadow {
@@ -1096,7 +1147,7 @@ video {
 }
 
 .gameOverDesign {
-  background-color: #2c5d63;
+  background-color: var(--BackgroundColor);
   color: white;
 }
 
@@ -1110,6 +1161,7 @@ video {
 }
 
 .gameOverDesign a {
+  transition: all 0.4s;
   font-size: 200%;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -1117,7 +1169,15 @@ video {
   cursor: pointer;
   border-radius: 5px;
   padding: 15px 15px;
-  background-color: #008080;
+  background-color: var(--Green);
+}
+
+.gameOverDesign a:hover {
+  transition: all 0.4s;
+  background-color: #98c66c;
+  border-color: #98c66c;
+  border-radius: 4px;
+  box-shadow: 1px 1px 2px 4px #98c66c;
 }
 
 .move-history {
@@ -1135,7 +1195,7 @@ video {
 }
 
 .peaceChoiceHolder {
-  background-color: #32581f;
+  background-color: var(--BackgroundColor);
 }
 
 .peaceChoiceHolder img {
@@ -1156,17 +1216,73 @@ video {
 }
 
 .movesNotationHolder:nth-child(even) {
-  background-color: #2c5d63;
+  background-color: var(--BackgroundColor);
 }
 
 .movesNotationHolder:nth-child(odd) {
-  background-color: rgb(25, 113, 74);
+  background-color: var(--SecondBackgroundColor);
 }
 
 .drawButton {
-  background-color: #636363;
+  color: white;
+  width: 5vw;
+  font-size: 125%;
+  transition: all 0.4s;
+  background-color: #80b54c;
+  border-radius: 4px;
+}
+
+.drawButton:hover {
+  transition: all 0.4s;
+  background-color: #98c66c;
+  box-shadow: 1px 1px 2px #98c66c;
 }
 
 .giveUpButton {
-  background-color: red;
+  transition: all 0.7s;
+  color: white;
+  width: 5vw;
+  font-size: 125%;
+  transition: all 0.4s;
+  background-color: #80b54c;
+  border-radius: 4px;
+}
+
+.giveUpButton:hover {
+  transition: all 0.4s;
+  background-color: #98c66c;
+  box-shadow: 1px 1px 2px #98c66c;
+}
+
+.minusmargintop {
+  margin-top: -6vh;
+}
+
+img {
+  height: 80px;
+  width: 80px;
+}
+
+.selectedMove {
+  background-color: rgb(69, 68, 65);
+  border-radius: 4px;
+}
+
+.playButton a {
+  transition: all 0.4s;
+  background-color: #80b54c;
+  border-radius: 4px;
+  color: white;
+}
+
+.playButton a:hover {
+  transition: all 0.4s;
+  background-color: #98c66c;
+  border-color: #98c66c;
+  border-radius: 4px;
+  box-shadow: 1px 1px 2px 4px #98c66c;
+}
+
+.highlighted {
+  box-shadow: 1px 1px 2px 4px #ff0000;
 }
