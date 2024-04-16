@@ -73,7 +73,7 @@
     border-style: solid;
     height: 10vh;
     width: 400px;
-    min-height: 80px;
+    min-height: 90px;
     border-radius: 15px;
     font-size: 250%;
     color: white;
@@ -93,7 +93,7 @@
     transition: all 0.4s;
     border-style: solid;
     height: 10vh;
-    min-height: 80px;
+    min-height: 90px;
     width: 400px;
     border-radius: 15px;
     font-size: 250%;
@@ -143,18 +143,11 @@
     min-height: 550px;
 }
 .chooseTime {
-    background-color: var(--SecondBackgroundColor);
     display: flex;
-    position: absolute;
-    margin-left: 54.5vw;
-    width: 28vw;
-    border-radius: 10px;
-    height: 60vh;
-    margin-top: -67vh;
 }
 .chooseTime span {
+    margin-top: 0.2vh;
     color: rgb(242, 84, 84);
-    margin-left: 28vw;
     cursor: pointer;
 }
 .chooseTime span:hover {
@@ -186,8 +179,10 @@
         font-size: 300%;
         box-shadow: 0 0 20px white;
         color: white;
-        width: 10vw;
-        height: 6.5vh;
+        min-width: 250px;
+        min-height: 60px;
+        width: 15vw;
+        height: 8.5vh;
         border-radius: 10px;
         background-color: #283739;
         font-weight: 700;
@@ -239,6 +234,7 @@
 .move-history {
         overflow: scroll;
         height: 53vh;
+        min-height: 380px;
     }
 .d-block {
     display: block;
