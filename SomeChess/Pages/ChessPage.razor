@@ -28,8 +28,6 @@
     string blackName = "";
     string whiteName = "";
 
-    ChessMatch? Match;
-
     public string Title = "";
 
 
@@ -48,6 +46,7 @@
         {
             await social.FetchPlayerAsync();
 
+            social.CurrentPlayer.PlayersMatch = MatchID;
 
             if (social.CurrentPlayer == null || social.CurrentPlayer.PlayersMatch == 0)
             {
@@ -56,7 +55,7 @@
             }
             else
             {
-                Match = (ChessMatch)MatchSearching.GetInstance().GetChessMatchByID(MatchID);
+                ChessMatch? Match = (ChessMatch)MatchSearching.GetInstance().GetChessMatchByID(MatchID);
 
                 if(Match != null)
                 {

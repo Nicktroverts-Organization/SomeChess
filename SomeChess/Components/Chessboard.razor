@@ -571,7 +571,7 @@
         if (firstRender)
         {
             await social.FetchPlayerAsync();
-            
+
             if(social.CurrentPlayer != null)
                 Match = (ChessMatch)MatchSearching.GetInstance().GetChessMatchByID(social.CurrentPlayer.PlayersMatch);
 
@@ -628,6 +628,8 @@
         {
             await JsRuntime.InvokeVoidAsync("Over", !ChessGame.IsPlaying);
         }
+
+        StateHasChanged();
     }
 
 
@@ -661,7 +663,8 @@
             {
                 social.CurrentPlayer.PlayersMatch = foundMatch.MatchID;
                 foundMatch.Join(social.CurrentPlayer);
-                NavigationManager.NavigateTo("/chess/" + foundMatch.MatchID, true);
+                social.PersistPlayerAsync(social.CurrentPlayer);
+                NavigationManager.NavigateTo("/chess/" + social.CurrentPlayer.PlayersMatch.ToString(), false);
                 return foundMatch;
             }
 
@@ -730,48 +733,71 @@
             ToID = id;
             ChessPiece FromPiece = ChessGame.Board.GetPiece(FromID);
 
-            //if(Match != null && Match.Black != null && Match.White != null)
-            //{
-            //    if (ChessGame.TeamTurn == Team.Black && social.CurrentPlayer.Name == Match.Black.Player.Name)
-            //    {
-            //        if (ChessGame.MovePiece(FromID, ToID))
-            //        {
-            //            ChessGame.EndTurn();
-            //            Reload = true;
-            //            StateHasChanged();
-            //        }
-            //        else
-            //        {
-            //            ToID = FromID;
-            //            Reload = true;
-            //            StateHasChanged();
-            //            //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
-            //        }
-            //    }
-            //    else if (ChessGame.TeamTurn == Team.White && social.CurrentPlayer.Name == Match.White.Player.Name)
-            //    {
-            //        if (ChessGame.MovePiece(FromID, ToID))
-            //        {
-            //            ChessGame.EndTurn();
-            //            Reload = true;
-            //            StateHasChanged();
-            //        }
-            //        else
-            //        {
-            //            ToID = FromID;
-            //            Reload = true;
-            //            StateHasChanged();
-            //            //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        ToID = FromID;
-            //        Reload = true;
-            //        StateHasChanged();
-            //        //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
-            //    }
-            //}
+            // if (ChessGame.MovePiece(FromID, ToID))
+            // {
+            //     ChessGame.EndTurn();
+            //     Reload = true;
+            //     StateHasChanged();
+            // }
+            // else
+            // {
+            //     ToID = FromID;
+            //     Reload = true;
+            //     StateHasChanged();
+            //     await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+            // }
+
+            if(Match != null)
+            {
+                //ChessGame = Match.Chess;
+
+                if (Match.Black != null && Match.White != null)
+                {
+
+                    if (ChessGame.TeamTurn == Team.Black && social.CurrentPlayer.Name == Match.Black.Player.Name)
+                    {
+                        if (ChessGame.MovePiece(FromID, ToID))
+                        {
+                            ChessGame.EndTurn();
+                            Reload = true;
+                            StateHasChanged();
+                        }
+                        else
+                        {
+                            ToID = FromID;
+                            Reload = true;
+                            StateHasChanged();
+                            //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                        }
+                    }
+                    else if (ChessGame.TeamTurn == Team.White && social.CurrentPlayer.Name == Match.White.Player.Name)
+                    {
+                        if (ChessGame.MovePiece(FromID, ToID))
+                        {
+                            ChessGame.EndTurn();
+                            Reload = true;
+                            StateHasChanged();
+                        }
+                        else
+                        {
+                            ToID = FromID;
+                            Reload = true;
+                            StateHasChanged();
+                            //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                        }
+                    }
+                    else
+                    {
+                        ToID = FromID;
+                        Reload = true;
+                        StateHasChanged();
+                        //await JsRuntime.InvokeVoidAsync("MovePiece", FromID, ToID);
+                    }
+
+                }
+
+                //Match.Chess = ChessGame;
+            }
 
             return;
         }
