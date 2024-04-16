@@ -50,7 +50,7 @@
                                 @if (!NavMan.Uri.ToLower().Contains("/chess/"))
                                 {
                                     <div class="item @color" draggable="false">
-                                        @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] +( LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
+                                        @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
                                     </div>
                                 }
                                 else
@@ -81,180 +81,40 @@
                 }
                 @if (!NavMan.Uri.ToLower().Contains("/chess/"))
                 {
-                    <div class="backholder border-color ml-24 flex flex-col text-center">
-                        <h1 class="greengradient anton-regular">
-                            Play Chess<br />
-                            Online<br />
-                            on the #1 Site!
-                        </h1>
-                        <div class="flex items-center flex-col justify-center mt-5">
-                            <div class="flex justify-between playOnline">
-                                <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer mt-2" />
-                                <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
-                            </div>
-                            <div class="flex justify-between playComputer mt-5">
-                                <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
-                                <button class="textInButton">Computer<br /><span class="smalltextPlayComputer">Play vs training bots offline!</span></button>
-                            </div>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    @if (!NavMan.Uri.ToLower().Contains("/chess/"))
+                    @if (!PlayOnline)
                     {
                         <div class="backholder ml-24 flex flex-col text-center">
-                            <h1 class="greengradient anton-regular">Moves Notation</h1>
-                            <div id="move-history" class="move-history flex-col justify-center">
-                                @for (int i = 0; i < MoveHistory.Count; i += 2)
-                                {
-                                    int moveNumber = i / 2 + 1;
-                                    int thisi = i;
-                                    <div class="flex text-start justify-evenly movesNotationHolder">
-                                        <div class="w-1/6">
-                                            <p @onclick="() => { ChessGame.ViewPosition(thisi); }" class="h-8 cursor-pointer text-center select-none @(ChessGame.MatchingPositionFromHistory == thisi + 1 ? "selectedMove" : "")">
-
-                                                @(moveNumber.ToString() + ". ")
-                                                @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
-                                                {
-                                                    @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
-                                                    {
-                                                        @(MoveHistory[i].Item1.Field[0] + "x" + @MoveHistory[i].Item2.Field)
-                                                    }
-                                                    else
-                                                    {
-                                                        @MoveHistory[i].Item2.Field
-                                                        ;
-                                                    }
-                                                }
-                                                else if (MoveHistory[i].Item3 == true)
-                                                {
-                                                    if (MoveHistory[i].Item2.Field.ToString()[0] == 'c')
-                                                    {
-                                                        @("0-0-0")
-                                                        ;
-                                                    }
-                                                    else
-                                                    {
-                                                        @("0-0")
-                                                        ;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
-                                                    {
-                                                        @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
-                                                        {
-                                                            @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i].Item2.Field)
-                                                        }
-                                                        else
-                                                        {
-                                                            @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i].Item2.Field)
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
-                                                        {
-                                                            @(MoveHistory[i].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i].Item2.Field)
-                                                        }
-                                                        else
-                                                        {
-                                                            @(MoveHistory[i].Item1.PieceType.ToString()[0] + @MoveHistory[i].Item2.Field)
-                                                        }
-                                                    }
-                                                }
-                                            </p>
-                                        </div>
-                                        <div class="w-1/6">
-                                            @if (i + 1 < MoveHistory.Count)
-                                            {
-                                                <p @onclick="() => { ChessGame.ViewPosition(thisi+1); }" class="h-8 text-center cursor-pointer select-none @(ChessGame.MatchingPositionFromHistory == thisi + 2 ? "selectedMove" : "")">
-                                                    @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
-                                                    {
-                                                        @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
-                                                        {
-                                                            @(MoveHistory[i + 1].Item1.Field[0] + "x" + @MoveHistory[i + 1].Item2.Field)
-                                                        }
-                                                        else
-                                                        {
-                                                            @MoveHistory[i + 1].Item2.Field
-                                                            ;
-                                                        }
-                                                    }
-                                                    else if (MoveHistory[i + 1].Item3 == true)
-                                                    {
-                                                        if (MoveHistory[i + 1].Item2.Field.ToString()[0] == 'c')
-                                                        {
-                                                            @("0-0-0")
-                                                            ;
-                                                        }
-                                                        else
-                                                        {
-                                                            @("0-0")
-                                                            ;
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Knight)
-                                                        {
-                                                            @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
-                                                            {
-                                                                @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i + 1].Item2.Field)
-                                                            }
-                                                            else
-                                                            {
-                                                                @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i + 1].Item2.Field)
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
-                                                            {
-                                                                @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i + 1].Item2.Field)
-                                                            }
-                                                            else
-                                                            {
-                                                                @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + @MoveHistory[i + 1].Item2.Field)
-                                                            }
-                                                        }
-                                                    }
-                                                </p>
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                            @if (DrawOffer == true)
-                            {
-                                <div class="flex text-center justify-center minusmargintop">
-                                    <div class="bg-emerald-900 w-6/12 rounded h-14">
-                                        <p class="text-white">Your opponent offered a draw</p>
-                                        <div>
-                                            <button @onclick="() => { ChessGame.ForceDraw(); ChessGame.UpdateGameState(); }"><span class="material-symbols-outlined text-lime-500 cursor-pointer">done</span></button>
-                                            <button @onclick="() => { DrawOffer = false; }"><span class="material-symbols-outlined text-red-700 mt-1.5 cursor-pointer">close</span></button>
-                                        </div>
-                                    </div>
+                            <h1 class="greengradient anton-regular">
+                                Play Chess<br />
+                                Online<br />
+                                on the #1 Site!
+                            </h1>
+                            <div class="flex items-center flex-col justify-center mt-5">
+                                <div class="flex justify-between playOnline">
+                                    <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer mt-2" />
+                                    <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
                                 </div>
-                            }
-                            <div class="flex justify-around text-center bottom-72 right-80 mt-3">
-                                <button @onclick="() => { ChessGame.GiveUp(Team.White); ChessGame.UpdateGameState(); }" class="giveUpButton ml-8 mb-2">Give Up</button>
-                                <button @onclick="() => { DrawOffer = true; }" class="drawButton mb-2">Draw</button>
+                                <div class="flex justify-between playComputer mt-5">
+                                    <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
+                                    <button class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
+                                </div>
                             </div>
                         </div>
                     }
                     else
                     {
-                        <div class="chooseTime flex flex-col">
-                            <div>
-                                <span @onclick="() => { PlayOnline = false; }" class="material-symbols-outlined fixed absolute select-none">cancel</span>
-                                <h1 class="greengradient ml-16">Choose a Time</h1>
-                            </div>
-                            <div class="ml-8">
+                        <div class="backholder ml-24 flex flex-col chooseTime">
+                            <div class="row">
+                                <div class="material-symbols-outlined flex justify-end text-end select-none">
+                                    <span @onclick="() => { PlayOnline = false; }">cancel</span>
+                                </div>
                                 <div>
-                                    <h2 class="anton-regular mt-5">Bullet</h2>
+                                    <h1 class="mt-2 greengradient">Choose a Time</h1>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <h2 class="anton-regular mt-10">Bullet</h2>
                                     <div class="flex justify-evenly">
                                         <button @onclick="() => {SetButtonState(1); CreateChessMatch(GameMode.OnlineOneMinute);}" class="@((SelectedButton == 1) ? "selectedTimeShadow" : "")">1 Minutes</button>
                                         <button @onclick="() => {SetButtonState(2); CreateChessMatch(GameMode.OnlineOneMinutePlusOne);}" class="@((SelectedButton == 2) ? "selectedTimeShadow" : "")">1 | 1</button>
@@ -279,13 +139,155 @@
                                     </div>
                                 </div>
                                 <div class="playButton flex text-center justify-center mt-14 select-none">
-                                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center items-center justify-center"><div class="flex text-center items-center justify-center">Play</div></a>
+                                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center items-center justify-center"><div class="flex text-center items-center justify-center">Play now!</div></a>
                                 </div>
                             </div>
-
                         </div>
                     }
-                    
+                }
+                else
+                {
+                    <div class="backholder ml-24 flex flex-col text-center">
+                        <h1 class="greengradient anton-regular">Moves Notation</h1>
+                        <div id="move-history" class="move-history flex-col justify-center">
+                            @for (int i = 0; i < MoveHistory.Count; i += 2)
+                            {
+                                int moveNumber = i / 2 + 1;
+                                int thisi = i;
+                                <div class="flex text-start justify-evenly movesNotationHolder">
+                                    <div class="w-1/6">
+                                        <p @onclick="() => { ChessGame.ViewPosition(thisi); }" class="h-8 cursor-pointer text-center select-none @(ChessGame.MatchingPositionFromHistory == thisi + 1 ? "selectedMove" : "")">
+
+                                            @(moveNumber.ToString() + ". ")
+                                            @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
+                                            {
+                                                @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                {
+                                                    @(MoveHistory[i].Item1.Field[0] + "x" + @MoveHistory[i].Item2.Field)
+                                                }
+                                                else
+                                                {
+                                                    @MoveHistory[i].Item2.Field
+                                                    ;
+                                                }
+                                            }
+                                            else if (MoveHistory[i].Item3 == true)
+                                            {
+                                                if (MoveHistory[i].Item2.Field.ToString()[0] == 'c')
+                                                {
+                                                    @("0-0-0")
+                                                    ;
+                                                }
+                                                else
+                                                {
+                                                    @("0-0")
+                                                    ;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
+                                                {
+                                                    @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @(MoveHistory[i].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i].Item2.Field)
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @(MoveHistory[i].Item1.PieceType.ToString()[0] + @MoveHistory[i].Item2.Field)
+                                                    }
+                                                }
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="w-1/6">
+                                        @if (i + 1 < MoveHistory.Count)
+                                        {
+                                            <p @onclick="() => { ChessGame.ViewPosition(thisi+1); }" class="h-8 text-center cursor-pointer select-none @(ChessGame.MatchingPositionFromHistory == thisi + 2 ? "selectedMove" : "")">
+                                                @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Pawn)
+                                                {
+                                                    @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                    {
+                                                        @(MoveHistory[i + 1].Item1.Field[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                    }
+                                                    else
+                                                    {
+                                                        @MoveHistory[i + 1].Item2.Field
+                                                        ;
+                                                    }
+                                                }
+                                                else if (MoveHistory[i + 1].Item3 == true)
+                                                {
+                                                    if (MoveHistory[i + 1].Item2.Field.ToString()[0] == 'c')
+                                                    {
+                                                        @("0-0-0")
+                                                        ;
+                                                    }
+                                                    else
+                                                    {
+                                                        @("0-0")
+                                                        ;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Knight)
+                                                    {
+                                                        @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                        {
+                                                            @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                        }
+                                                        else
+                                                        {
+                                                            @(MoveHistory[i + 1].Item1.PieceType.ToString().ToUpper()[1] + @MoveHistory[i + 1].Item2.Field)
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
+                                                        {
+                                                            @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + "x" + @MoveHistory[i + 1].Item2.Field)
+                                                        }
+                                                        else
+                                                        {
+                                                            @(MoveHistory[i + 1].Item1.PieceType.ToString()[0] + @MoveHistory[i + 1].Item2.Field)
+                                                        }
+                                                    }
+                                                }
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @if (DrawOffer == true)
+                        {
+                            <div class="flex text-center justify-center minusmargintop">
+                                <div class="bg-emerald-900 w-6/12 rounded h-14">
+                                    <p class="text-white">Your opponent offered a draw</p>
+                                    <div>
+                                        <button @onclick="() => { ChessGame.ForceDraw(); ChessGame.UpdateGameState(); }"><span class="material-symbols-outlined text-lime-500 cursor-pointer">done</span></button>
+                                        <button @onclick="() => { DrawOffer = false; }"><span class="material-symbols-outlined text-red-700 mt-1.5 cursor-pointer">close</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="flex justify-around text-center bottom-72 right-80 mt-3 mb-2">
+                            <button @onclick="() => { ChessGame.GiveUp(Team.White); ChessGame.UpdateGameState(); }" class="giveUpButton ml-8">Give Up</button>
+                            <button @onclick="() => { DrawOffer = true; }" class="drawButton">Draw</button>
+                        </div>
+                    </div>
                 }
             </div>
         }
@@ -354,23 +356,69 @@
                 }
                 @if (!NavMan.Uri.ToLower().Contains("/chess/"))
                 {
-                    <div class="backholder justify-center flex flex-col text-center">
-                        <h1 class="greengradient anton-regular">
-                            Play Chess<br />
-                            Online<br />
-                            on the #1 Site!
-                        </h1>
-                        <div class="flex text-center flex-col justify-center mt-5">
-                            <div class="flex justify-between playOnline">
-                                <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer mt-2" />
-                                <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
-                            </div>
-                            <div class="flex justify-between playComputer mt-5">
-                                <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
-                                <button class="textInButton">Computer<br /><span class="smalltextPlayComputer">Play vs training bots offline!</span></button>
+                    @if (!PlayOnline)
+                    {
+                        <div class="backholder ml-24 flex flex-col text-center">
+                            <h1 class="greengradient anton-regular">
+                                Play Chess<br />
+                                Online<br />
+                                on the #1 Site!
+                            </h1>
+                            <div class="flex items-center flex-col justify-center mt-5">
+                                <div class="flex justify-between playOnline">
+                                    <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer mt-2" />
+                                    <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
+                                </div>
+                                <div class="flex justify-between playComputer mt-5">
+                                    <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
+                                    <button class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="backholder ml-24 flex flex-col chooseTime">
+                            <div class="row">
+                                <div class="material-symbols-outlined flex justify-end text-end select-none">
+                                    <span @onclick="() => { PlayOnline = false; }">cancel</span>
+                                </div>
+                                <div>
+                                    <h1 class="mt-2 greengradient">Choose a Time</h1>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <h2 class="anton-regular mt-10">Bullet</h2>
+                                    <div class="flex justify-evenly">
+                                        <button @onclick="() => {SetButtonState(1); CreateChessMatch(GameMode.OnlineOneMinute);}" class="@((SelectedButton == 1) ? "selectedTimeShadow" : "")">1 Minutes</button>
+                                        <button @onclick="() => {SetButtonState(2); CreateChessMatch(GameMode.OnlineOneMinutePlusOne);}" class="@((SelectedButton == 2) ? "selectedTimeShadow" : "")">1 | 1</button>
+                                        <button @onclick="() => {SetButtonState(3); CreateChessMatch(GameMode.OnlineTwoMinutesPlusOne);}" class="@((SelectedButton == 3) ? "selectedTimeShadow" : "")">2 | 1</button>
+                                    </div>
+
+                                </div>
+                                <div>
+                                    <h2 class="anton-regular  mt-7">Blitz</h2>
+                                    <div class="flex justify-evenly">
+                                        <button @onclick="() => {SetButtonState(4); CreateChessMatch(GameMode.OnlineThreeMinutes);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
+                                        <button @onclick="() => {SetButtonState(5); CreateChessMatch(GameMode.OnlineThreeMinutesPlusTwo);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
+                                        <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 class="anton-regular mt-7">Rapid</h2>
+                                    <div class="flex justify-evenly">
+                                        <button @onclick="() => {SetButtonState(7); CreateChessMatch(GameMode.OnlineTenMinutes);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
+                                        <button @onclick="() => {SetButtonState(8); CreateChessMatch(GameMode.OnlineFifteenMinutesPlusTen);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
+                                        <button @onclick="() => {SetButtonState(9); CreateChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
+                                    </div>
+                                </div>
+                                <div class="playButton flex text-center justify-center mt-14 select-none">
+                                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center items-center justify-center"><div class="flex text-center items-center justify-center">Play now!</div></a>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 }
                 else
                 {
@@ -510,9 +558,9 @@
                                 </div>
                             </div>
                         }
-                        <div class="flex justify-around text-center bottom-72 right-80 mt-3">
-                            <button @onclick="() => { ChessGame.GiveUp(Team.White); ChessGame.UpdateGameState(); }" class="giveUpButton ml-8 mb-2">Give Up</button>
-                            <button @onclick="() => { DrawOffer = true; }" class="drawButton mb-2">Draw</button>
+                        <div class="flex justify-around text-center bottom-72 right-80 mt-3 mb-2">
+                            <button @onclick="() => { ChessGame.GiveUp(Team.White); ChessGame.UpdateGameState(); }" class="giveUpButton ml-8">Give Up</button>
+                            <button @onclick="() => { DrawOffer = true; }" class="drawButton">Draw</button>
                         </div>
                     </div>
                 }
@@ -595,7 +643,7 @@
     public bool isFirstClick = true;
 
     private DotNetObjectReference<Chessboard> dotNetReference;
-    
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
 
