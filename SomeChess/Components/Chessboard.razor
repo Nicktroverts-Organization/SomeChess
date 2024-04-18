@@ -71,33 +71,78 @@
                                 <p class="text-3xl from-orange-800">Which peace do you want?</p>
                             </div>
                             <div class="flex text-center justify-around">
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="normalefiguren chessPiece mt-2 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }"/></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="rook chessPiece mt-1.5 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }"/></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_knight.png" class="knight chessPiece selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }"/></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_bishop.png" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" class="normalefiguren chessPiece chessPiece selector"/></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="chessPiece mt-2 selector" style="padding: 9px 7px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="chessPiece mt-2 selector" style="padding: 8px 12px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_knight.png" class="chessPiece selector mt-1.5" style="padding: 8px 10px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_bishop.png" class="mt-1.5 chessPiece selector" style="padding: 9px 7px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" /></div>
                             </div>
                         </div>
                     </div>
                 }
                 @if (!NavMan.Uri.ToLower().Contains("/chess/"))
                 {
-                    <div class="backholder border-color ml-24 flex flex-col text-center">
-                        <h1 class="greengradient anton-regular">
-                            Play Chess<br/>
-                            Online<br/>
-                            on the #1 Site!
-                        </h1>
-                        <div class="flex text-center flex-col ml-24 mt-5">
-                            <div class="flex justify-between playOnline">
-                                <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer mt-2" />
-                                <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br/><span>Play with a real person online!</span></button>
-                            </div>
-                            <div class="flex justify-between playComputer mt-5">
-                                <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1"/>
-                                <button class="textInButton">Computer<br/><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
+                    @if (!PlayOnline)
+                    {
+                        <div class="backholder ml-24 flex flex-col text-center">
+                            <h1 class="greengradient anton-regular">
+                                Play Chess<br />
+                                Online<br />
+                                on the #1 Site!
+                            </h1>
+                            <div class="flex items-center flex-col justify-center mt-5">
+                                <div class="flex justify-between playOnline">
+                                    <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer mt-2" />
+                                    <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
+                                </div>
+                                <div class="flex justify-between playComputer mt-5">
+                                    <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
+                                    <button class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="backholder ml-24 flex flex-col chooseTime">
+                            <div class="row">
+                                <div class="material-symbols-outlined flex justify-end text-end select-none" style="width: 100%;">
+                                    <span @onclick="() => { PlayOnline = false; }">cancel</span>
+                                </div>
+                                <div>
+                                    <h1 class="mt-2 greengradient">Choose a Time</h1>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <h2 class="anton-regular mt-10">Bullet</h2>
+                                    <div class="flex justify-evenly">
+                                        <button @onclick="() => {SetButtonState(1); CreateChessMatch(GameMode.OnlineOneMinute);}" class="@((SelectedButton == 1) ? "selectedTimeShadow" : "")">1 Minutes</button>
+                                        <button @onclick="() => {SetButtonState(2); CreateChessMatch(GameMode.OnlineOneMinutePlusOne);}" class="@((SelectedButton == 2) ? "selectedTimeShadow" : "")">1 | 1</button>
+                                        <button @onclick="() => {SetButtonState(3); CreateChessMatch(GameMode.OnlineTwoMinutesPlusOne);}" class="@((SelectedButton == 3) ? "selectedTimeShadow" : "")">2 | 1</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 class="anton-regular  mt-7">Blitz</h2>
+                                    <div class="flex justify-evenly">
+                                        <button @onclick="() => {SetButtonState(4); CreateChessMatch(GameMode.OnlineThreeMinutes);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
+                                        <button @onclick="() => {SetButtonState(5); CreateChessMatch(GameMode.OnlineThreeMinutesPlusTwo);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
+                                        <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 class="anton-regular mt-7">Rapid</h2>
+                                    <div class="flex justify-evenly">
+                                        <button @onclick="() => {SetButtonState(7); CreateChessMatch(GameMode.OnlineTenMinutes);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
+                                        <button @onclick="() => {SetButtonState(8); CreateChessMatch(GameMode.OnlineFifteenMinutesPlusTen);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
+                                        <button @onclick="() => {SetButtonState(9); CreateChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
+                                    </div>
+                                </div>
+                                <div class="playButton flex text-center justify-center mt-14 select-none">
+                                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center items-center justify-center"><div class="flex text-center items-center justify-center">Play now!</div></a>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 }
                 else
                 {
@@ -299,33 +344,78 @@
                                 <p class="text-3xl from-orange-800">Which peace do you want?</p>
                             </div>
                             <div class="flex text-center justify-around">
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="normalefiguren chessPiece mt-2 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }" /></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="rook chessPiece mt-1.5 selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }" /></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_knight.png" class="knight chessPiece selector" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }" /></div>
-                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_bishop.png" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" class="normalefiguren chessPiece chessPiece selector" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_queen.png" class="chessPiece mt-2 selector" style="padding: 9px 7px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Queen); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_rook.png" class="chessPiece mt-2 selector" style="padding: 8px 12px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Rook); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_knight.png" class="chessPiece selector mt-1.5" style="padding: 8px 10px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Knight); }" /></div>
+                                <div><img src="images/@(PawnToTransform.Team == Team.White ? "w" : "b")_bishop.png" class="mt-1.5 chessPiece selector" style="padding: 9px 7px;" @onclick="() => { DoPawnTransformEnd(ChessPieceType.Bishop); }" /></div>
                             </div>
                         </div>
                     </div>
                 }
                 @if (!NavMan.Uri.ToLower().Contains("/chess/"))
                 {
-                    <div class="backholder ml-24 flex flex-col text-center">
-                        <h1 class="greengradient anton-regular">
-                            Play Chess<br />
-                            Online<br />
-                            on the #1 Site!
-                        </h1>
-                        <div class="flex text-center flex-col ml-24 mt-5">
-                            <div class="flex justify-between playOnline">
-                                <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer mt-2" />
-                                <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
-                            </div>
-                            <div class="flex justify-between playComputer mt-5">
-                                <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
-                                <button class="textInButton">Computer<br /><span class="smalltextPlayComputer">Play vs training bots offline!</span></button>
+                    @if (!PlayOnline)
+                    {
+                        <div class="backholder ml-24 flex flex-col text-center">
+                            <h1 class="greengradient anton-regular">
+                                Play Chess<br />
+                                Online<br />
+                                on the #1 Site!
+                            </h1>
+                            <div class="flex items-center flex-col justify-center mt-5">
+                                <div class="flex justify-between playOnline">
+                                    <img @onclick="() => { PlayOnline = true; }" width="85" height="2" src="images/online-icon.png" class="selector cursor-pointer mt-2" />
+                                    <button class="textInButton" @onclick="() => { PlayOnline = true; }">Play Online<br /><span>Play with a real person online!</span></button>
+                                </div>
+                                <div class="flex justify-between playComputer mt-5">
+                                    <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
+                                    <button class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="backholder ml-24 flex flex-col chooseTime">
+                            <div class="row">
+                                <div class="material-symbols-outlined flex justify-end text-end select-none">
+                                    <span @onclick="() => { PlayOnline = false; }">cancel</span>
+                                </div>
+                                <div>
+                                    <h1 class="mt-2 greengradient">Choose a Time</h1>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <h2 class="anton-regular mt-10">Bullet</h2>
+                                    <div class="flex justify-evenly">
+                                        <button @onclick="() => {SetButtonState(1); CreateChessMatch(GameMode.OnlineOneMinute);}" class="@((SelectedButton == 1) ? "selectedTimeShadow" : "")">1 Minutes</button>
+                                        <button @onclick="() => {SetButtonState(2); CreateChessMatch(GameMode.OnlineOneMinutePlusOne);}" class="@((SelectedButton == 2) ? "selectedTimeShadow" : "")">1 | 1</button>
+                                        <button @onclick="() => {SetButtonState(3); CreateChessMatch(GameMode.OnlineTwoMinutesPlusOne);}" class="@((SelectedButton == 3) ? "selectedTimeShadow" : "")">2 | 1</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 class="anton-regular  mt-7">Blitz</h2>
+                                    <div class="flex justify-evenly">
+                                        <button @onclick="() => {SetButtonState(4); CreateChessMatch(GameMode.OnlineThreeMinutes);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
+                                        <button @onclick="() => {SetButtonState(5); CreateChessMatch(GameMode.OnlineThreeMinutesPlusTwo);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
+                                        <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 class="anton-regular mt-7">Rapid</h2>
+                                    <div class="flex justify-evenly">
+                                        <button @onclick="() => {SetButtonState(7); CreateChessMatch(GameMode.OnlineTenMinutes);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
+                                        <button @onclick="() => {SetButtonState(8); CreateChessMatch(GameMode.OnlineFifteenMinutesPlusTen);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
+                                        <button @onclick="() => {SetButtonState(9); CreateChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
+                                    </div>
+                                </div>
+                                <div class="playButton flex text-center justify-center mt-14 select-none">
+                                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center items-center justify-center"><div class="flex text-center items-center justify-center">Play now!</div></a>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 }
                 else
                 {
@@ -474,46 +564,6 @@
             </div>
         }
     </div>
-    @if (PlayOnline)
-    {
-        <div class="chooseTime flex flex-col">
-            <div>
-                <span @onclick="() => { PlayOnline = false; }" class="material-symbols-outlined fixed absolute select-none">cancel</span>
-                <h1 class="greengradient ml-16">Choose a Time</h1>
-            </div>
-            <div class="ml-8">
-                <div>
-                    <h2 class="anton-regular mt-5">Bullet</h2>
-                    <div class="flex justify-evenly">
-                        <button @onclick="() => {SetButtonState(1); CreateChessMatch(GameMode.OnlineOneMinute);}" class="@((SelectedButton == 1) ? "selectedTimeShadow" : "")">1 Minutes</button>
-                        <button @onclick="() => {SetButtonState(2); CreateChessMatch(GameMode.OnlineOneMinutePlusOne);}" class="@((SelectedButton == 2) ? "selectedTimeShadow" : "")">1 | 1</button>
-                        <button @onclick="() => {SetButtonState(3); CreateChessMatch(GameMode.OnlineTwoMinutesPlusOne);}" class="@((SelectedButton == 3) ? "selectedTimeShadow" : "")">2 | 1</button>
-                    </div>
-
-                </div>
-                <div>
-                    <h2 class="anton-regular  mt-7">Blitz</h2>
-                    <div class="flex justify-evenly">
-                        <button @onclick="() => {SetButtonState(4); CreateChessMatch(GameMode.OnlineThreeMinutes);}" class="@((SelectedButton == 4) ? "selectedTimeShadow" : "")">3 Minutes</button>
-                        <button @onclick="() => {SetButtonState(5); CreateChessMatch(GameMode.OnlineThreeMinutesPlusTwo);}" class="@((SelectedButton == 5) ? "selectedTimeShadow" : "")">3 | 2</button>
-                        <button @onclick="() => {SetButtonState(6); CreateChessMatch(GameMode.OnlineFiveMinutes);}" class="@((SelectedButton == 6) ? "selectedTimeShadow" : "")">5 Minutes</button>
-                    </div>
-                </div>
-                <div>
-                    <h2 class="anton-regular mt-7">Rapid</h2>
-                    <div class="flex justify-evenly">
-                        <button @onclick="() => {SetButtonState(7); CreateChessMatch(GameMode.OnlineTenMinutes);}" class="@((SelectedButton == 7) ? "selectedTimeShadow" : "")">10 Minutes</button>
-                        <button @onclick="() => {SetButtonState(8); CreateChessMatch(GameMode.OnlineFifteenMinutesPlusTen);}" class="@((SelectedButton == 8) ? "selectedTimeShadow" : "")">15 | 10</button>
-                        <button @onclick="() => {SetButtonState(9); CreateChessMatch(GameMode.OnlineThirtyMinutes); }" class="@((SelectedButton == 9) ? "selectedTimeShadow" : "")">30 Minutes</button>
-                    </div>
-                </div>
-                <div class="playButton flex text-center justify-center mt-14 select-none">
-                    <a href="/chess/@("A4v9-jh9L-aSs4-984R")" class="flex text-center justify-center"><div class="flex text-center justify-center">Play</div></a>
-                </div>
-            </div>
-
-        </div>
-    }
     @if (!ChessGame.IsPlaying && GameOver)
     {
         <div class="w-screen absolute h-screen gameOverScreen">
