@@ -740,10 +740,6 @@ video {
   width: 0.25rem;
 }
 
-.w-1\/2 {
-  width: 50%;
-}
-
 .w-1\/6 {
   width: 16.666667%;
 }
@@ -1103,12 +1099,19 @@ video {
 }
 
 .chooseTime {
+  background-color: var(--SecondBackgroundColor);
   display: flex;
+  position: absolute;
+  margin-left: 54.5vw;
+  width: 28vw;
+  border-radius: 10px;
+  height: 60vh;
+  margin-top: -67vh;
 }
 
 .chooseTime span {
-  margin-top: 0.2vh;
   color: rgb(242, 84, 84);
+  margin-left: 28vw;
   cursor: pointer;
 }
 

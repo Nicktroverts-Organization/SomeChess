@@ -143,26 +143,37 @@
     min-height: 550px;
 }
 .chooseTime {
+    background-color: var(--SecondBackgroundColor);
     display: flex;
+    position: absolute;
+    margin-left: 54.5vw;
+    width: 28vw;
+    border-radius: 10px;
+    height: 60vh;
+    margin-top: -67vh;
 }
+
 .chooseTime span {
-    margin-top: 0.2vh;
     color: rgb(242, 84, 84);
+    margin-left: 28vw;
     cursor: pointer;
 }
+
 .chooseTime span:hover {
     color: rgb(243, 45, 45);
 }
-    .chooseTime button {
-        transition: all 0.15s;
-        background-color: var(--HoverColor);
-        width: 6vw;
-        border-radius: 5px;
-    }
-    .chooseTime button:hover {
-        transition: all 0.15s;
-        box-shadow: 0 0 15px #767373;
-    }
+
+.chooseTime button {
+    transition: all 0.15s;
+    background-color: var(--HoverColor);
+    width: 6vw;
+    border-radius: 5px;
+}
+
+.chooseTime button:hover {
+    transition: all 0.15s;
+    box-shadow: 0 0 15px #767373;
+}
 .selectedTimeShadow {
     background-color: #32581f;
     box-shadow: 0 0 20px #72c21f;
