@@ -1,7 +1,11 @@
-﻿//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using SomeChess.Code.GameEngine;
+using SomeChess.Code.GameEngine.ChessImplementation;
+using SomeChess.Code;
+using SomeChess.Components;
+//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
 //ispolzovat KakietoSchachmaty.Kod.IgrovoiDvighok;
 
-using SomeChess.Components;
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
@@ -20,7 +24,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
 
         public ChessState GameState { get; private set; } = ChessState.None;
-
 
 
         public Chessboard FrontendPageChessBoard;
@@ -55,6 +58,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
         public int MadeMoves = 0;
         public List<Tuple<ChessPiece, ChessPiece, bool>> ChessPieceMoveHistory = new();
+        public List<ChessBoard> ChessBoardHistory = new();
 
         public bool WhiteIsChecked
         {
@@ -100,7 +104,8 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// </summary>
         public bool IsLatestPosition
         {
-            get {
+            get
+            {
                 if (LatestBoard == null) return true;
                 return Board.Test == LatestBoard.Test;
             }
@@ -138,6 +143,16 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
             set => throw new InvalidOperationException(nameof(WinnerTeam) + "can't be set!");
         }
+
+        /// <summary>
+        /// <para>Defines whether one of both teams gave up.</para>
+        /// </summary>
+        private Team? Surrender = null;
+
+        /// <summary>
+        /// <para>Defines whether or not a draw is being forced.</para>
+        /// </summary>
+        private bool forcedDraw = false;
 
         /// <summary>
         /// <para>Gets <see cref="Chess"/>.</para>
@@ -196,6 +211,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <returns><see cref="ChessState"/> <see cref="GameState"/></returns>
         public ChessState GetGameState()
         {
+
             return GameState;
         }
 
@@ -371,9 +387,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             //set default state to playing
             GameState = ChessState.Playing;
 
+
             //Clean up the Lists of Fields each team can move to potentially.
             if (OriginalChess.Clones.Count == 0 && IsLatestPosition)
-
             {
                 Task CleanUpWhite = new Task(CleanUpFieldsWhiteCanMoveTo);
                 Task CleanUpBlack = new Task(() => CleanUpFieldsBlackCanMoveTo(CleanUpWhite));
@@ -462,7 +478,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         private void WinStateConsoleLogging()
         {
             if (OriginalChess.Clones.Count == 0 && IsLatestPosition)
-
             {
                 if (GameState == ChessState.Playing)
                 {
@@ -490,7 +505,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 }
             }
         }
-
 
         //--------UpdateGameState private Methods-----------
 
@@ -584,10 +598,10 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
         }
 
+
         //--------MovePiece private Methods-----------
 
         private bool CheckCastling(string To, List<string> fieldsEnemyCanMoveTo, int row) // no idea how to explain this ;-;
-
         {
             if (To == $"g{row}")
             {
@@ -618,7 +632,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             return false;
         }
-
 
         private bool CheckEnPassant(ChessPiece FromPiece, string To, int direction)
         {
@@ -660,6 +673,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
 
             return false;
         }
+
         /// <summary>
         /// <para>Moves the piece from field <paramref name="From"/> to the field <paramref name="To"/>.</para>
         /// </summary>
@@ -691,6 +705,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                 Chess? ChessCopy = (Chess)Clone();
                 OriginalChess.Clones.Add(ChessCopy);
                 ChessCopy.UpdateGameState();
+
 
                 if (TeamTurn == Team.White)
                 {
@@ -761,11 +776,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         if (CheckCastling(To, FieldsBlackCanMoveTo, 1))
                         {
                             if (OriginalChess.Clones.Count == 0)
-
                             {
                                 AddHistory(From, To, true);
                             }
-
 
                             FromPiece.Field = To;
 
@@ -784,11 +797,9 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                         if (CheckCastling(To, FieldsWhiteCanMoveTo, 8))
                         {
                             if (OriginalChess.Clones.Count == 0)
-
                             {
                                 AddHistory(From, To, true);
                             }
-
 
                             FromPiece.Field = To;
 
@@ -814,16 +825,13 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
             }
 
             if (OriginalChess.Clones.Count == 0)
-
                 AddHistory(From, To, false);
-
 
             FromPiece.Field = To;
 
             //Moves the piece to the new position
             Board.SetPiece(To, FromPiece);
             Board.SetPiece(From, new EmptyPiece(FromPiece.Team, From));
-
 
             if (OriginalChess.Clones.Count == 0)
             {
@@ -852,7 +860,6 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
                     LatestBoard.Test = _guid;
                 }
             }
-
 
             //Successfully moved piece from field "From" to field "To"
             return true;
