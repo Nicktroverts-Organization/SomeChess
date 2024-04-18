@@ -628,6 +628,10 @@ video {
   margin-left: 2rem;
 }
 
+.mr-24 {
+  margin-right: 6rem;
+}
+
 .mt-0 {
   margin-top: 0px;
 }
@@ -642,6 +646,10 @@ video {
 
 .mt-1\.5 {
   margin-top: 0.375rem;
+}
+
+.mt-10 {
+  margin-top: 2.5rem;
 }
 
 .mt-14 {
@@ -802,6 +810,10 @@ video {
   justify-content: flex-start;
 }
 
+.justify-end {
+  justify-content: flex-end;
+}
+
 .justify-center {
   justify-content: center;
 }
@@ -864,6 +876,10 @@ video {
 
 .text-start {
   text-align: start;
+}
+
+.text-end {
+  text-align: end;
 }
 
 .text-3xl {
@@ -971,28 +987,13 @@ video {
   --SecondBackgroundColor: #21201e;
   --HoverColor: #3c3b39;
   --TextColor: #d3d3d3;
+  --Green: #80b54c;
 }
 
 .chessboard {
   display: grid;
   grid-template-columns: repeat(8, 80px);
   grid-template-rows: repeat(8, 80px);
-}
-
-.normalefiguren {
-  width: 70px;
-}
-
-.powns {
-  width: 50px;
-}
-
-.rook {
-  width: 60px;
-}
-
-.knight {
-  width: 65px;
 }
 
 .item {
@@ -1018,6 +1019,7 @@ video {
   border-style: solid;
   height: 10vh;
   width: 400px;
+  min-height: 90px;
   border-radius: 15px;
   font-size: 250%;
   color: white;
@@ -1040,6 +1042,7 @@ video {
   transition: all 0.4s;
   border-style: solid;
   height: 10vh;
+  min-height: 90px;
   width: 400px;
   border-radius: 15px;
   font-size: 250%;
@@ -1091,22 +1094,17 @@ video {
   width: 30vw;
   height: 68vh;
   border: solid;
+  min-width: 450px;
+  min-height: 600px;
 }
 
 .chooseTime {
-  background-color: var(--SecondBackgroundColor);
   display: flex;
-  position: absolute;
-  margin-left: 54.5vw;
-  width: 28vw;
-  border-radius: 10px;
-  height: 60vh;
-  margin-top: -67vh;
 }
 
 .chooseTime span {
+  margin-top: 0.2vh;
   color: rgb(242, 84, 84);
-  margin-left: 28vw;
   cursor: pointer;
 }
 
@@ -1145,8 +1143,10 @@ video {
   font-size: 300%;
   box-shadow: 0 0 20px white;
   color: white;
-  width: 10vw;
-  height: 6.5vh;
+  min-width: 250px;
+  min-height: 60px;
+  width: 15vw;
+  height: 8.5vh;
   border-radius: 10px;
   background-color: #283739;
   font-weight: 700;
@@ -1170,7 +1170,7 @@ video {
 }
 
 .gameOverDesign {
-  background-color: #2c5d63;
+  background-color: var(--BackgroundColor);
   color: white;
 }
 
@@ -1184,6 +1184,7 @@ video {
 }
 
 .gameOverDesign a {
+  transition: all 0.4s;
   font-size: 200%;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -1191,12 +1192,21 @@ video {
   cursor: pointer;
   border-radius: 5px;
   padding: 15px 15px;
-  background-color: #008080;
+  background-color: var(--Green);
+}
+
+.gameOverDesign a:hover {
+  transition: all 0.4s;
+  background-color: #98c66c;
+  border-color: #98c66c;
+  border-radius: 4px;
+  box-shadow: 1px 1px 2px 4px #98c66c;
 }
 
 .move-history {
   overflow: scroll;
   height: 53vh;
+  min-height: 450px;
 }
 
 .d-block {
@@ -1210,7 +1220,7 @@ video {
 }
 
 .peaceChoiceHolder {
-  background-color: #32581f;
+  background-color: var(--BackgroundColor);
 }
 
 .peaceChoiceHolder img {
@@ -1241,6 +1251,8 @@ video {
 .drawButton {
   color: white;
   width: 5vw;
+  min-width: 80px;
+  max-height: 30px;
   font-size: 125%;
   transition: all 0.4s;
   background-color: #80b54c;
@@ -1257,6 +1269,8 @@ video {
   transition: all 0.7s;
   color: white;
   width: 5vw;
+  min-width: 80px;
+  max-height: 30px;
   font-size: 125%;
   transition: all 0.4s;
   background-color: #80b54c;
@@ -1284,7 +1298,6 @@ img {
 }
 
 .playButton a {
-  box-shadow: none;
   transition: all 0.4s;
   background-color: #80b54c;
   border-radius: 4px;
@@ -1294,5 +1307,11 @@ img {
 .playButton a:hover {
   transition: all 0.4s;
   background-color: #98c66c;
-  box-shadow: 1px 1px 2px #98c66c;
+  border-color: #98c66c;
+  border-radius: 4px;
+  box-shadow: 1px 1px 2px 4px #98c66c;
+}
+
+.highlighted {
+  box-shadow: 1px 1px 2px 4px #ff0000;
 }
