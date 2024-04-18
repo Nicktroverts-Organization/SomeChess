@@ -1,7 +1,11 @@
-﻿//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using SomeChess.Code.GameEngine;
+using SomeChess.Code.GameEngine.ChessImplementation;
+using SomeChess.Code;
+using SomeChess.Components;
+//C# is fucking trash get some good existing, why cant i define some random word to be using i hate tis ;-;
 //ispolzovat KakietoSchachmaty.Kod.IgrovoiDvighok;
 
-using SomeChess.Components;
 
 namespace SomeChess.Code.GameEngine.ChessImplementation
 {
@@ -55,6 +59,18 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         public int MadeMoves = 0;
         public List<Tuple<ChessPiece, ChessPiece, bool>> ChessPieceMoveHistory = new();
         public List<ChessBoard> ChessBoardHistory = new();
+
+        public bool WhiteIsChecked
+        {
+            get => FieldsBlackCanMoveTo.Contains(WhiteKing.Field);
+            set => throw new InvalidOperationException(nameof(WhiteIsChecked) + "can't be set!");
+        }
+
+        public bool BlackIsChecked
+        {
+            get => FieldsWhiteCanMoveTo.Contains(BlackKing.Field);
+            set => throw new InvalidOperationException(nameof(BlackIsChecked) + "can't be set!");
+        }
 
         /// <summary>
         /// <para>Whether or not the game is currently running</para>
@@ -195,6 +211,7 @@ namespace SomeChess.Code.GameEngine.ChessImplementation
         /// <returns><see cref="ChessState"/> <see cref="GameState"/></returns>
         public ChessState GetGameState()
         {
+
             return GameState;
         }
 
