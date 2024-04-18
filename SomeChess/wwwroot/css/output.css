@@ -544,12 +544,20 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
 .visible {
   visibility: visible;
 }
 
 .collapse {
   visibility: collapse;
+}
+
+.static {
+  position: static;
 }
 
 .fixed {
@@ -564,12 +572,108 @@ video {
   position: relative;
 }
 
+.bottom-0 {
+  bottom: 0px;
+}
+
+.bottom-72 {
+  bottom: 18rem;
+}
+
+.right-36 {
+  right: 9rem;
+}
+
+.right-56 {
+  right: 14rem;
+}
+
+.right-72 {
+  right: 18rem;
+}
+
+.right-80 {
+  right: 20rem;
+}
+
+.mb-0 {
+  margin-bottom: 0px;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.ml-0 {
+  margin-left: 0px;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
+.ml-16 {
+  margin-left: 4rem;
+}
+
+.ml-24 {
+  margin-left: 6rem;
+}
+
 .ml-8 {
   margin-left: 2rem;
 }
 
-.ml-80 {
-  margin-left: 20rem;
+.mr-24 {
+  margin-right: 6rem;
+}
+
+.mt-0 {
+  margin-top: 0px;
+}
+
+.mt-0\.5 {
+  margin-top: 0.125rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-1\.5 {
+  margin-top: 0.375rem;
+}
+
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
+.mt-14 {
+  margin-top: 3.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
+.mt-32 {
+  margin-top: 8rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.mt-7 {
+  margin-top: 1.75rem;
 }
 
 .block {
@@ -596,12 +700,72 @@ video {
   display: none;
 }
 
-.h-52 {
-  height: 13rem;
+.h-10 {
+  height: 2.5rem;
 }
 
-.h-64 {
-  height: 16rem;
+.h-12 {
+  height: 3rem;
+}
+
+.h-14 {
+  height: 3.5rem;
+}
+
+.h-2 {
+  height: 0.5rem;
+}
+
+.h-2\/6 {
+  height: 33.333333%;
+}
+
+.h-24 {
+  height: 6rem;
+}
+
+.h-5 {
+  height: 1.25rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.w-1 {
+  width: 0.25rem;
+}
+
+.w-1\/6 {
+  width: 16.666667%;
+}
+
+.w-3 {
+  width: 0.75rem;
+}
+
+.w-4 {
+  width: 1rem;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.w-6\/12 {
+  width: 50%;
+}
+
+.w-96 {
+  width: 24rem;
+}
+
+.w-screen {
+  width: 100vw;
 }
 
 .border-collapse {
@@ -612,8 +776,26 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.select-none {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
 .resize {
   resize: both;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.place-content-evenly {
+  place-content: space-evenly;
 }
 
 .content-center {
@@ -624,12 +806,90 @@ video {
   align-items: center;
 }
 
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
 .justify-center {
   justify-content: center;
 }
 
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.justify-self-start {
+  justify-self: start;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+.rounded-sm {
+  border-radius: 0.125rem;
+}
+
 .border {
   border-width: 1px;
+}
+
+.bg-emerald-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(6 78 59 / var(--tw-bg-opacity));
+}
+
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.from-orange-800 {
+  --tw-gradient-from: #9a3412 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(154 52 18 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-start {
+  text-align: start;
+}
+
+.text-end {
+  text-align: end;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .text-5xl {
@@ -641,29 +901,24 @@ video {
   font-weight: 700;
 }
 
-.text-blue-400 {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
-}
-
 .text-gray-100 {
   --tw-text-opacity: 1;
   color: rgb(243 244 246 / var(--tw-text-opacity));
 }
 
-.text-green-400 {
+.text-lime-500 {
   --tw-text-opacity: 1;
-  color: rgb(74 222 128 / var(--tw-text-opacity));
+  color: rgb(132 204 22 / var(--tw-text-opacity));
 }
 
-.text-red-400 {
+.text-red-700 {
   --tw-text-opacity: 1;
-  color: rgb(248 113 113 / var(--tw-text-opacity));
+  color: rgb(185 28 28 / var(--tw-text-opacity));
 }
 
-.text-yellow-500 {
+.text-white {
   --tw-text-opacity: 1;
-  color: rgb(234 179 8 / var(--tw-text-opacity));
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .underline {
@@ -672,6 +927,22 @@ video {
 
 .outline {
   outline-style: solid;
+}
+
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.transition {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #blazor-error-ui {
@@ -703,34 +974,26 @@ video {
   content: "An error has occurred."
 }
 
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
 :root {
-  --BackgroundColor: #402218;
-  --SecondBackgroundColor: #865439;
-  --HoverColor: #C68B59;
-  --ActiveColor: #D7B19D;
+  --BackgroundColor: #302e2b;
+  --SecondBackgroundColor: #21201e;
+  --HoverColor: #3c3b39;
   --TextColor: #d3d3d3;
+  --Green: #80b54c;
 }
 
 .chessboard {
   display: grid;
   grid-template-columns: repeat(8, 80px);
   grid-template-rows: repeat(8, 80px);
-}
-
-.normalefiguren {
-  width: 70px;
-}
-
-.powns {
-  width: 50px;
-}
-
-.rook {
-  width: 60px;
-}
-
-.knight {
-  width: 65px;
 }
 
 .item {
@@ -747,4 +1010,308 @@ video {
 
 .blackCell {
   background-color: #769656;
+}
+
+/*buttons*/
+
+.playOnline {
+  transition: all 0.4s;
+  border-style: solid;
+  height: 10vh;
+  width: 400px;
+  min-height: 90px;
+  border-radius: 15px;
+  font-size: 250%;
+  color: white;
+  background-color: #80b54c;
+}
+
+.playOnline:hover {
+  transition: all 0.4s;
+  background-color: #98c66c;
+  box-shadow: 1px 1px 2px #98c66c;
+}
+
+.playOnline span {
+  margin-top: -9.5vh;
+  margin-left: 1.5vw;
+  font-size: 50%;
+}
+
+.playComputer {
+  transition: all 0.4s;
+  border-style: solid;
+  height: 10vh;
+  min-height: 90px;
+  width: 400px;
+  border-radius: 15px;
+  font-size: 250%;
+  color: white;
+  background-color: #403e3c;
+}
+
+.playComputer span {
+  margin-top: -9.5vh;
+  font-size: 50%;
+}
+
+.playComputer:hover {
+  transition: all 0.4s;
+  background-color: #767373;
+  box-shadow: 1px 1px 2px #767373;
+}
+
+.textInButton {
+  width: 310px;
+}
+
+.playOnline button {
+  line-height: 0.8em;
+}
+
+.playComputer button {
+  line-height: 0.8em;
+}
+
+/*buttons*/
+
+.greengradient {
+  font-size: 400%;
+  background-color: var(--TextColor);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.anton-regular {
+  font-family: "Anton", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.backholder {
+  background-color: var(--SecondBackgroundColor);
+  border-radius: 10px;
+  width: 30vw;
+  height: 68vh;
+  border: solid;
+  min-width: 450px;
+  min-height: 600px;
+}
+
+.chooseTime {
+  display: flex;
+}
+
+.chooseTime span {
+  margin-top: 0.2vh;
+  color: rgb(242, 84, 84);
+  cursor: pointer;
+}
+
+.chooseTime span:hover {
+  color: rgb(243, 45, 45);
+}
+
+.chooseTime button {
+  transition: all 0.15s;
+  background-color: var(--HoverColor);
+  width: 6vw;
+  border-radius: 5px;
+}
+
+.chooseTime button:hover {
+  transition: all 0.15s;
+  box-shadow: 0 0 15px #767373;
+}
+
+.selectedTimeShadow {
+  background-color: #32581f;
+  box-shadow: 0 0 20px #72c21f;
+}
+
+.chooseTime h1 {
+  font-size: 400%;
+}
+
+.chooseTime h2 {
+  font-size: 200%;
+  color: white;
+}
+
+.chooseTime a {
+  cursor: pointer;
+  font-size: 300%;
+  box-shadow: 0 0 20px white;
+  color: white;
+  min-width: 250px;
+  min-height: 60px;
+  width: 15vw;
+  height: 8.5vh;
+  border-radius: 10px;
+  background-color: #283739;
+  font-weight: 700;
+}
+
+.chooseTime a:hover {
+  background-color: #2f3e41;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: ease-in-out;
+}
+
+.chessPiece[draggable] {
+  cursor: pointer;
+}
+
+.gameOverScreen {
+  right: 50%;
+  bottom: 50%;
+  transform: translate(72.5%, 80.2%);
+}
+
+.gameOverDesign {
+  background-color: var(--BackgroundColor);
+  color: white;
+}
+
+.gameOverScreen span {
+  cursor: pointer;
+  color: #ff6262;
+}
+
+.gameOverScreen span:hover {
+  color: #ff1f1f;
+}
+
+.gameOverDesign a {
+  transition: all 0.4s;
+  font-size: 200%;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 15px 15px;
+  background-color: var(--Green);
+}
+
+.gameOverDesign a:hover {
+  transition: all 0.4s;
+  background-color: #98c66c;
+  border-color: #98c66c;
+  border-radius: 4px;
+  box-shadow: 1px 1px 2px 4px #98c66c;
+}
+
+.move-history {
+  overflow: scroll;
+  height: 53vh;
+  min-height: 450px;
+}
+
+.d-block {
+  display: block;
+}
+
+.pawnTransformationChoice {
+  right: 70.5%;
+  bottom: 57.5%;
+  transform: translate(77.5%, 5%);
+}
+
+.peaceChoiceHolder {
+  background-color: var(--BackgroundColor);
+}
+
+.peaceChoiceHolder img {
+  cursor: pointer;
+}
+
+.selector {
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.movesNotationHolder {
+  font-size: 120%;
+  color: white;
+}
+
+.movesNotationHolder:nth-child(even) {
+  background-color: var(--BackgroundColor);
+}
+
+.movesNotationHolder:nth-child(odd) {
+  background-color: var(--SecondBackgroundColor);
+}
+
+.drawButton {
+  color: white;
+  width: 5vw;
+  min-width: 80px;
+  max-height: 30px;
+  font-size: 125%;
+  transition: all 0.4s;
+  background-color: #80b54c;
+  border-radius: 4px;
+}
+
+.drawButton:hover {
+  transition: all 0.4s;
+  background-color: #98c66c;
+  box-shadow: 1px 1px 2px #98c66c;
+}
+
+.giveUpButton {
+  transition: all 0.7s;
+  color: white;
+  width: 5vw;
+  min-width: 80px;
+  max-height: 30px;
+  font-size: 125%;
+  transition: all 0.4s;
+  background-color: #80b54c;
+  border-radius: 4px;
+}
+
+.giveUpButton:hover {
+  transition: all 0.4s;
+  background-color: #98c66c;
+  box-shadow: 1px 1px 2px #98c66c;
+}
+
+.minusmargintop {
+  margin-top: -6vh;
+}
+
+img {
+  height: 80px;
+  width: 80px;
+}
+
+.selectedMove {
+  background-color: rgb(69, 68, 65);
+  border-radius: 4px;
+}
+
+.playButton a {
+  transition: all 0.4s;
+  background-color: #80b54c;
+  border-radius: 4px;
+  color: white;
+}
+
+.playButton a:hover {
+  transition: all 0.4s;
+  background-color: #98c66c;
+  border-color: #98c66c;
+  border-radius: 4px;
+  box-shadow: 1px 1px 2px 4px #98c66c;
+}
+
+.highlighted {
+  box-shadow: 1px 1px 2px 4px #ff0000;
 }

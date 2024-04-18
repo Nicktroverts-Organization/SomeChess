@@ -1,4 +1,4 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -31,29 +31,25 @@
         content: "An error has occurred."
     }
 
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
 :root {
-    --BackgroundColor: #402218;
-    --SecondBackgroundColor: #865439;
-    --HoverColor: #C68B59;
-    --ActiveColor: #D7B19D;
+    --BackgroundColor: #302e2b;
+    --SecondBackgroundColor: #21201e;
+    --HoverColor: #3c3b39;
     --TextColor: #d3d3d3;
+    --Green: #80b54c;
 }
 .chessboard {
     display: grid;
     grid-template-columns: repeat(8, 80px);
     grid-template-rows: repeat(8, 80px);
-}
-.normalefiguren {
-    width: 70px;
-}
-.powns {
-    width: 50px;
-}
-.rook {
-    width: 60px;
-}
-.knight {
-    width: 65px;
 }
 
 .item {
@@ -69,5 +65,303 @@
 }
 
 .blackCell {
-    background-color: #769656; 
+    background-color: #769656;
+}
+/*buttons*/
+.playOnline {
+    transition: all 0.4s;
+    border-style: solid;
+    height: 10vh;
+    width: 400px;
+    min-height: 90px;
+    border-radius: 15px;
+    font-size: 250%;
+    color: white;
+    background-color: #80b54c;
+}
+
+    .playOnline:hover {
+        transition: all 0.4s;
+        background-color: #98c66c;
+        box-shadow: 1px 1px 2px #98c66c;
+    }
+
+    .playOnline span {
+        margin-top: -9.5vh;
+        margin-left: 1.5vw;
+        font-size: 50%;
+    }
+
+.playComputer {
+    transition: all 0.4s;
+    border-style: solid;
+    height: 10vh;
+    min-height: 90px;
+    width: 400px;
+    border-radius: 15px;
+    font-size: 250%;
+    color: white;
+    background-color: #403e3c;
+}
+
+    .playComputer span {
+        margin-top: -9.5vh;
+        font-size: 50%;
+    }
+
+    .playComputer:hover {
+        transition: all 0.4s;
+        background-color: #767373;
+        box-shadow: 1px 1px 2px #767373;
+    }
+
+.textInButton {
+    width: 310px;
+}
+
+.playOnline button {
+    line-height: 0.8em;
+}
+
+.playComputer button {
+    line-height: 0.8em;
+}
+/*buttons*/
+.greengradient {
+    font-size: 400%;
+    background-color: var(--TextColor);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.anton-regular {
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.backholder {
+    background-color: var(--SecondBackgroundColor);
+    border-radius: 10px;
+    width: 30vw;
+    height: 68vh;
+    border: solid;
+    min-width: 450px;
+    min-height: 600px;
+}
+
+.chooseTime {
+    display: flex;
+}
+
+    .chooseTime span {
+        margin-top: 0.2vh;
+        color: rgb(242, 84, 84);
+        cursor: pointer;
+    }
+
+        .chooseTime span:hover {
+            color: rgb(243, 45, 45);
+        }
+
+    .chooseTime button {
+        transition: all 0.15s;
+        background-color: var(--HoverColor);
+        width: 6vw;
+        border-radius: 5px;
+    }
+
+        .chooseTime button:hover {
+            transition: all 0.15s;
+            box-shadow: 0 0 15px #767373;
+        }
+
+.selectedTimeShadow {
+    background-color: #32581f;
+    box-shadow: 0 0 20px #72c21f;
+}
+
+.chooseTime h1 {
+    font-size: 400%;
+}
+
+.chooseTime h2 {
+    font-size: 200%;
+    color: white;
+}
+
+.chooseTime a {
+    cursor: pointer;
+    font-size: 300%;
+    box-shadow: 0 0 20px white;
+    color: white;
+    min-width: 250px;
+    min-height: 60px;
+    width: 15vw;
+    height: 8.5vh;
+    border-radius: 10px;
+    background-color: #283739;
+    font-weight: 700;
+}
+
+    .chooseTime a:hover {
+        background-color: #2f3e41;
+        transition-duration: 0.15s;
+        transition-property: all;
+        transition-timing-function: ease-in-out;
+    }
+
+.chessPiece[draggable] {
+    cursor: pointer;
+}
+
+.gameOverScreen {
+    right: 50%;
+    bottom: 50%;
+    transform: translate(72.5%, 80.2%);
+}
+
+.gameOverDesign {
+    background-color: var(--BackgroundColor);
+    color: white;
+}
+
+.gameOverScreen span {
+    cursor: pointer;
+    color: #ff6262;
+}
+
+    .gameOverScreen span:hover {
+        color: #ff1f1f;
+    }
+
+.gameOverDesign a {
+    transition: all 0.4s;
+    font-size: 200%;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 15px 15px;
+    background-color: var(--Green);
+}
+
+    .gameOverDesign a:hover {
+        transition: all 0.4s;
+        background-color: #98c66c;
+        border-color: #98c66c;
+        border-radius: 4px;
+        box-shadow: 1px 1px 2px 4px #98c66c;
+    }
+
+.move-history {
+    overflow: scroll;
+    height: 53vh;
+    min-height: 450px;
+}
+
+.d-block {
+    display: block;
+}
+
+.pawnTransformationChoice {
+    right: 70.5%;
+    bottom: 57.5%;
+    transform: translate(77.5%, 5%);
+}
+
+.peaceChoiceHolder {
+    background-color: var(--BackgroundColor);
+}
+
+    .peaceChoiceHolder img {
+        cursor: pointer;
+    }
+
+.selector {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.movesNotationHolder {
+    font-size: 120%;
+    color: white;
+}
+
+.movesNotationHolder:nth-child(even) {
+    background-color: var(--BackgroundColor);
+}
+
+.movesNotationHolder:nth-child(odd) {
+    background-color: var(--SecondBackgroundColor);
+}
+
+.drawButton {
+    color: white;
+    width: 5vw;
+    min-width: 80px;
+    max-height: 30px;
+    font-size: 125%;
+    transition: all 0.4s;
+    background-color: #80b54c;
+    border-radius: 4px;
+}
+
+    .drawButton:hover {
+        transition: all 0.4s;
+        background-color: #98c66c;
+        box-shadow: 1px 1px 2px #98c66c;
+    }
+
+.giveUpButton {
+    transition: all 0.7s;
+    color: white;
+    width: 5vw;
+    min-width: 80px;
+    max-height: 30px;
+    font-size: 125%;
+    transition: all 0.4s;
+    background-color: #80b54c;
+    border-radius: 4px;
+}
+
+    .giveUpButton:hover {
+        transition: all 0.4s;
+        background-color: #98c66c;
+        box-shadow: 1px 1px 2px #98c66c;
+    }
+
+.minusmargintop {
+    margin-top: -6vh;
+}
+
+img {
+    height: 80px;
+    width: 80px;
+}
+
+.selectedMove {
+    background-color: rgb(69, 68, 65);
+    border-radius: 4px;
+}
+
+.playButton a {
+    transition: all 0.4s;
+    background-color: #80b54c;
+    border-radius: 4px;
+    color: white;
+}
+
+    .playButton a:hover {
+        transition: all 0.4s;
+        background-color: #98c66c;
+        border-color: #98c66c;
+        border-radius: 4px;
+        box-shadow: 1px 1px 2px 4px #98c66c;
+    }
+
+.highlighted {
+    box-shadow: 1px 1px 2px 4px #ff0000;
 }

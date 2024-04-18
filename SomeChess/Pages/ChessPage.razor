@@ -1,0 +1,56 @@
+﻿@page "/chess/{MatchID:int}"
+@inject IJSRuntime JsRuntime
+@using SomeChess.Components
+@using Microsoft.AspNetCore.Components.Web
+@using SomeChess.Code.GameEngine.ChessImplementation
+@using SomeChess.Code.MatchMaking.ChessMatchImplementation
+@using SomeChess.Code.Social
+@using SomeChess.Code.MatchMaking
+@using SomeChess.Code
+@inject UserAuthentication social
+@inject NavigationManager NavigationManager
+
+<body style="background-color: var(--BackgroundColor);">
+
+</body>
+<div class="flex h-24 justify-center content-center items-center">
+    <h1 class="font-bold text-5xl" style="color: var(--TextColor)">@(Name)</h1>
+</div>
+
+<Chessboard></Chessboard>
+
+
+@code
+{
+    [Parameter]
+    public int MatchID { get; set; }
+
+    public string Name = "";
+
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    await social.FetchPlayerAsync();
+    //    Name = social.CurrentPlayer.Name;
+    //    
+    //}
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        if(firstRender)
+        {
+            await social.FetchPlayerAsync();
+            Name = social.CurrentPlayer.Name;
+
+            if (social.CurrentPlayer == null || social.CurrentPlayer.PlayersMatch == 0)
+            {
+                Console.WriteLine("Cannot fetch: user is null");
+                NavigationManager.NavigateTo("/", forceLoad: true);
+            }
+
+            StateHasChanged();
+        }
+    }
+}
