@@ -10,7 +10,6 @@
 @using SomeChess.Code
 @inject IJSRuntime JsRuntime;
 @inject NavigationManager NavMan;
-@inject NavigationManager NavigationManager
 @inject UserAuthentication social
 
 @if (ChessGame != null)
@@ -668,7 +667,7 @@
             social.PersistPlayerAsync(social.CurrentPlayer);
 
 
-            NavigationManager.NavigateTo("/chess/" + newMatch.MatchID.ToString(), false);
+            NavMan.NavigateTo("/chess/" + newMatch.MatchID.ToString(), false);
 
             return newMatch;
         }
