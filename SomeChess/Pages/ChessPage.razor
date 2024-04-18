@@ -14,6 +14,7 @@
 
 </body>
 <div class="flex h-24 justify-center content-center items-center">
+    <h1 class="font-bold text-5xl" style="color: var(--TextColor)">@(Name)</h1>
     <h1 class="font-bold text-5xl" style="color: var(--TextColor)"><font color="Black">@(blackName)</font> <font color="Red">VS</font> <font color="White">@(whiteName)</font></h1>
 </div>
 
@@ -25,6 +26,8 @@
     [Parameter]
     public int MatchID { get; set; }
 
+
+    public string Name = "";
     string blackName = "";
     string whiteName = "";
 

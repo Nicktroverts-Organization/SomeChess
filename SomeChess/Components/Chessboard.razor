@@ -1,16 +1,17 @@
-﻿@inject IJSRuntime JsRuntime;
-@inject NavigationManager NavMan;
-@using Microsoft.AspNetCore.Components.Web
+﻿@using Microsoft.AspNetCore.Components.Web
 @using SomeChess.Code
 @using SomeChess.Code.GameEngine.ChessImplementation
 @using SomeChess.Code.MatchMaking.ChessMatchImplementation
 @using SomeChess.Code.Social
+@using System.Security.Cryptography.X509Certificates
+@using System.Threading.Tasks.Dataflow
 @using System.Diagnostics.Eventing.Reader
+@using System.Text.RegularExpressions
 @using Microsoft.AspNetCore.Mvc.ModelBinding
 @using SomeChess.Code.MatchMaking
-@using SomeChess.Code
-@inject NavigationManager NavigationManager
-@inject UserAuthentication social
+@inject SomeChess.Code.Social.UserAuthentication social;
+@inject Microsoft.JSInterop.IJSRuntime JsRuntime;
+@inject Microsoft.AspNetCore.Components.NavigationManager NavMan;
 
 @if (ChessGame != null)
 {
@@ -59,7 +60,6 @@
                                         @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
                                     </div>
                                 }
-          
                         }
                     </div>
                 }
@@ -174,7 +174,7 @@
                                             }
                                             else if (MoveHistory[i].Item3 == true)
                                             {
-                                                if (MoveHistory[i].Item2.Field.ToString()[0] == 'c')
+                                                @if (MoveHistory[i].Item2.Field.ToString()[0] == 'c')
                                                 {
                                                     @("0-0-0")
                                                     ;
@@ -187,7 +187,7 @@
                                             }
                                             else
                                             {
-                                                if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
+                                                @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Knight)
                                                 {
                                                     @if (@MoveHistory[i].Item2.PieceType != ChessPieceType.None)
                                                     {
@@ -230,7 +230,7 @@
                                                 }
                                                 else if (MoveHistory[i + 1].Item3 == true)
                                                 {
-                                                    if (MoveHistory[i + 1].Item2.Field.ToString()[0] == 'c')
+                                                    @if (MoveHistory[i + 1].Item2.Field.ToString()[0] == 'c')
                                                     {
                                                         @("0-0-0")
                                                         ;
@@ -243,7 +243,7 @@
                                                 }
                                                 else
                                                 {
-                                                    if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Knight)
+                                                    @if (@MoveHistory[i + 1].Item1.PieceType == ChessPieceType.Knight)
                                                     {
                                                         @if (@MoveHistory[i + 1].Item2.PieceType != ChessPieceType.None)
                                                         {
