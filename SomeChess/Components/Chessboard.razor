@@ -637,8 +637,8 @@
 
             await social.FetchPlayerAsync();
 
-
-            Match = (ChessMatch)MatchSearching.GetInstance().GetChessMatchByID(social.CurrentPlayer.PlayersMatch);
+            if(social.CurrentPlayer != null)
+                Match = (ChessMatch)MatchSearching.GetInstance().GetChessMatchByID(social.CurrentPlayer.PlayersMatch);
 
 
             if (Match == null)

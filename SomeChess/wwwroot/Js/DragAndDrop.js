@@ -82,4 +82,4 @@ window.addEventListener('dragstart', function (event) {
 function SetMoveHistoryScroll() {
     var objDiv = document.getElementById("move-history");
     objDiv.scrollTop = objDiv.scrollHeight;
-}, 1000);
+}
