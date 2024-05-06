@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Code\ComputerPlayer\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\Js\DragAndDrop.js" />
   </ItemGroup>
 

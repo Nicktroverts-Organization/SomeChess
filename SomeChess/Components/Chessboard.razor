@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Web
+﻿
+@using Microsoft.AspNetCore.Components.Web
 @using SomeChess.Code.GameEngine.ChessImplementation
 @using SomeChess.Code.MatchMaking.ChessMatchImplementation
 @using SomeChess.Code.Social
@@ -78,7 +79,7 @@
                         </div>
                     </div>
                 }
-                @if (!NavMan.Uri.ToLower().Contains("/chess/"))
+                @if (!NavMan.Uri.ToLower().Contains("/chess") && !NavMan.Uri.ToLower().Contains("/playcomputer"))
                 {
                     @if (!PlayOnline)
                     {
@@ -95,7 +96,7 @@
                                 </div>
                                 <div class="flex justify-between playComputer mt-5">
                                     <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
-                                    <button class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
+                                    <button onclick="location.href = '/playComputer'" class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
                                 </div>
                             </div>
                         </div>
@@ -336,7 +337,8 @@
                         </div>
                     }
                 </div>
-                @if (ChoicePeace){
+                @if (ChoicePeace)
+                {
                     <div class="flex absolute pawnTransformationChoice">
                         <div class="peaceChoiceHolder rounded-md">
                             <div class="bg-white rounded-sm">
@@ -351,7 +353,7 @@
                         </div>
                     </div>
                 }
-                @if (!NavMan.Uri.ToLower().Contains("/chess/"))
+                @if (!NavMan.Uri.ToLower().Contains("/chess/") && !NavMan.Uri.ToLower().Contains("/playComputer/"))
                 {
                     @if (!PlayOnline)
                     {
@@ -368,7 +370,7 @@
                                 </div>
                                 <div class="flex justify-between playComputer mt-5">
                                     <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
-                                    <button class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
+                                    <button onclick="location.href = '/playComputer'" class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
                                 </div>
                             </div>
                         </div>
@@ -427,7 +429,7 @@
                                 int thisi = i;
 
                                 <div class="flex text-start justify-evenly movesNotationHolder">
-                                    <div class="w-1/6" >
+                                    <div class="w-1/6">
                                         <p @onclick="() => { ChessGame.ViewPosition(thisi); }" class="h-8 cursor-pointer text-center select-none @(ChessGame.MatchingPositionFromHistory == thisi ? "selectedMove" : "")">
                                             @(moveNumber.ToString() + ". ")
                                             @if (@MoveHistory[i].Item1.PieceType == ChessPieceType.Pawn)
@@ -651,7 +653,7 @@
                 await social.FetchPlayerAsync();
             }
             Match = null;
-            if(Match == null)
+            if (Match == null)
             {
                 ChessGame = new Chess(this);
                 ChessGame.StartGame();
@@ -661,13 +663,13 @@
             else
             {
                 ChessGame = Match.Chess;
-            
-                if(!ChessGame.IsRunning)
+
+                if (!ChessGame.IsRunning)
                 {
                     ChessGame.StartGame();
                     ChessGame.ResetBoard();
                 }
-            
+
                 ChessGame.UpdateGameState();
             }
 
