@@ -1,5 +1,4 @@
-﻿
-@using Microsoft.AspNetCore.Components.Web
+﻿@using Microsoft.AspNetCore.Components.Web
 @using SomeChess.Code.GameEngine.ChessImplementation
 @using SomeChess.Code.MatchMaking.ChessMatchImplementation
 @using SomeChess.Code.Social
@@ -7,6 +6,7 @@
 @using System.Security.Cryptography.X509Certificates
 @using System.Threading.Tasks.Dataflow
 @using Microsoft.AspNetCore.Mvc.ModelBinding
+@using SomeChess.Code.ComputerPlayer;
 @using SomeChess.Code.MatchMaking
 @using SomeChess.Code
 @inject IJSRuntime JsRuntime;
@@ -47,7 +47,7 @@
                                 @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
                                     pieceColor = "w";
                                 else pieceColor = "b";
-                                @if (!NavMan.Uri.ToLower().Contains("/chess/"))
+                                @if (!NavMan.Uri.ToLower().Contains("/chess") && !NavMan.Uri.ToLower().Contains("/playcomputer"))
                                 {
                                     <div class="item @color" draggable="false">
                                         @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="flex justify-between playComputer mt-5">
                                     <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
-                                    <button onclick="location.href = '/playComputer'" class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
+                                    <button @onclick='() => { NavMan.NavigateTo("/playComputer"); computerEngine(); }' class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
                                 </div>
                             </div>
                         </div>
@@ -321,7 +321,7 @@
                                 @if (ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).Team == Team.White)
                                     pieceColor = "w";
                                 else pieceColor = "b";
-                                @if (!NavMan.Uri.ToLower().Contains("/chess/"))
+                                @if (!NavMan.Uri.ToLower().Contains("/chess") && !NavMan.Uri.ToLower().Contains("/playcomputer"))
                                 {
                                     <div class="item @color" draggable="false">
                                         @((MarkupString)PieceToHTML[ChessGame.Board.GetPiece(Chess.AlphConversionChars[LoopI] + (LoopU + 1).ToString()).PieceType].Replace("src=\"images/w", $"src=\"images/{pieceColor}"))
@@ -353,7 +353,7 @@
                         </div>
                     </div>
                 }
-                @if (!NavMan.Uri.ToLower().Contains("/chess/") && !NavMan.Uri.ToLower().Contains("/playComputer/"))
+                @if (!NavMan.Uri.ToLower().Contains("/chess") && !NavMan.Uri.ToLower().Contains("/playcomputer"))
                 {
                     @if (!PlayOnline)
                     {
@@ -370,7 +370,7 @@
                                 </div>
                                 <div class="flex justify-between playComputer mt-5">
                                     <img width="80" height="2" src="images/computer-icon.png" class="selector cursor-pointer ml-1 mt-1" />
-                                    <button onclick="location.href = '/playComputer'" class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
+                                    <button @onclick='() => { NavMan.NavigateTo("/playComputer"); computerEngine(); }' class="textInButton">Computer<br /><span class="smalltextPlayComputer mt-0.5">Play vs training bots offline!</span></button>
                                 </div>
                             </div>
                         </div>
@@ -636,11 +636,41 @@
         { ChessPieceType.None, ""},
     };
 
-    public static string FromID = "";
-    public static string ToID = "";
+    public string ComputerFromId = "";
+    public string ComputerToId = "";
+    public string FromID = "";
+    public string ToID = "";
     public bool isFirstClick = true;
 
     private DotNetObjectReference<Chessboard> dotNetReference;
+
+    public async void computerEngine()
+    {
+        ComputerApiHandler computer = new ComputerApiHandler();
+        ComputerApiHandler.Key = await computer.CreateInstance();
+    }
+
+    public async void EngineMove()
+    {
+        ComputerApiHandler computer = new ComputerApiHandler();
+        string ComputerMove = await computer.MakeTurn(ComputerApiHandler.Key, FromID, ToID);
+
+        ComputerFromId = ComputerMove[0].ToString() + ComputerMove[1].ToString();
+        ComputerToId = ComputerMove[2].ToString() + ComputerMove[3].ToString();
+
+        if (ChessGame.MovePiece(ComputerFromId, ComputerToId))
+        {
+            ChessGame.EndTurn();
+            Reload = true;
+            StateHasChanged();
+        }
+        else
+        {
+            Reload = true;
+            StateHasChanged();
+        }
+        Console.WriteLine(ComputerFromId, ComputerToId);
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -764,6 +794,7 @@
                     ChessGame.EndTurn();
                     Reload = true;
                     StateHasChanged();
+                    EngineMove();
                 }
                 else
                 {

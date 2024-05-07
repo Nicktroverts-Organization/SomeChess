@@ -4,7 +4,7 @@ var elementUnderMouse = "";
 var dotNet = "";
 var gameOver = false;
 
-window.setDotNetReference = function (dotNetReference) {
+window.setDotNetReference = function (dotNetRceference) {
     dotNet = dotNetReference;
 }
 
